@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>P.U.S.H — TOS</title>
+  <style>
+    :root{
+      --bg: rgba(10, 14, 20, .55);
+      --card: rgba(18, 24, 34, .55);
+      --card2: rgba(18, 24, 34, .35);
+      --stroke: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --muted2: rgba(255,255,255,.55);
+      --accent: rgba(255,255,255,.90);
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      overflow-x:hidden;
+      background:#05070b;
+    }
+
+    /* Snowy blurred background */
+    .bg{
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(255,255,255,.18), transparent 55%),
+        radial-gradient(900px 600px at 80% 30%, rgba(160,200,255,.14), transparent 60%),
+        radial-gradient(800px 600px at 60% 85%, rgba(255,255,255,.10), transparent 60%),
+        linear-gradient(180deg, #070a11 0%, #06070b 100%);
+      filter: blur(0px);
+      z-index:-3;
+    }
+    /* Optional: replace with your own snowy image (keeps blur) */
+    .bg::before{
+      content:"";
+      position:absolute; inset:-20px;
+      background-image: url("https://images.unsplash.com/photo-1489587028985-1a95819a7b39?auto=format&fit=crop&w=2400&q=80");
+      background-size: cover;
+      background-position: center;
+      filter: blur(14px);
+      opacity:.55;
+      transform: scale(1.08);
+      z-index:-2;
+    }
+    .bg::after{
+      content:"";
+      position:absolute; inset:0;
+      background: rgba(0,0,0,.38);
+      z-index:-1;
+    }
+
+    /* Snow particles */
+    canvas#snow{
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      opacity:.8;
+    }
+
+    /* Top bar */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(8, 10, 14, .35);
+      border-bottom: 1px solid var(--stroke);
+    }
+    .topbar-inner{
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:baseline;
+      gap:10px;
+      user-select:none;
+    }
+    .brand .title{
+      font-size: 18px;
+      letter-spacing: .28em;
+      font-weight: 800;
+    }
+    .brand .sub{
+      font-size: 12px;
+      color: var(--muted2);
+      letter-spacing:.18em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .pill{
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+    .pill:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.16);
+    }
+
+    .right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .discordBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.07);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease;
+    }
+    .discordBtn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.12);
+    }
+    .discordBtn svg{ width: 20px; height: 20px; fill: var(--accent); }
+
+    /* Layout */
+    .wrap{
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 26px 18px 60px;
+    }
+
+    .hero{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:16px;
+      margin-top: 18px;
+      margin-bottom: 18px;
+    }
+    .hero h1{
+      margin:0;
+      font-size: 44px;
+      letter-spacing: .22em;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .hero .tos{
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .hero .hint{
+      color: var(--muted2);
+      font-size: 13px;
+      max-width: 520px;
+      line-height: 1.5;
+      text-align:right;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 16px;
+      align-items:start;
+    }
+    @media (max-width: 960px){
+      .grid{ grid-template-columns: 1fr; }
+      .hero{ flex-direction:column; align-items:flex-start; }
+      .hero .hint{ text-align:left; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardHeader{
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .cardHeader h2{
+      margin:0;
+      font-size: 16px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .badge{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .cardBody{
+      padding: 14px 16px 16px;
+    }
+
+    .sectionTitle{
+      margin: 14px 0 8px;
+      font-size: 13px;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .rules{
+      margin:0;
+      padding-left: 18px;
+      color: var(--text);
+      line-height: 1.65;
+    }
+    .rules li{ margin: 6px 0; }
+    .muted{ color: var(--muted2); }
+
+    .ladder{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      margin-top: 10px;
+    }
+    @media (max-width: 520px){
+      .ladder{ grid-template-columns: 1fr; }
+    }
+    .step{
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .step .k{
+      font-size: 12px;
+      color: var(--muted2);
+      text-transform: uppercase;
+      letter-spacing:.14em;
+    }
+    .step .v{
+      margin-top: 6px;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    .callout{
+      margin-top: 12px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      line-height:1.55;
+    }
+
+    .toolbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top: 8px;
+    }
+    .toolbar .pill{
+      background: rgba(255,255,255,.08);
+    }
+
+    .footer{
+      margin-top: 18px;
+      color: var(--muted2);
+      font-size: 12px;
+      text-align:center;
+      opacity:.9;
+    }
+
+    .toast{
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10, 12, 16, .70);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+      padding: 10px 12px;
+      border-radius: 999px;
+      color: var(--text);
+      font-size: 13px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .toast.show{
+      opacity:1;
+      transform: translateX(-50%) translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+  <canvas id="snow"></canvas>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div>
+          <div class="title">P.U.S.H</div>
+          <div class="sub">TOS</div>
+        </div>
+      </div>
+
+      <!-- Full info bar buttons -->
+      <nav class="nav" aria-label="Navigation">
+        <button class="pill" data-jump="#tos">TOS Rules</button>
+        <button class="pill" data-jump="#staff">Staff Standards</button>
+        <button class="pill" data-jump="#logs">Logs & Evidence</button>
+        <button class="pill" data-jump="#appeals">Appeals</button>
+        <button class="pill" data-jump="#more">More</button>
+      </nav>
+
+      <div class="right">
+        <!-- Discord icon button (top right) -->
+        <button class="discordBtn" id="discordJoin" title="Join Discord" aria-label="Join Discord">
+          <!-- Discord SVG icon -->
+          <svg viewBox="0 0 127.14 96.36" aria-hidden="true">
+            <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2A75.57,75.57,0,0,0,95.73,78c.87.72,1.76,1.4,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.18-16.14C129.24,52.84,122.07,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.22,46,96.11,53,91.07,65.69,84.69,65.69Z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <h1>P.U.S.H</h1>
+        <div class="tos">TOS</div>
+      </div>
+      <div class="hint">
+        Community rules + staff standards. Clear punishments, proper evidence, and clean logging so everything stays fair.
+      </div>
+    </section>
+
+    <div class="grid">
+      <!-- Main TOS -->
+      <section class="card" id="tos">
+        <div class="cardHeader">
+          <h2>Community Rules</h2>
+          <div class="badge">Applies to Discord + in-game</div>
+        </div>
+        <div class="cardBody">
+          <div class="sectionTitle">What this covers</div>
+          <p class="muted" style="margin:0;line-height:1.6">
+            This applies to all P.U.S.H spaces (Discord, events, game sessions, voice, and community-run chats).
+          </p>
+
+          <div class="sectionTitle">Slurs / Hate Speech</div>
+          <ul class="rules">
+            <li>Slurs or hateful language uses the ladder below (no “joke” exceptions).</li>
+            <li>Filter bypassing counts (spacing/symbols).</li>
+            <li>Targeting identity = not allowed.</li>
+          </ul>
+
+          <div class="ladder" aria-label="Slur enforcement ladder">
+            <div class="step">
+              <div class="k">1st</div>
+              <div class="v">Warning</div>
+            </div>
+            <div class="step">
+              <div class="k">2nd</div>
+              <div class="v">Mute / Timeout</div>
+            </div>
+            <div class="step">
+              <div class="k">3rd</div>
+              <div class="v">Ban</div>
+            </div>
+          </div>
+
+          <div class="callout">
+            <strong>Appealable:</strong> Yes (for ladder actions).<br/>
+            <span class="muted">If it becomes personal threats / doxx / DDOS threats, it moves to zero-tolerance.</span>
+          </div>
+
+          <div class="sectionTitle">Zero-tolerance: threats / doxxing / DDOS threats</div>
+          <ul class="rules">
+            <li>Real-life threats or safety threats</li>
+            <li>Doxxing or threatening to leak private info</li>
+            <li>DDOS threats (“boot you offline”, “hit your net”, etc.)</li>
+            <li>Coordinating harassment</li>
+          </ul>
+
+          <div class="callout">
+            <strong>Result:</strong> Permanent ban<br/>
+            <strong>Appealable:</strong> No<br/>
+            <strong>Staff must attach proof:</strong> screenshots/message links + timestamps + usernames/IDs
+          </div>
+
+          <div class="sectionTitle">Harassment / bullying</div>
+          <ul class="rules">
+            <li>No targeted abuse, stalking behavior, or dogpiling.</li>
+            <li>“In DMs” doesn’t protect it if it started through the community.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Side: Staff tools + quick buttons -->
+      <aside class="card" id="staff">
+        <div class="cardHeader">
+          <h2>Staff Standards</h2>
+          <div class="badge">PR / calm handling</div>
+        </div>
+        <div class="cardBody">
+          <div class="sectionTitle">How staff should act</div>
+          <ul class="rules">
+            <li>Stay professional (no arguing like a member).</li>
+            <li>Enforce rules with evidence, not emotion.</li>
+            <li>Be consistent. Same rule = same action.</li>
+            <li>No leaking internal reports or staff chat.</li>
+          </ul>
+
+          <div class="sectionTitle">When slurs happen</div>
+          <ul class="rules">
+            <li>Stop it fast: “That’s not allowed here. Drop it now.”</li>
+            <li>Apply ladder: warn → mute → ban</li>
+            <li>Log the action + attach evidence</li>
+          </ul>
+
+          <div class="sectionTitle">Info bar buttons</div>
+          <div class="toolbar" role="group" aria-label="Staff shortcuts">
+            <button class="pill" data-jump="#logs">Log Action</button>
+            <button class="pill" data-jump="#appeals">View Appeals</button>
+            <button class="pill" data-jump="#more">Member Info</button>
+            <button class="pill" id="copyInvite">Copy Discord Invite</button>
+          </div>
+
+          <div class="callout" style="margin-top:12px">
+            <strong>Reminder:</strong> If there’s no proof, don’t action. Ask for evidence first.
+          </div>
+        </div>
+      </aside>
+
+      <!-- Logs & Evidence -->
+      <section class="card" id="logs" style="grid-column: 1 / -1;">
+        <div class="cardHeader">
+          <h2>Logs & Evidence</h2>
+          <div class="badge">Required for staff actions</div>
+        </div>
+        <div class="cardBody">
+          <div class="sectionTitle">What every log must include</div>
+          <ul class="rules">
+            <li>Staff member name + role</li>
+            <li>User name + user ID (if possible)</li>
+            <li>Rule broken (which section)</li>
+            <li>Action taken (warn / mute / ban / perma)</li>
+            <li><strong>Evidence:</strong> screenshots or message links + timestamps</li>
+            <li>Date/time + short context</li>
+          </ul>
+
+          <div class="callout">
+            <strong>No log = action can be reversed.</strong>
+            <span class="muted">Logging protects the community and protects staff too.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Appeals -->
+      <section class="card" id="appeals" style="grid-column: 1 / -1;">
+        <div class="cardHeader">
+          <h2>Appeals</h2>
+          <div class="badge">Fair + consistent</div>
+        </div>
+        <div class="cardBody">
+          <div class="sectionTitle">Appealable</div>
+          <ul class="rules">
+            <li>Warning / mute / ban ladder actions</li>
+            <li>Most non-zero-tolerance punishments</li>
+          </ul>
+
+          <div class="sectionTitle">Not appealable</div>
+          <ul class="rules">
+            <li>Perma bans for real-life threats, doxxing, or DDOS threats</li>
+          </ul>
+
+          <div class="sectionTitle">Appeal should include</div>
+          <ul class="rules">
+            <li>What happened (brief)</li>
+            <li>Why they think it was wrong / context</li>
+            <li>What they’ll do differently</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- More -->
+      <section class="card" id="more" style="grid-column: 1 / -1;">
+        <div class="cardHeader">
+          <h2>More</h2>
+          <div class="badge">Recommended additions</div>
+        </div>
+        <div class="cardBody">
+          <ul class="rules">
+            <li>Age / NSFW policy (if needed)</li>
+            <li>Spam / raid behavior rules</li>
+            <li>Impersonation rules</li>
+            <li>Scams / fake giveaways</li>
+            <li>Event disruption (mic spam, lobby crashing)</li>
+          </ul>
+
+          <div class="footer">
+            P.U.S.H • TOS page • clean rules, clean logs, fair enforcement
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="toast" id="toast">Copied!</div>
+
+  <script>
+    // Jump buttons
+    document.querySelectorAll("[data-jump]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const sel = btn.getAttribute("data-jump");
+        const el = document.querySelector(sel);
+        if(!el) return;
+        el.scrollIntoView({behavior:"smooth", block:"start"});
+      });
+    });
+
+    // Discord join button
+    const invite = "https://discord.gg/3H45bxeMe2";
+    document.getElementById("discordJoin").addEventListener("click", () => {
+      window.open(invite, "_blank", "noopener,noreferrer");
+    });
+
+    // Copy invite button
+    const toast = document.getElementById("toast");
+    function showToast(text){
+      toast.textContent = text || "Copied!";
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1400);
+    }
+    document.getElementById("copyInvite").addEventListener("click", async () => {
+      try{
+        await navigator.clipboard.writeText(invite);
+        showToast("Discord invite copied");
+      }catch(e){
+        showToast("Copy failed");
+      }
+    });
+
+    // Snow animation (lightweight)
+    const canvas = document.getElementById("snow");
+    const ctx = canvas.getContext("2d");
+    let w, h, flakes;
+
+    function resize(){
+      w = canvas.width = window.innerWidth * devicePixelRatio;
+      h = canvas.height = window.innerHeight * devicePixelRatio;
+      flakes = Array.from({length: Math.max(80, Math.floor(window.innerWidth/12))}, () => ({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        r: (Math.random()*2.2 + 0.8) * devicePixelRatio,
+        s: (Math.random()*0.9 + 0.35) * devicePixelRatio,
+        d: (Math.random()*0.7 + 0.2) * devicePixelRatio
+      }));
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function tick(){
+      ctx.clearRect(0,0,w,h);
+      ctx.globalAlpha = 0.9;
+      ctx.fillStyle = "white";
+      for(const f of flakes){
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI*2);
+        ctx.fill();
+        f.y += f.s;
+        f.x += Math.sin(f.y * 0.002) * f.d;
+        if(f.y > h + 10) { f.y = -10; f.x = Math.random()*w; }
+        if(f.x > w + 10) f.x = -10;
+        if(f.x < -10) f.x = w + 10;
+      }
+      requestAnimationFrame(tick);
+    }
+    tick();
+  </script>
+</body>
+</html>
