@@ -350,7 +350,7 @@
       display:flex;
       align-items:flex-start;
       gap:10px;
-      pointer-events:none; /* allow only inner controls */
+      pointer-events:auto; /* allow only inner controls */
     }
     .musicToggle{
       pointer-events:auto;
@@ -1009,7 +1009,7 @@
     // =========================
     // Music Player
     // =========================
-    const AUDIO_SRC = "./assets/PUSH%20IT%20THEME%20WAV.%20(2).wav";
+    const AUDIO_SRC = "./assets/theme.wav";
 
     const musicDock = document.getElementById("musicDock");
     const musicToggle = document.getElementById("musicToggle");
@@ -1327,4 +1327,5 @@
   </script>
 </body>
 </html>
+
 
