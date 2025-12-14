@@ -613,46 +613,51 @@
   <div class="bg"></div>
   <canvas id="snow"></canvas>
 
-  <!-- Slide-in Music Player (Top Left) -->
-  <div class="musicDock" id="musicDock" aria-label="Music player">
-    <button class="musicToggle" id="musicToggle" title="Music player" aria-label="Toggle music player">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h6V3h-8z"/></svg>
-    </button>
+<!-- Slide-in Music Player (Top Left) -->
+<div class="musicDock" id="musicDock" aria-label="Music player">
+  <button class="musicToggle" id="musicToggle" title="Music player" aria-label="Toggle music player">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h6V3h-8z"/></svg>
+  </button>
 
-    <div class="musicPanel">
-      <div class="musicHead">
-        <div class="musicTitle" id="musicTitle">PUSH Theme</div>
-        <div class="musicBtns">
-          <button class="iconBtn" id="btnPlay" title="Play / Pause" aria-label="Play / Pause">
-            <svg id="icoPlay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            <svg id="icoPause" viewBox="0 0 24 24" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
-          </button>
-          <button class="iconBtn" id="btnMute" title="Mute" aria-label="Mute">
-            <svg id="icoVol" viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.23v2.06a7 7 0 0 1 0 13.42v2.06a9 9 0 0 0 0-17.6z"/></svg>
-            <svg id="icoMuted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12a4.5 4.5 0 0 0-2.5-4v3.18l2.45 2.45c.03-.21.05-.42.05-.63zM19 12a7 7 0 0 1-1.5 4.33l1.43 1.43A9 9 0 0 0 21 12a9 9 0 0 0-2.07-5.76L17.5 7.67A7 7 0 0 1 19 12zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l5.73 5.73L19 21l-7-7-7.73-7.73L4.27 3zM12 4.83L9.17 7.66 12 10.5V4.83z"/></svg>
-          </button>
-        </div>
+  <div class="musicPanel">
+    <div class="musicHead">
+      <div class="musicTitle" id="musicTitle">PUSH Theme</div>
+      <div class="musicBtns">
+        <button class="iconBtn" id="btnPlay" title="Play / Pause" aria-label="Play / Pause">
+          <svg id="icoPlay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="icoPause" viewBox="0 0 24 24" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+        </button>
+        <button class="iconBtn" id="btnMute" title="Mute" aria-label="Mute">
+          <svg id="icoVol" viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.23v2.06a7 7 0 0 1 0 13.42v2.06a9 9 0 0 0 0-17.6z"/></svg>
+          <svg id="icoMuted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12a4.5 4.5 0 0 0-2.5-4v3.18l2.45 2.45c.03-.21.05-.42.05-.63zM19 12a7 7 0 0 1-1.5 4.33l1.43 1.43A9 9 0 0 0 21 12a9 9 0 0 0-2.07-5.76L17.5 7.67A7 7 0 0 1 19 12zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l5.73 5.73L19 21l-7-7-7.73-7.73L4.27 3zM12 4.83L9.17 7.66 12 10.5V4.83z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="musicBody">
+      <div class="barRow">
+        <div class="time" id="tCur">0:00</div>
+        <input type="range" id="seek" min="0" max="1000" value="0" aria-label="Seek" />
+        <div class="time" id="tDur">0:00</div>
       </div>
 
-      <div class="musicBody">
-        <div class="barRow">
-          <div class="time" id="tCur">0:00</div>
-          <input type="range" id="seek" min="0" max="1000" value="0" aria-label="Seek" />
-          <div class="time" id="tDur">0:00</div>
-        </div>
-
-        <div class="barRow">
-          <div class="smallLabel" style="width:42px;text-align:center">VOL</div>
-          <input type="range" id="vol" min="0" max="100" value="70" aria-label="Volume" />
-          <div class="smallLabel" id="volPct" style="width:42px;text-align:center">70%</div>
-        </div>
+      <div class="barRow">
+        <div class="smallLabel" style="width:42px;text-align:center">VOL</div>
+        <input type="range" id="vol" min="0" max="100" value="70" aria-label="Volume" />
+        <div class="smallLabel" id="volPct" style="width:42px;text-align:center">70%</div>
       </div>
     </div>
   </div>
 
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
+  <!-- Hidden audio element (THIS is the important part) -->
+  <audio id="pushAudio" preload="auto" playsinline>
+    <source src="/assets/theme.mp3?v=1" type="audio/mpeg" />
+  </audio>
+</div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
         <!-- small logo icon (optional) -->
         <img src="https://cdn.discordapp.com/attachments/1154831673058402317/1447188492261130323/content.png?ex=693e9fd0&is=693d4e50&hm=ba17c78a85c673a90a6dc69a7ef5de0f165eaa566d57c32d8931ad4ce79be8f6&" alt="P.U.S.H logo" />
         <div>
@@ -1327,6 +1332,7 @@
   </script>
 </body>
 </html>
+
 
 
 
