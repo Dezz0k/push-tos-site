@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>P.U.S.H — Home</title>
+  <style>
+    :root{
+      --bg: rgba(10, 14, 20, .55);
+      --card: rgba(18, 24, 34, .55);
+      --card2: rgba(18, 24, 34, .35);
+      --stroke: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --muted2: rgba(255,255,255,.55);
+      --accent: rgba(255,255,255,.90);
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      overflow-x:hidden;
+      background:#05070b;
+    }
+
+    /* Background */
+    .bg{
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(255,255,255,.18), transparent 55%),
+        radial-gradient(900px 600px at 80% 30%, rgba(160,200,255,.14), transparent 60%),
+        radial-gradient(800px 600px at 60% 85%, rgba(255,255,255,.10), transparent 60%),
+        linear-gradient(180deg, #070a11 0%, #06070b 100%);
+      z-index:-3;
+    }
+    .bg::before{
+      content:"";
+      position:absolute; inset:-20px;
+      background-image: url("https://images.unsplash.com/photo-1489587028985-1a95819a7b39?auto=format&fit=crop&w=2400&q=80");
+      background-size: cover;
+      background-position: center;
+      filter: blur(14px);
+      opacity:.55;
+      transform: scale(1.08);
+      z-index:-2;
+    }
+    .bg::after{
+      content:"";
+      position:absolute; inset:0;
+      background: rgba(0,0,0,.38);
+      z-index:-1;
+    }
+    canvas#snow{
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      opacity:.8;
+    }
+
+    /* Top bar */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(8, 10, 14, .35);
+      border-bottom: 1px solid var(--stroke);
+    }
+    .topbar-inner{
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      user-select:none;
+      min-width: 160px;
+      text-decoration:none;
+      color:inherit;
+    }
+    .brand img{
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.10);
+      object-fit: cover;
+      background: rgba(255,255,255,.06);
+    }
+    .brand .title{
+      font-size: 16px;
+      letter-spacing: .28em;
+      font-weight: 900;
+    }
+    .brand .sub{
+      font-size: 12px;
+      color: var(--muted2);
+      letter-spacing:.18em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .pill{
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .pill:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.16);
+    }
+
+    .right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .discordBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.07);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease;
+    }
+    .discordBtn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.12);
+    }
+    .discordBtn svg{ width: 20px; height: 20px; fill: var(--accent); }
+
+    /* Layout */
+    .wrap{
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 26px 18px 60px;
+    }
+
+    .hero{
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(10,12,16,.48);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:-60px;
+      background: radial-gradient(800px 400px at 20% 10%, rgba(255,255,255,.16), transparent 60%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .hero-inner{
+      position:relative;
+      z-index:1;
+      display:grid;
+      gap:12px;
+    }
+    .hero h1{
+      margin:0;
+      font-size: 44px;
+      letter-spacing: .22em;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .tagline{
+      color: var(--muted);
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+    .hero p{
+      margin:0;
+      max-width: 760px;
+      line-height: 1.6;
+      color: rgba(255,255,255,.82);
+      font-size: 14px;
+    }
+    .ctaRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top: 8px;
+    }
+    .ctaPrimary{
+      background: rgba(255,255,255,.14);
+      border-color: rgba(255,255,255,.22);
+      font-weight: 900;
+      letter-spacing:.06em;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+      align-items:stretch;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height: 170px;
+    }
+    .cardHeader{
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .cardHeader h2{
+      margin:0;
+      font-size: 14px;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+    }
+    .badge{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .cardBody{
+      padding: 14px 16px 16px;
+      color: rgba(255,255,255,.82);
+      line-height:1.6;
+      display:grid;
+      gap:10px;
+      flex:1;
+    }
+    .miniList{
+      margin:0;
+      padding-left: 18px;
+      color: rgba(255,255,255,.82);
+    }
+    .miniList li{ margin:6px 0; }
+
+    .footer{
+      margin-top: 22px;
+      color: var(--muted2);
+      font-size: 12px;
+      text-align:center;
+      opacity:.9;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+  <canvas id="snow"></canvas>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/" aria-label="Home">
+        <img src="https://cdn.discordapp.com/attachments/1154831673058402317/1447188492261130323/content.png" alt="P.U.S.H logo" />
+        <div>
+          <div class="title">P.U.S.H</div>
+          <div class="sub">Home</div>
+        </div>
+      </a>
+
+      <nav class="nav" aria-label="Navigation">
+        <a class="pill" href="#about">About</a>
+        <a class="pill" href="/tos.html">Rules / TOS</a>
+        <a class="pill" href="#staff">Staff</a>
+        <a class="pill" href="#apply">Apply</a>
+      </nav>
+
+      <div class="right">
+        <a class="pill" href="/tos.html">Open TOS</a>
+        <button class="discordBtn" id="discordJoin" title="Join Discord" aria-label="Join Discord">
+          <svg viewBox="0 0 127.14 96.36" aria-hidden="true">
+            <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2A75.57,75.57,0,0,0,95.73,78c.87.72,1.76,1.4,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.18-16.14C129.24,52.84,122.07,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.22,46,96.11,53,91.07,65.69,84.69,65.69Z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero" id="about">
+      <div class="hero-inner">
+        <div class="tagline">events • creators • community • fairness</div>
+        <h1>P.U.S.H</h1>
+        <p>
+          This is the main hub for the P.U.S.H community. Use this page for quick access to rules/TOS, staff standards,
+          applications, and event info — all clean and easy to find.
+        </p>
+
+        <div class="ctaRow">
+          <a class="pill ctaPrimary" href="/tos.html">Read Rules / TOS</a>
+          <a class="pill" href="#apply">Apply (Staff / Events / Creator)</a>
+          <a class="pill" href="#staff">Staff Standards</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <div class="cardHeader">
+          <h2>Rules / TOS</h2>
+          <div class="badge">discord + in-game</div>
+        </div>
+        <div class="cardBody">
+          <div>Clear rules, clean logs, fair enforcement. Quick link to the full page:</div>
+          <a class="pill" href="/tos.html">Open TOS Page</a>
+        </div>
+      </section>
+
+      <section class="card" id="staff">
+        <div class="cardHeader">
+          <h2>Staff Standards</h2>
+          <div class="badge">professional</div>
+        </div>
+        <div class="cardBody">
+          <ul class="miniList">
+            <li>Stay calm, don’t argue like a member.</li>
+            <li>Action only with evidence.</li>
+            <li>Be consistent (same rule = same action).</li>
+            <li>Don’t leak staff reports or private logs.</li>
+          </ul>
+          <a class="pill" href="/tos.html#staff">View in TOS</a>
+        </div>
+      </section>
+
+      <section class="card" id="apply">
+        <div class="cardHeader">
+          <h2>Apply</h2>
+          <div class="badge">staff / events</div>
+        </div>
+        <div class="cardBody">
+          <div>Applications can be handled through Discord for now (fast + simple).</div>
+          <ul class="miniList">
+            <li>Events Staff</li>
+            <li>Moderation</li>
+            <li>Creator / Media</li>
+          </ul>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="pill ctaPrimary" id="btnOpenApps">Open Apps Channel</button>
+            <a class="pill" href="/tos.html#appeals">Appeals</a>
+          </div>
+          <div style="color:var(--muted2);font-size:12px">
+            Later we can add a real form → webhook using a Cloudflare Worker.
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      P.U.S.H — main hub • last updated: <span id="lastUpdated"></span>
+    </div>
+  </main>
+
+  <script>
+    // Snow
+    const canvas = document.getElementById("snow");
+    const ctx = canvas.getContext("2d");
+    let w, h, flakes;
+
+    function resize(){
+      w = canvas.width = window.innerWidth * devicePixelRatio;
+      h = canvas.height = window.innerHeight * devicePixelRatio;
+      flakes = Array.from({length: Math.max(80, Math.floor(window.innerWidth/12))}, () => ({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        r: (Math.random()*2.2 + 0.8) * devicePixelRatio,
+        s: (Math.random()*0.9 + 0.35) * devicePixelRatio,
+        d: (Math.random()*0.7 + 0.2) * devicePixelRatio
+      }));
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function tick(){
+      ctx.clearRect(0,0,w,h);
+      ctx.globalAlpha = 0.9;
+      ctx.fillStyle = "white";
+      for(const f of flakes){
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI*2);
+        ctx.fill();
+        f.y += f.s;
+        f.x += Math.sin(f.y * 0.002) * f.d;
+        if(f.y > h + 10) { f.y = -10; f.x = Math.random()*w; }
+        if(f.x > w + 10) f.x = -10;
+        if(f.x < -10) f.x = w + 10;
+      }
+      requestAnimationFrame(tick);
+    }
+    tick();
+
+    // Links
+    const invite = "https://discord.gg/3H45bxeMe2";
+    document.getElementById("discordJoin").addEventListener("click", () => {
+      window.open(invite, "_blank", "noopener,noreferrer");
+    });
+
+    // Apps button (change this to your real apps channel link if you want)
+    document.getElementById("btnOpenApps").addEventListener("click", () => {
+      // Put your Discord channel URL here later if you want
+      window.open(invite, "_blank", "noopener,noreferrer");
+    });
+
+    // Footer timestamp
+    const d = new Date();
+    document.getElementById("lastUpdated").textContent =
+      d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"2-digit" });
+  </script>
+</body>
+</html>
