@@ -129,6 +129,11 @@
       cursor:pointer;
       transition: transform .12s ease, background .12s ease, border-color .12s ease;
       white-space:nowrap;
+
+      /* helps <a class="pill"> match buttons */
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
     }
     .pill:hover{
       transform: translateY(-1px);
@@ -308,14 +313,6 @@
       background: rgba(255,255,255,.08);
     }
 
-    .footer{
-      margin-top: 18px;
-      color: var(--muted2);
-      font-size: 12px;
-      text-align:center;
-      opacity:.9;
-    }
-
     .toast{
       position: fixed;
       bottom: 18px;
@@ -339,120 +336,9 @@
       transform: translateX(-50%) translateY(-2px);
     }
 
-    /* ===========================
-       Slide-in Music Player
-       =========================== */
-    .musicDock{
-      position: fixed;
-      top: 78px; /* below topbar */
-      left: 16px;
-      z-index: 1200;
-      display:flex;
-      align-items:flex-start;
-      gap:10px;
-      pointer-events:auto; /* allow only inner controls */
-    }
-    .musicToggle{
-      pointer-events:auto;
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(10,12,16,.55);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 20px 60px rgba(0,0,0,.35);
-      cursor:pointer;
-      display:grid;
-      place-items:center;
-      transition: transform .12s ease, background .12s ease;
-    }
-    .musicToggle:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
-    .musicToggle svg{ width: 20px; height: 20px; fill: rgba(255,255,255,.92); }
-
-    .musicPanel{
-      pointer-events:auto;
-      width: 310px;
-      max-width: calc(100vw - 90px);
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(10,12,16,.55);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 20px 60px rgba(0,0,0,.45);
-      overflow:hidden;
-      transform: translateX(calc(-100% - 10px));
-      opacity: 0;
-      transition: transform .20s ease, opacity .20s ease;
-    }
-    .musicDock.open .musicPanel{
-      transform: translateX(0);
-      opacity: 1;
-    }
-    .musicHead{
-      padding: 12px 12px 10px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .musicTitle{
-      font-size: 12px;
-      letter-spacing:.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.70);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      max-width: 210px;
-    }
-    .musicBtns{
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-    .iconBtn{
-      width: 34px; height: 34px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      cursor:pointer;
-      display:grid;
-      place-items:center;
-      transition: transform .12s ease, background .12s ease;
-    }
-    .iconBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
-    .iconBtn svg{ width: 18px; height: 18px; fill: rgba(255,255,255,.92); }
-
-    .musicBody{
-      padding: 12px;
-      display:grid;
-      gap: 10px;
-    }
-    .barRow{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .time{
-      font-size: 12px;
-      color: rgba(255,255,255,.70);
-      width: 42px;
-      text-align:center;
-      user-select:none;
-    }
-    input[type="range"]{
-      width: 100%;
-      accent-color: white;
-    }
-    .smallLabel{
-      font-size: 12px;
-      color: rgba(255,255,255,.70);
-      user-select:none;
-    }
-
-    /* ===========================
+    /* =========================
        Auth Modal
-       =========================== */
+       ========================= */
     .modalOverlay{
       position: fixed;
       inset: 0;
@@ -613,52 +499,9 @@
   <div class="bg"></div>
   <canvas id="snow"></canvas>
 
-<!-- Slide-in Music Player (Top Left) -->
-<div class="musicDock" id="musicDock" aria-label="Music player">
-  <button class="musicToggle" id="musicToggle" title="Music player" aria-label="Toggle music player">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h6V3h-8z"/></svg>
-  </button>
-
-  <div class="musicPanel">
-    <div class="musicHead">
-      <div class="musicTitle" id="musicTitle">PUSH Theme</div>
-      <div class="musicBtns">
-        <button class="iconBtn" id="btnPlay" title="Play / Pause" aria-label="Play / Pause">
-          <svg id="icoPlay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          <svg id="icoPause" viewBox="0 0 24 24" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
-        </button>
-        <button class="iconBtn" id="btnMute" title="Mute" aria-label="Mute">
-          <svg id="icoVol" viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.23v2.06a7 7 0 0 1 0 13.42v2.06a9 9 0 0 0 0-17.6z"/></svg>
-          <svg id="icoMuted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12a4.5 4.5 0 0 0-2.5-4v3.18l2.45 2.45c.03-.21.05-.42.05-.63zM19 12a7 7 0 0 1-1.5 4.33l1.43 1.43A9 9 0 0 0 21 12a9 9 0 0 0-2.07-5.76L17.5 7.67A7 7 0 0 1 19 12zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l5.73 5.73L19 21l-7-7-7.73-7.73L4.27 3zM12 4.83L9.17 7.66 12 10.5V4.83z"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <div class="musicBody">
-      <div class="barRow">
-        <div class="time" id="tCur">0:00</div>
-        <input type="range" id="seek" min="0" max="1000" value="0" aria-label="Seek" />
-        <div class="time" id="tDur">0:00</div>
-      </div>
-
-      <div class="barRow">
-        <div class="smallLabel" style="width:42px;text-align:center">VOL</div>
-        <input type="range" id="vol" min="0" max="100" value="70" aria-label="Volume" />
-        <div class="smallLabel" id="volPct" style="width:42px;text-align:center">70%</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Hidden audio element (THIS is the important part) -->
-  <audio id="pushAudio" preload="auto" playsinline>
-    <source src="/assets/theme.mp3?v=1" type="audio/mpeg" />
-  </audio>
-</div>
-
-<header class="topbar">
-  <div class="topbar-inner">
-    <div class="brand">
-        <!-- small logo icon (optional) -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
         <img src="https://cdn.discordapp.com/attachments/1154831673058402317/1447188492261130323/content.png?ex=693e9fd0&is=693d4e50&hm=ba17c78a85c673a90a6dc69a7ef5de0f165eaa566d57c32d8931ad4ce79be8f6&" alt="P.U.S.H logo" />
         <div>
           <div class="title">P.U.S.H</div>
@@ -667,21 +510,20 @@
       </div>
 
       <!-- Full info bar buttons -->
-<nav class="nav" aria-label="Navigation">
-  <a class="pill" href="/">Home</a>
+      <nav class="nav" aria-label="Navigation">
+        <a class="pill" href="/">Home</a>
+        <button class="pill" data-jump="#tos">TOS Rules</button>
+        <button class="pill" data-jump="#staff">Staff Standards</button>
+        <button class="pill" data-jump="#logs">Logs & Evidence</button>
+        <button class="pill" data-jump="#appeals">Appeals</button>
+        <button class="pill" data-jump="#more">More</button>
+      </nav>
 
-  <button class="pill" data-jump="#tos">TOS Rules</button>
-  <button class="pill" data-jump="#staff">Staff Standards</button>
-  <button class="pill" data-jump="#logs">Logs & Evidence</button>
-  <button class="pill" data-jump="#appeals">Appeals</button>
-  <button class="pill" data-jump="#more">More</button>
-</nav>
+      <div class="right" id="authArea">
+        <button class="pill" id="openLogin">Login</button>
+        <button class="pill" id="openRegister">Register</button>
 
-<div class="right" id="authArea">
-  <button class="pill" id="openLogin">Login</button>
-  <button class="pill" id="openRegister">Register</button>
-
-  <!-- Discord icon button -->
+        <!-- Discord icon button -->
         <button class="discordBtn" id="discordJoin" title="Join Discord" aria-label="Join Discord">
           <svg viewBox="0 0 127.14 96.36" aria-hidden="true">
             <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2A75.57,75.57,0,0,0,95.73,78c.87.72,1.76,1.4,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.18-16.14C129.24,52.84,122.07,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.22,46,96.11,53,91.07,65.69,84.69,65.69Z"/>
@@ -751,6 +593,13 @@
           <ul class="rules">
             <li>No targeted abuse, stalking behavior, or dogpiling.</li>
             <li>“In DMs” doesn’t protect it if it started through the community.</li>
+          </ul>
+
+          <div class="sectionTitle">NSFW / sexual content</div>
+          <ul class="rules">
+            <li>No explicit sexual content, porn, or sexual roleplay in public channels.</li>
+            <li>No sexual content involving minors (instant perma + report where required).</li>
+            <li>If you allow any mature talk in specific spaces, it must be clearly marked and restricted to 18+.</li>
           </ul>
         </div>
       </section>
@@ -831,6 +680,7 @@
           <div class="sectionTitle">Not appealable</div>
           <ul class="rules">
             <li>Perma bans for real-life threats, doxxing, or DDOS threats</li>
+            <li>Sexual content involving minors (zero-tolerance)</li>
           </ul>
 
           <div class="sectionTitle">Appeal should include</div>
@@ -849,14 +699,45 @@
           <div class="badge">Recommended additions</div>
         </div>
         <div class="cardBody">
+          <div class="sectionTitle">Age / NSFW</div>
           <ul class="rules">
-            <li>Age / NSFW policy (if needed)</li>
-            <li>Spam / raid behavior rules</li>
-            <li>Impersonation rules</li>
-            <li>Scams / fake giveaways</li>
-            <li>Event disruption (mic spam, lobby crashing)</li>
+            <li>If your community includes mature content, keep it in clearly marked 18+ channels only.</li>
+            <li>No porn, explicit media, or sexual roleplay in public spaces.</li>
+            <li>Anyone under 18 must not access 18+ channels. No exceptions.</li>
           </ul>
 
+          <div class="sectionTitle">Spam / raid behavior</div>
+          <ul class="rules">
+            <li>No spam (caps spam, emoji spam, mic spam, soundboards, repeated pings).</li>
+            <li>Raid attempts or encouraging raids = instant ban.</li>
+            <li>Advertising other servers, socials, or “join my group” without permission is treated as spam.</li>
+          </ul>
+
+          <div class="sectionTitle">Impersonation</div>
+          <ul class="rules">
+            <li>No pretending to be staff, a creator, or another member.</li>
+            <li>Copying names/avatars to trick people counts as impersonation.</li>
+            <li>Fake screenshots, fake “staff DMs”, or fake modmail = ban.</li>
+          </ul>
+
+          <div class="sectionTitle">Scams / fake giveaways</div>
+          <ul class="rules">
+            <li>No scam links, “free nitro”, phishing, token grabbers, or account selling.</li>
+            <li>Giveaways must be approved by staff and posted in the correct channel.</li>
+            <li>Chargebacks/refund abuse on paid services (if used) can lead to removal and blacklist.</li>
+          </ul>
+
+          <div class="sectionTitle">Event disruption</div>
+          <ul class="rules">
+            <li>No crashing events, trolling hosts, or intentionally ruining games.</li>
+            <li>No mic spamming, loud audio, or disrupting briefings.</li>
+            <li>Follow host instructions during events. If you disagree, appeal after.</li>
+          </ul>
+
+          <div class="callout">
+            <strong>Tip:</strong> If you want the strictest and cleanest setup, add a short “Three strikes” system for minor stuff
+            (spam, minor disrespect), and keep threats/doxxing/scams as instant bans.
+          </div>
         </div>
       </section>
     </div>
@@ -928,8 +809,7 @@
 
           <div class="field">
             <label for="r_did">Discord ID (optional)</label>
-            <input id="r_did" type="text" inputmode="numeric"
-              placeholder="example 1161162505628942346" />
+            <input id="r_did" type="text" inputmode="numeric" placeholder="example 1161162505628942346" />
           </div>
 
           <div class="formActions">
@@ -1012,135 +892,6 @@
       requestAnimationFrame(tick);
     }
     tick();
-
-    // =========================
-    // Music Player
-    // =========================
-    const AUDIO_SRC = "/assets/theme.mp3";
-
-    const musicDock = document.getElementById("musicDock");
-    const musicToggle = document.getElementById("musicToggle");
-    const btnPlay = document.getElementById("btnPlay");
-    const btnMute = document.getElementById("btnMute");
-    const icoPlay = document.getElementById("icoPlay");
-    const icoPause = document.getElementById("icoPause");
-    const icoVol = document.getElementById("icoVol");
-    const icoMuted = document.getElementById("icoMuted");
-    const seek = document.getElementById("seek");
-    const vol = document.getElementById("vol");
-    const volPct = document.getElementById("volPct");
-    const tCur = document.getElementById("tCur");
-    const tDur = document.getElementById("tDur");
-
-    const audio = new Audio();
-    audio.src = AUDIO_SRC;
-    audio.preload = "metadata";
-    audio.loop = true;
-    audio.crossOrigin = "anonymous";
-
-    function fmtTime(sec){
-      if(!isFinite(sec) || sec < 0) return "0:00";
-      const m = Math.floor(sec/60);
-      const s = Math.floor(sec%60);
-      return `${m}:${String(s).padStart(2,"0")}`;
-    }
-
-    function setPlayIcon(isPlaying){
-      icoPlay.style.display = isPlaying ? "none" : "";
-      icoPause.style.display = isPlaying ? "" : "none";
-    }
-    function setMuteIcon(isMuted){
-      icoVol.style.display = isMuted ? "none" : "";
-      icoMuted.style.display = isMuted ? "" : "none";
-    }
-
-    // Restore settings
-    const musicState = JSON.parse(localStorage.getItem("push_music_state_v1") || "{}");
-    if(typeof musicState.open === "boolean" && musicState.open) musicDock.classList.add("open");
-
-    let lastVol = (typeof musicState.lastVol === "number") ? musicState.lastVol : 0.70;
-    audio.volume = Math.min(1, Math.max(0, (typeof musicState.volume === "number" ? musicState.volume : 0.70)));
-    audio.muted = !!musicState.muted;
-
-    vol.value = Math.round(audio.volume * 100);
-    volPct.textContent = `${vol.value}%`;
-    setMuteIcon(audio.muted);
-
-    function persistMusic(){
-      localStorage.setItem("push_music_state_v1", JSON.stringify({
-        open: musicDock.classList.contains("open"),
-        volume: audio.volume,
-        muted: audio.muted,
-        lastVol
-      }));
-    }
-
-    musicToggle.addEventListener("click", () => {
-      musicDock.classList.toggle("open");
-      persistMusic();
-    });
-
-    btnPlay.addEventListener("click", async () => {
-      try{
-        if(audio.paused){
-          await audio.play(); // user gesture required
-          setPlayIcon(true);
-        }else{
-          audio.pause();
-          setPlayIcon(false);
-        }
-      }catch(e){
-        showToast("Press play again (browser blocked autoplay)");
-      }
-    });
-
-    btnMute.addEventListener("click", () => {
-      audio.muted = !audio.muted;
-      setMuteIcon(audio.muted);
-      if(!audio.muted && audio.volume === 0 && lastVol > 0){
-        audio.volume = lastVol;
-        vol.value = Math.round(audio.volume * 100);
-        volPct.textContent = `${vol.value}%`;
-      }
-      persistMusic();
-    });
-
-    vol.addEventListener("input", () => {
-      const v = Math.min(100, Math.max(0, Number(vol.value)));
-      volPct.textContent = `${v}%`;
-      audio.volume = v / 100;
-      if(v > 0) lastVol = audio.volume;
-      if(v === 0) audio.muted = true;
-      else audio.muted = false;
-      setMuteIcon(audio.muted);
-      persistMusic();
-    });
-
-    let seeking = false;
-    seek.addEventListener("input", () => {
-      seeking = true;
-    });
-    seek.addEventListener("change", () => {
-      if(!isFinite(audio.duration) || audio.duration <= 0) return;
-      const p = Number(seek.value) / 1000;
-      audio.currentTime = p * audio.duration;
-      seeking = false;
-    });
-
-    audio.addEventListener("loadedmetadata", () => {
-      tDur.textContent = fmtTime(audio.duration);
-    });
-
-    audio.addEventListener("timeupdate", () => {
-      if(!isFinite(audio.duration) || audio.duration <= 0) return;
-      tCur.textContent = fmtTime(audio.currentTime);
-      if(!seeking){
-        seek.value = Math.round((audio.currentTime / audio.duration) * 1000);
-      }
-    });
-
-    audio.addEventListener("play", () => setPlayIcon(true));
-    audio.addEventListener("pause", () => setPlayIcon(false));
 
     // =========================
     // Auth (client-side demo)
@@ -1260,11 +1011,7 @@
       }
 
       const pwh = await sha256Hex(pass);
-      accounts[user] = {
-        pwh,
-        discordId: did,
-        createdAt: Date.now()
-      };
+      accounts[user] = { pwh, discordId: did, createdAt: Date.now() };
       saveAccounts(accounts);
 
       setAuthMsg("ok", "Account created. You can login now.");
@@ -1296,9 +1043,7 @@
       const area = document.getElementById("authArea");
       const sess = getSession();
 
-      // reset to default buttons if not logged in
       if(!sess || !sess.username){
-        // nothing to do (buttons already exist)
         document.getElementById("openLogin").style.display = "";
         document.getElementById("openRegister").style.display = "";
         const existing = document.getElementById("whoami");
@@ -1334,9 +1079,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
