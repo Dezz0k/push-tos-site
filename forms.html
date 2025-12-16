@@ -379,7 +379,15 @@
       border: 1px solid rgba(168,120,255,.14);
       background: rgba(0,0,0,.18);
       border-radius: 14px;
+      cursor:pointer;
+      transition: border-color .12s ease, background .12s ease, transform .12s ease;
     }
+    .memberRow:hover{
+      transform: translateY(-1px);
+      background: rgba(168,120,255,.08);
+      border-color: rgba(168,120,255,.24);
+    }
+    .memberRow:active{ transform: translateY(0px); }
     .dot{
       width: 10px;
       height: 10px;
@@ -724,6 +732,9 @@
           <div id="memberList" class="callout" style="display:grid; gap:10px;">
             <div style="color:var(--muted2)">No accounts yet.</div>
           </div>
+          <div class="callout" style="color:var(--muted2)">
+            <b>Demo note:</b> accounts/members are stored in your browser. Other people won’t see these members until we add a real database.
+          </div>
         </div>
       </aside>
       </div>
@@ -870,6 +881,92 @@ EXTRA:
     </div>
   </div>
 
+  <!-- Settings Modal -->
+  <div class="modalOverlay" id="settingsModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Settings">
+      <div class="modalTop">
+        <h3>Settings</h3>
+        <button class="xBtn" id="settingsClose" aria-label="Close settings">
+          <svg viewBox="0 0 24 24"><path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.42L12 13.41l-6.89 6.3-1.42-1.41L10.59 12 3.69 5.71 5.11 4.29 12 10.59l6.89-6.3z"/></svg>
+        </button>
+      </div>
+      <div class="modalBody">
+        <div class="notice">
+          Update your account settings.<br/>
+          <span style="color:var(--muted2)">Demo note:</span> changes are stored in your browser (localStorage), not a real server.
+        </div>
+
+        <div id="settingsMsg"></div>
+
+        <div class="callout" style="display:grid; gap:6px;">
+          <div><span style="color:var(--muted2)">User:</span> <b id="settings_username">—</b></div>
+          <div><span style="color:var(--muted2)">Role:</span> <b id="settings_role">Member</b></div>
+        </div>
+
+        <div class="field">
+          <label for="s_display">Display Name</label>
+          <input id="s_display" type="text" placeholder="name shown on the site" />
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label for="s_dhandle">Discord @ (optional)</label>
+            <input id="s_dhandle" type="text" placeholder="@username" />
+          </div>
+          <div class="field">
+            <label for="s_did">Discord ID (optional)</label>
+            <input id="s_did" type="text" inputmode="numeric" placeholder="example 1161162505628942346" />
+          </div>
+        </div>
+
+        <div class="formActions">
+          <button type="button" class="btnGhost" id="s_resetProfile">Reset</button>
+          <button type="button" class="btnPrimary" id="s_saveProfile">Save Profile</button>
+        </div>
+
+        <div style="margin-top:8px; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.70)">Change password</div>
+
+        <div class="row2">
+          <div class="field">
+            <label for="s_curpass">Current password</label>
+            <input id="s_curpass" type="password" placeholder="current password" />
+          </div>
+          <div class="field">
+            <label for="s_newpass">New password</label>
+            <input id="s_newpass" type="password" placeholder="new password" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="s_newconf">Confirm new password</label>
+          <input id="s_newconf" type="password" placeholder="confirm new password" />
+        </div>
+
+        <div class="formActions">
+          <button type="button" class="btnGhost" id="s_clearPass">Clear</button>
+          <button type="button" class="btnPrimary" id="s_savePass">Update Password</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div class="modalOverlay" id="profileModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Profile">
+      <div class="modalTop">
+        <h3 id="profileTitle">Profile</h3>
+        <button class="xBtn" id="profileClose" aria-label="Close profile">
+          <svg viewBox="0 0 24 24"><path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.42L12 13.41l-6.89 6.3-1.42-1.41L10.59 12 3.69 5.71 5.11 4.29 12 10.59l6.89-6.3z"/></svg>
+        </button>
+      </div>
+      <div class="modalBody">
+        <div id="profileMsg"></div>
+        <div id="profileContent" class="callout" style="display:grid; gap:10px;">
+          <div style="color:var(--muted2)">Select a member to view their profile.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     // =========================
     // Smooth jumps
@@ -907,12 +1004,39 @@ EXTRA:
     const storm = document.getElementById("storm");
     const sctx = storm.getContext("2d");
     let SW, SH;
+    let lastDpr = devicePixelRatio || 1;
 
     function stormResize(){
-      SW = storm.width = Math.floor(window.innerWidth * devicePixelRatio);
-      SH = storm.height = Math.floor(window.innerHeight * devicePixelRatio);
+      const dpr = devicePixelRatio || 1;
+      lastDpr = dpr;
+      SW = storm.width = Math.floor(window.innerWidth * dpr);
+      SH = storm.height = Math.floor(window.innerHeight * dpr);
     }
-    window.addEventListener("resize", stormResize);
+
+    let stormRaf = 0;
+    function stormResizeSoon(){
+      if(stormRaf) return;
+      stormRaf = requestAnimationFrame(() => {
+        stormRaf = 0;
+        stormResize();
+      });
+    }
+
+    window.addEventListener("resize", stormResizeSoon);
+    window.addEventListener("orientationchange", stormResizeSoon);
+    window.addEventListener("pageshow", stormResizeSoon);
+    if(window.visualViewport){
+      window.visualViewport.addEventListener("resize", stormResizeSoon);
+    }
+
+    // Zoom can change devicePixelRatio without a resize event
+    setInterval(() => {
+      const dpr = devicePixelRatio || 1;
+      if(Math.abs(dpr - lastDpr) > 0.001){
+        stormResizeSoon();
+      }
+    }, 500);
+
     stormResize();
 
     let flash = 0;
@@ -1021,6 +1145,28 @@ EXTRA:
     ]);
 
     const PRESENCE_TTL_MS = 60 * 1000;
+
+    // Cross-tab UI refresh (helps “auto update” when multiple pages are open)
+    const BUS_NAME = "push_bus_v1";
+    const bus = ("BroadcastChannel" in window) ? new BroadcastChannel(BUS_NAME) : null;
+
+    function busEmit(type, data){
+      try{ bus?.postMessage({ type, data, ts: Date.now() }); }catch{}
+    }
+
+    function busHandle(msg){
+      const t = msg?.type;
+      if(t === "accounts"){
+        renderAuthArea();
+        renderForms();
+        syncLoginUI();
+        renderMembers();
+      }
+    }
+
+    if(bus){
+      bus.addEventListener("message", (e) => busHandle(e.data));
+    }
 
     // Optional: legacy staff/dev username allowlists
     const STAFF_USERS = ["Dezz", "DezzDk", "Dezz.fed", "Diesel", "Diesel Lane"];
@@ -1143,8 +1289,261 @@ EXTRA:
     const formRegister = document.getElementById("formRegister");
     const authMsg = document.getElementById("authMsg");
 
+    // Settings modal
+    const settingsModal = document.getElementById("settingsModal");
+    const settingsClose = document.getElementById("settingsClose");
+    const settingsMsg = document.getElementById("settingsMsg");
+
+    // Profile modal
+    const profileModal = document.getElementById("profileModal");
+    const profileClose = document.getElementById("profileClose");
+    const profileTitle = document.getElementById("profileTitle");
+    const profileMsg = document.getElementById("profileMsg");
+    const profileContent = document.getElementById("profileContent");
+    let activeProfileUser = "";
+
     function setAuthMsg(type, text){
       authMsg.innerHTML = text ? `<div class="${type === "ok" ? "okText" : "errorText"}">${text}</div>` : "";
+    }
+
+    function setSettingsMsg(type, text){
+      if(!settingsMsg) return;
+      settingsMsg.innerHTML = text ? `<div class="${type === "ok" ? "okText" : "errorText"}">${text}</div>` : "";
+    }
+
+    function setProfileMsg(type, text){
+      if(!profileMsg) return;
+      profileMsg.innerHTML = text ? `<div class="${type === "ok" ? "okText" : "errorText"}">${text}</div>` : "";
+    }
+
+    function showSettings(){
+      const sess = getSession();
+      if(!sess?.username){
+        showToast("Login required");
+        showModal("login");
+        return;
+      }
+
+      const acc = getAccount(sess.username);
+      if(!acc){
+        showToast("No account");
+        return;
+      }
+
+      document.getElementById("settings_username").textContent = acc.username;
+      document.getElementById("settings_role").textContent = getRole(acc.username);
+
+      document.getElementById("s_display").value = acc.displayName || acc.username;
+      document.getElementById("s_dhandle").value = acc.discordHandle || "";
+      document.getElementById("s_did").value = acc.discordId || "";
+
+      document.getElementById("s_curpass").value = "";
+      document.getElementById("s_newpass").value = "";
+      document.getElementById("s_newconf").value = "";
+
+      setSettingsMsg("", "");
+      settingsModal.classList.add("show");
+      settingsModal.setAttribute("aria-hidden","false");
+    }
+
+    function hideSettings(){
+      settingsModal.classList.remove("show");
+      settingsModal.setAttribute("aria-hidden","true");
+      setSettingsMsg("", "");
+    }
+
+    function openProfile(username){
+      activeProfileUser = String(username || "");
+      renderProfile();
+      setProfileMsg("", "");
+      profileModal.classList.add("show");
+      profileModal.setAttribute("aria-hidden","false");
+    }
+
+    function hideProfile(){
+      profileModal.classList.remove("show");
+      profileModal.setAttribute("aria-hidden","true");
+      activeProfileUser = "";
+      setProfileMsg("", "");
+    }
+
+    function renderProfile(){
+      if(!profileContent) return;
+
+      const u = activeProfileUser;
+      const accounts = loadAccounts();
+      const info = accounts[u];
+
+      if(!u || !info){
+        profileTitle.textContent = "Profile";
+        profileContent.innerHTML = `<div style="color:var(--muted2)">Profile not found.</div>`;
+        return;
+      }
+
+      const sess = getSession();
+      const me = sess?.username || "";
+      const isSelf = me && me === u;
+      const isOwner = getRole(me) === "Owner";
+      const online = isSelf || isOnline({ lastSeenAt: info.lastSeenAt });
+
+      const role = normalizeRole(info.role);
+      const roleBadge = role !== "Member"
+        ? `<span class="badge" style="font-size:12px; padding:6px 10px;">${escapeHtml(role)}</span>`
+        : `<span class="badge" style="font-size:12px; padding:6px 10px;">Member</span>`;
+
+      const connected = !!info.discordHandle;
+      const handleText = connected ? info.discordHandle : `@${u}`;
+      const createdAt = info.createdAt ? new Date(info.createdAt).toLocaleString() : "—";
+      const lastSeenAt = info.lastSeenAt ? new Date(info.lastSeenAt).toLocaleString() : "—";
+
+      profileTitle.textContent = isSelf ? "Your Profile" : `Profile`;
+
+      const ownerTools = isOwner ? `
+        <div style="margin-top:10px; border-top:1px solid rgba(168,120,255,.16); padding-top:10px;">
+          <div style="font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.70)">Owner tools</div>
+
+          <div class="field" style="margin-top:10px;">
+            <label for="p_display">Display Name</label>
+            <input id="p_display" type="text" value="${escapeHtml(info.displayName || u)}" />
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label for="p_role">Role</label>
+              <select id="p_role" style="width:100%; padding:12px 12px; border-radius:14px; border:1px solid rgba(168,120,255,.18); background:rgba(255,255,255,.06); color:rgba(255,255,255,.92);">
+                ${ROLE_ORDER.map(r => `<option ${normalizeRole(role) === r ? "selected" : ""}>${escapeHtml(r)}</option>`).join("")}
+              </select>
+            </div>
+            <div class="field">
+              <label for="p_dhandle">Discord @</label>
+              <input id="p_dhandle" type="text" value="${escapeHtml(info.discordHandle || "")}" placeholder="@username" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="p_did">Discord ID</label>
+            <input id="p_did" type="text" inputmode="numeric" value="${escapeHtml(info.discordId || "")}" placeholder="example 1161162505628942346" />
+          </div>
+
+          <div class="formActions">
+            <button type="button" class="btnGhost" id="p_remove">Remove</button>
+            <button type="button" class="btnPrimary" id="p_save">Save</button>
+          </div>
+        </div>
+      ` : "";
+
+      profileContent.innerHTML = `
+        <div style="display:grid; gap:10px;">
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-start; justify-content:space-between;">
+            <div>
+              <div style="font-weight:1000; font-size:18px;">${escapeHtml(info.displayName || u)}</div>
+              <div style="color:var(--muted2); font-size:13px;">@${escapeHtml(u)} • ${online ? "online" : "offline"}</div>
+            </div>
+            ${roleBadge}
+          </div>
+
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <img class="miniIcon" src="./assets/discord.svg" alt="" aria-hidden="true" />
+            <span style="color:${connected ? 'var(--text)' : 'rgba(255,120,120,.95)'};">${escapeHtml(handleText)}</span>
+            <span style="color:rgba(255,255,255,.28)">•</span>
+            <span style="color:var(--muted2)">ID:</span>
+            <code>${escapeHtml(info.discordId || "")}</code>
+          </div>
+
+          <div style="color:var(--muted2); font-size:12px; line-height:1.5;">
+            <div>Created: ${escapeHtml(createdAt)}</div>
+            <div>Last seen: ${escapeHtml(lastSeenAt)}</div>
+          </div>
+
+          ${isSelf ? `
+            <div class="formActions">
+              <button type="button" class="btnPrimary" id="p_openSettings">Open Settings</button>
+            </div>
+          ` : ""}
+
+          ${ownerTools}
+        </div>
+      `;
+
+      const openSettingsBtn = document.getElementById("p_openSettings");
+      if(openSettingsBtn){
+        openSettingsBtn.addEventListener("click", () => {
+          hideProfile();
+          showSettings();
+        });
+      }
+
+      const saveBtn = document.getElementById("p_save");
+      if(saveBtn){
+        saveBtn.addEventListener("click", () => {
+          const accounts2 = loadAccounts();
+          if(!accounts2[u]) return;
+
+          const newDisplay = String(document.getElementById("p_display").value || "").trim();
+          const newRole = String(document.getElementById("p_role").value || "Member");
+          const newHandle = normalizeDiscordHandle(String(document.getElementById("p_dhandle").value || "").trim());
+          const newDid = String(document.getElementById("p_did").value || "").trim();
+
+          if(newDisplay.length < 2){
+            setProfileMsg("err", "Display name must be at least 2 characters.");
+            return;
+          }
+          if(!isValidDiscordId(newDid)){
+            setProfileMsg("err", "Discord ID looks wrong. Example: 1161162505628942346");
+            return;
+          }
+
+          if(newDid){
+            for(const [uname, info2] of Object.entries(accounts2)){
+              if(uname === u) continue;
+              if(info2.discordId && String(info2.discordId).trim() === newDid){
+                setProfileMsg("err", `That Discord ID is already linked to ${uname}.`);
+                return;
+              }
+            }
+          }
+
+          accounts2[u].displayName = newDisplay;
+          accounts2[u].discordHandle = newHandle;
+          accounts2[u].discordId = newDid;
+          accounts2[u].role = normalizeRole(newRole);
+          if(newDid && newDid === OWNER_DISCORD_ID) accounts2[u].role = "Owner";
+
+          saveAccounts(accounts2);
+          renderAuthArea();
+          renderForms();
+          syncLoginUI();
+          renderMembers();
+          busEmit("accounts");
+
+          showToast("Saved");
+          setProfileMsg("ok", "Saved.");
+          renderProfile();
+        });
+      }
+
+      const removeBtn = document.getElementById("p_remove");
+      if(removeBtn){
+        removeBtn.addEventListener("click", () => {
+          const accounts2 = loadAccounts();
+          if(!accounts2[u]) return;
+          delete accounts2[u];
+          saveAccounts(accounts2);
+
+          const sess2 = getSession();
+          if(sess2?.username === u){
+            clearSession();
+          } else {
+            renderMembers();
+            renderForms();
+            syncLoginUI();
+          }
+
+          busEmit("accounts");
+          showToast("Removed");
+          hideProfile();
+        });
+      }
     }
 
     function showModal(which){
@@ -1172,6 +1571,12 @@ EXTRA:
     authClose.addEventListener("click", hideModal);
     authModal.addEventListener("click", (e) => { if(e.target === authModal) hideModal(); });
 
+    settingsClose.addEventListener("click", hideSettings);
+    settingsModal.addEventListener("click", (e) => { if(e.target === settingsModal) hideSettings(); });
+
+    profileClose.addEventListener("click", hideProfile);
+    profileModal.addEventListener("click", (e) => { if(e.target === profileModal) hideProfile(); });
+
     tabLogin.addEventListener("click", () => setTab("login"));
     tabRegister.addEventListener("click", () => setTab("register"));
 
@@ -1188,6 +1593,143 @@ EXTRA:
       document.getElementById("r_conf").value = "";
       document.getElementById("r_did").value = "";
       setAuthMsg("", "");
+    });
+
+    // =========================
+    // Settings actions
+    // =========================
+    document.getElementById("s_resetProfile").addEventListener("click", () => {
+      const sess = getSession();
+      if(!sess?.username) return;
+      const acc = getAccount(sess.username);
+      if(!acc) return;
+
+      document.getElementById("settings_username").textContent = acc.username;
+      document.getElementById("settings_role").textContent = getRole(acc.username);
+      document.getElementById("s_display").value = acc.displayName || acc.username;
+      document.getElementById("s_dhandle").value = acc.discordHandle || "";
+      document.getElementById("s_did").value = acc.discordId || "";
+
+      setSettingsMsg("", "");
+      showToast("Reset");
+    });
+
+    document.getElementById("s_saveProfile").addEventListener("click", () => {
+      const sess = getSession();
+      if(!sess?.username){
+        showToast("Login required");
+        showModal("login");
+        return;
+      }
+
+      const username = sess.username;
+      const accounts = loadAccounts();
+      if(!accounts[username]){
+        setSettingsMsg("err", "Account not found.");
+        return;
+      }
+
+      const displayName = String(document.getElementById("s_display").value || "").trim();
+      const dhandleRaw = String(document.getElementById("s_dhandle").value || "").trim();
+      const discordHandle = normalizeDiscordHandle(dhandleRaw);
+      const did = String(document.getElementById("s_did").value || "").trim();
+
+      if(displayName.length < 2){
+        setSettingsMsg("err", "Display name must be at least 2 characters.");
+        return;
+      }
+      if(!isValidDiscordId(did)){
+        setSettingsMsg("err", "Discord ID looks wrong. Example: 1161162505628942346");
+        return;
+      }
+
+      if(did){
+        for(const [u, info] of Object.entries(accounts)){
+          if(u === username) continue;
+          if(info.discordId && String(info.discordId).trim() === did){
+            setSettingsMsg("err", `That Discord ID is already linked to ${u}.`);
+            return;
+          }
+        }
+      }
+
+      accounts[username].displayName = displayName;
+      accounts[username].discordHandle = discordHandle;
+      accounts[username].discordId = did;
+      accounts[username].role = normalizeRole(accounts[username].role);
+      if(did && did === OWNER_DISCORD_ID) accounts[username].role = "Owner";
+
+      saveAccounts(accounts);
+      touchPresence();
+
+      document.getElementById("settings_role").textContent = getRole(username);
+
+      renderAuthArea();
+      renderForms();
+      syncLoginUI();
+      renderMembers();
+
+      busEmit("accounts");
+      setSettingsMsg("ok", "Profile updated.");
+      showToast("Saved");
+    });
+
+    document.getElementById("s_clearPass").addEventListener("click", () => {
+      document.getElementById("s_curpass").value = "";
+      document.getElementById("s_newpass").value = "";
+      document.getElementById("s_newconf").value = "";
+      setSettingsMsg("", "");
+      showToast("Cleared");
+    });
+
+    document.getElementById("s_savePass").addEventListener("click", async () => {
+      const sess = getSession();
+      if(!sess?.username){
+        showToast("Login required");
+        showModal("login");
+        return;
+      }
+
+      const username = sess.username;
+      const accounts = loadAccounts();
+      if(!accounts[username]){
+        setSettingsMsg("err", "Account not found.");
+        return;
+      }
+
+      const cur = String(document.getElementById("s_curpass").value || "");
+      const np = String(document.getElementById("s_newpass").value || "");
+      const conf = String(document.getElementById("s_newconf").value || "");
+
+      if(cur.length < 1){
+        setSettingsMsg("err", "Enter your current password.");
+        return;
+      }
+      if(np.length < 6){
+        setSettingsMsg("err", "New password must be at least 6 characters.");
+        return;
+      }
+      if(np !== conf){
+        setSettingsMsg("err", "New passwords do not match.");
+        return;
+      }
+
+      const curHash = await sha256Hex(cur);
+      if(curHash !== accounts[username].pwh){
+        setSettingsMsg("err", "Current password is wrong.");
+        return;
+      }
+
+      accounts[username].pwh = await sha256Hex(np);
+      saveAccounts(accounts);
+      busEmit("accounts");
+
+      document.getElementById("s_curpass").value = "";
+      document.getElementById("s_newpass").value = "";
+      document.getElementById("s_newconf").value = "";
+
+      setSettingsMsg("ok", "Password updated.");
+      showToast("Password updated");
     });
 
     function isValidDiscordId(s){
@@ -1229,6 +1771,7 @@ EXTRA:
       const role = (did && did === OWNER_DISCORD_ID) ? "Owner" : "Member";
       accounts[user] = { pwh, displayName, role, discordId: did, discordHandle, lastSeenAt: 0, createdAt: Date.now() };
       saveAccounts(accounts);
+      busEmit("accounts");
       renderMembers();
 
       setAuthMsg("ok", "Account created. You can login now.");
@@ -1263,6 +1806,8 @@ EXTRA:
       // ALWAYS remove old dynamic nodes before adding (prevents duplicates)
       const existing = document.getElementById("whoami");
       if(existing) existing.remove();
+      const settingsBtn = document.getElementById("settingsBtn");
+      if(settingsBtn) settingsBtn.remove();
       const logout = document.getElementById("logoutBtn");
       if(logout) logout.remove();
 
@@ -1284,6 +1829,15 @@ EXTRA:
       who.style.cursor = "default";
       who.textContent = `Hi, ${getDisplayName(sess.username)}`;
       area.insertBefore(who, area.firstChild);
+
+      const settings = document.createElement("button");
+      settings.id = "settingsBtn";
+      settings.className = "pill";
+      settings.textContent = "Settings";
+      settings.addEventListener("click", () => {
+        showSettings();
+      });
+      area.insertBefore(settings, document.getElementById("discordJoin"));
 
       const out = document.createElement("button");
       out.id = "logoutBtn";
@@ -1349,7 +1903,7 @@ EXTRA:
           : `<span class="badge" style="font-size:11px; padding:4px 8px; border-color: rgba(255,120,120,.35); background: rgba(255,120,120,.12); color: rgba(255,120,120,.95);">NOT CONNECTED</span>`;
 
         return `
-          <div class="memberRow">
+          <div class="memberRow" data-member="${escapeHtml(acc.username)}" role="button" tabindex="0" aria-label="Open profile">
             <span class="dot" style="background:${dot}"></span>
             <div style="display:grid; gap:4px;">
               <div style="display:flex; gap:8px; align-items:baseline; flex-wrap:wrap;">
@@ -1516,6 +2070,23 @@ EXTRA:
     syncLoginUI();
     renderMembers();
     touchPresence();
+
+    // Profile open (event delegation)
+    const memberListBox = document.getElementById("memberList");
+    if(memberListBox){
+      memberListBox.addEventListener("click", (e) => {
+        const row = e.target.closest(".memberRow[data-member]");
+        if(!row) return;
+        openProfile(row.getAttribute("data-member"));
+      });
+      memberListBox.addEventListener("keydown", (e) => {
+        if(e.key !== "Enter" && e.key !== " ") return;
+        const row = e.target.closest(".memberRow[data-member]");
+        if(!row) return;
+        e.preventDefault();
+        openProfile(row.getAttribute("data-member"));
+      });
+    }
 
     window.addEventListener("focus", () => {
       touchPresence();
