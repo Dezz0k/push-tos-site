@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>P.U.S.H — Forms</title>
+
+  <style>
+    :root{
+      /* Black + dark purple theme */
+      --bg0: #05040a;
+      --bg1: #0b0620;
+      --bg2: #12072f;
+
+      --card: rgba(18, 10, 38, .62);
+      --card2: rgba(18, 10, 38, .38);
+
+      --stroke: rgba(255,255,255,.10);
+      --stroke2: rgba(168,120,255,.16);
+
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --muted2: rgba(255,255,255,.56);
+
+      --purple: rgba(168,120,255,.95);
+      --purple2: rgba(130,70,255,.85);
+
+      --shadow: 0 22px 70px rgba(0,0,0,.55);
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      overflow-x:hidden;
+      background: var(--bg0);
+    }
+
+    /* Storm background */
+    .bg{
+      position:fixed;
+      inset:0;
+      z-index:-4;
+      background:
+        radial-gradient(1100px 700px at 20% 15%, rgba(160,110,255,.22), transparent 55%),
+        radial-gradient(1000px 700px at 78% 25%, rgba(90,40,255,.18), transparent 60%),
+        radial-gradient(800px 600px at 60% 85%, rgba(255,255,255,.08), transparent 60%),
+        linear-gradient(180deg, var(--bg2) 0%, var(--bg1) 35%, var(--bg0) 100%);
+    }
+    .bg::after{
+      content:"";
+      position:absolute; inset:0;
+      background: rgba(0,0,0,.42);
+      pointer-events:none;
+    }
+
+    /* Lightning canvas */
+    canvas#storm{
+      position:fixed;
+      inset:0;
+      z-index:-3;
+      pointer-events:none;
+      opacity:.95;
+    }
+
+    /* Subtle mist grain */
+    .grain{
+      position:fixed;
+      inset:0;
+      z-index:-2;
+      pointer-events:none;
+      opacity:.10;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+    }
+
+    /* Top bar */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(12px);
+      background: rgba(6, 5, 12, .40);
+      border-bottom: 1px solid rgba(168,120,255,.18);
+    }
+    .topbar-inner{
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      user-select:none;
+      min-width: 180px;
+      text-decoration:none;
+      color:inherit;
+    }
+    .brand img{
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      border: 1px solid rgba(168,120,255,.22);
+      object-fit: cover;
+      background: rgba(255,255,255,.06);
+      box-shadow: 0 12px 36px rgba(0,0,0,.35);
+    }
+    .brand .title{
+      font-size: 14px;
+      letter-spacing: .32em;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .brand .sub{
+      font-size: 12px;
+      color: var(--muted2);
+      letter-spacing:.16em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    .pill{
+      border: 1px solid rgba(168,120,255,.18);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .pill:hover{
+      transform: translateY(-1px);
+      background: rgba(168,120,255,.10);
+      border-color: rgba(168,120,255,.28);
+    }
+    .pill.primary{
+      background: rgba(168,120,255,.18);
+      border-color: rgba(168,120,255,.35);
+      font-weight: 900;
+      letter-spacing:.04em;
+    }
+
+    .right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .discordBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(168,120,255,.22);
+      background: rgba(255,255,255,.07);
+      box-shadow: 0 14px 40px rgba(0,0,0,.35);
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease;
+    }
+    .discordBtn:hover{
+      transform: translateY(-1px);
+      background: rgba(168,120,255,.12);
+    }
+    .discordBtn img{ width: 20px; height: 20px; display:block; }
+
+    /* Layout */
+    .wrap{
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 26px 18px 70px;
+    }
+
+    .hero{
+      margin-top: 18px;
+      padding: 20px 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(168,120,255,.18);
+      background: rgba(10, 8, 22, .55);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-80px;
+      background:
+        radial-gradient(900px 520px at 18% 20%, rgba(168,120,255,.16), transparent 62%),
+        radial-gradient(900px 520px at 80% 40%, rgba(90,40,255,.14), transparent 62%);
+      opacity: 1;
+      pointer-events:none;
+    }
+    .hero-inner{
+      position:relative;
+      z-index:1;
+      display:grid;
+      gap:12px;
+    }
+    .heroTop{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+    .heroLogo{
+      width: 62px;
+      height: 62px;
+      border-radius: 18px;
+      border: 1px solid rgba(168,120,255,.22);
+      background: rgba(255,255,255,.05);
+      object-fit: cover;
+      box-shadow: 0 20px 55px rgba(0,0,0,.45);
+    }
+
+    /* Heading */
+    .hero h1{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size: clamp(44px, 8vw, 64px);
+      font-weight: 1000;
+      letter-spacing: .22em;
+      line-height: 1;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.95);
+      text-shadow:
+        0 0 18px rgba(168,120,255,.35),
+        0 0 40px rgba(90,40,255,.18);
+    }
+
+    .tagline{
+      color: rgba(255,255,255,.78);
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+    .hero p{
+      margin:0;
+      max-width: 820px;
+      line-height: 1.65;
+      color: rgba(255,255,255,.84);
+      font-size: 14px;
+    }
+
+    .ctaRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top: 6px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 16px;
+      margin-top: 16px;
+      align-items:start;
+    }
+    .sideCol{
+      display:grid;
+      gap: 16px;
+      align-content:start;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid rgba(168,120,255,.16);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardHeader{
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid rgba(168,120,255,.14);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .cardHeader h2{
+      margin:0;
+      font-size: 14px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .badge{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(168,120,255,.18);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .cardBody{
+      padding: 14px 16px 16px;
+      color: rgba(255,255,255,.84);
+      line-height:1.6;
+      display:grid;
+      gap:12px;
+    }
+
+    .field{
+      display:grid;
+      gap:6px;
+    }
+    .field label{
+      font-size: 12px;
+      color: rgba(255,255,255,.70);
+      letter-spacing:.08em;
+      text-transform: uppercase;
+    }
+    .field input, .field select, .field textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(168,120,255,.18);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.92);
+      outline:none;
+    }
+    .field textarea{ min-height: 120px; resize: vertical; }
+    .field input:focus, .field select:focus, .field textarea:focus{
+      border-color: rgba(168,120,255,.34);
+      background: rgba(168,120,255,.08);
+    }
+
+    .row2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 720px){
+      .row2{ grid-template-columns: 1fr; }
+    }
+
+    .callout{
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(168,120,255,.18);
+      background: rgba(255,255,255,.06);
+      line-height:1.55;
+      color: rgba(255,255,255,.82);
+    }
+
+    .memberRow{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding: 10px;
+      border: 1px solid rgba(168,120,255,.14);
+      background: rgba(0,0,0,.18);
+      border-radius: 14px;
+    }
+    .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      margin-top: 4px;
+      box-shadow: 0 0 0 3px rgba(168,120,255,.10);
+      flex: 0 0 auto;
+    }
+    .miniIcon{
+      width: 14px;
+      height: 14px;
+      opacity: .92;
+      display: block;
+    }
+
+    details.guide{
+      border: 1px solid rgba(168,120,255,.16);
+      background: rgba(0,0,0,.16);
+      border-radius: 14px;
+      overflow:hidden;
+    }
+    details.guide summary{
+      cursor:pointer;
+      padding: 12px 12px;
+      font-weight: 900;
+      letter-spacing:.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.90);
+      list-style:none;
+    }
+    details.guide summary::-webkit-details-marker{ display:none; }
+    details.guide .guideBody{
+      padding: 12px 12px 14px;
+      border-top: 1px solid rgba(168,120,255,.14);
+      color: rgba(255,255,255,.84);
+    }
+    .guideBody h3{
+      margin: 12px 0 6px;
+      font-size: 13px;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.86);
+    }
+    .guideBody ul{ margin: 6px 0 0; padding-left: 18px; }
+    .guideBody li{ margin: 6px 0; }
+
+    .toast{
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10, 8, 22, .72);
+      border: 1px solid rgba(168,120,255,.18);
+      backdrop-filter: blur(12px);
+      padding: 10px 12px;
+      border-radius: 999px;
+      color: var(--text);
+      font-size: 13px;
+      box-shadow: 0 22px 70px rgba(0,0,0,.55);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+      z-index: 9999;
+    }
+    .toast.show{
+      opacity:1;
+      transform: translateX(-50%) translateY(-2px);
+    }
+
+    /* =========================
+       Auth Modal
+       ========================= */
+    .modalOverlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(10px);
+      z-index: 2000;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+    }
+    .modalOverlay.show{ display:flex; }
+
+    .modal{
+      width: 520px;
+      max-width: 100%;
+      border-radius: 22px;
+      border: 1px solid rgba(168,120,255,.22);
+      background: rgba(10, 8, 22, .70);
+      box-shadow: 0 35px 100px rgba(0,0,0,.65);
+      overflow:hidden;
+    }
+    .modalTop{
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid rgba(168,120,255,.16);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .modalTop h3{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+    }
+    .xBtn{
+      width: 36px; height: 36px;
+      border-radius: 12px;
+      border: 1px solid rgba(168,120,255,.18);
+      background: rgba(255,255,255,.06);
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+    }
+    .xBtn:hover{ background: rgba(168,120,255,.10); }
+    .xBtn svg{ width: 18px; height: 18px; fill: rgba(255,255,255,.92); }
+
+    .modalBody{
+      padding: 14px;
+      display:grid;
+      gap: 12px;
+    }
+    .notice{
+      border: 1px solid rgba(168,120,255,.18);
+      background: rgba(255,255,255,.06);
+      border-radius: 16px;
+      padding: 12px;
+      line-height:1.55;
+      color: rgba(255,255,255,.84);
+      font-size: 13px;
+    }
+    .tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .tabBtn{
+      border: 1px solid rgba(168,120,255,.18);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.92);
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor:pointer;
+    }
+    .tabBtn.active{
+      background: rgba(168,120,255,.14);
+      border-color: rgba(168,120,255,.32);
+    }
+    .form{
+      display:grid;
+      gap:10px;
+    }
+    .formActions{
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+      margin-top: 4px;
+    }
+    .btnPrimary{
+      border: 1px solid rgba(168,120,255,.28);
+      background: rgba(168,120,255,.18);
+      color: rgba(255,255,255,.95);
+      padding: 10px 14px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight: 900;
+      letter-spacing:.06em;
+    }
+    .btnPrimary:hover{ background: rgba(168,120,255,.22); }
+    .btnGhost{
+      border: 1px solid rgba(168,120,255,.18);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.92);
+      padding: 10px 14px;
+      border-radius: 14px;
+      cursor:pointer;
+    }
+    .btnGhost:hover{ background: rgba(168,120,255,.10); }
+
+    .errorText{
+      color: rgba(255,120,120,.95);
+      font-size: 13px;
+      line-height:1.4;
+    }
+    .okText{
+      color: rgba(150,255,180,.95);
+      font-size: 13px;
+      line-height:1.4;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+  <canvas id="storm"></canvas>
+  <div class="grain"></div>
+
+  <!-- SINGLE topbar (no duplicates) -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./index.html" aria-label="Home">
+        <img
+          src="./assets/content.png"
+          alt="P.U.S.H logo"
+        />
+        <div>
+          <div class="title">P.U.S.H</div>
+          <div class="sub">Forms</div>
+        </div>
+      </a>
+
+      <nav class="nav" aria-label="Navigation">
+        <a class="pill" href="./index.html">Home</a>
+        <a class="pill primary" href="./forms.html" aria-current="page">Forms</a>
+        <a class="pill" href="./tos.html#tos">TOS Rules</a>
+      </nav>
+
+      <div class="right" id="authArea">
+        <button class="pill" id="openLogin">Login</button>
+        <button class="pill" id="openRegister">Register</button>
+
+        <button class="discordBtn" id="discordJoin" title="Join Discord" aria-label="Join Discord">
+          <img src="./assets/discord.svg" alt="" aria-hidden="true" />
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="heroTop">
+          <img
+            class="heroLogo"
+            src="./assets/content.png"
+            alt="P.U.S.H logo"
+          />
+          <div>
+            <div class="tagline">storm mode • forms hub • staff workflow</div>
+            <h1>PUSH</h1>
+          </div>
+        </div>
+
+        <p>
+          This is the P.U.S.H forms hub. You must be logged in to submit a form.
+          Your login saves across pages (Home + Forms + TOS) on this same website.
+        </p>
+
+        <div class="ctaRow">
+          <button class="pill primary" id="btnCreateForm">Create Form</button>
+          <a class="pill" href="./tos.html">Read TOS</a>
+          <button class="pill" data-jump="#myForms">My Submissions</button>
+        </div>
+
+        <div class="callout" id="loginHint" style="display:none;">
+          <strong>Heads up:</strong> you’re not logged in. Click <strong>Login</strong> or <strong>Register</strong> to submit forms.
+        </div>
+      </div>
+    </section>
+
+    <div class="grid" id="forms">
+      <!-- Create form -->
+      <section class="card">
+        <div class="cardHeader">
+          <h2>Create Form</h2>
+          <div class="badge" id="loginRequiredBadge">login required</div>
+        </div>
+        <div class="cardBody">
+          <div class="row2">
+            <div class="field">
+              <label for="f_type">Form Type</label>
+              <select id="f_type">
+                <option>Report (Rule Break)</option>
+                <option>Appeal</option>
+                <option>Staff / Dev Request</option>
+                <option>Event Issue</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f_title">Title</label>
+              <input id="f_title" type="text" placeholder="short title" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="f_body">Details</label>
+            <textarea id="f_body" placeholder="what happened? include usernames, dates, proof links, etc."></textarea>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+            <button class="pill" id="btnClearForm">Clear</button>
+            <button class="pill primary" id="btnSubmitForm">Submit</button>
+          </div>
+
+          <div class="callout" style="margin-top:6px;">
+            <strong>Tip:</strong> If this is a report, include message links/screenshots + timestamps. If it’s an appeal, include what you’ll do differently.
+          </div>
+        </div>
+      </section>
+
+      <!-- Right panel -->
+      <div class="sideCol">
+        <aside class="card" id="myForms">
+        <div class="cardHeader">
+          <h2>My Submissions</h2>
+          <div class="badge" id="myCount">0</div>
+        </div>
+        <div class="cardBody">
+          <div id="myList" class="callout" style="display:grid; gap:10px;">
+            <div style="color:var(--muted2)">No submissions yet.</div>
+          </div>
+
+          <div id="staffPanel" style="display:none; margin-top:10px;">
+            <div class="cardHeader" style="padding:0; border:0; margin-top:2px;">
+              <h2 style="font-size:13px;">Staff / Dev Panel</h2>
+              <div class="badge" id="staffBadge">STAFF</div>
+            </div>
+
+            <div class="callout" style="margin-top:10px;">
+              <strong>Visible to staff/dev usernames only.</strong><br/>
+              This is a simple demo. Later we can hook this into a real database + Discord webhook.
+            </div>
+
+            <button class="pill" id="btnViewAll" style="width:max-content;">View All Submissions</button>
+            <div id="allList" class="callout" style="display:none; margin-top:10px;"></div>
+          </div>
+        </div>
+      </aside>
+
+      <aside class="card" id="members">
+        <div class="cardHeader">
+          <h2>Members</h2>
+          <div class="badge" id="memberCount">0</div>
+        </div>
+        <div class="cardBody">
+          <div id="memberList" class="callout" style="display:grid; gap:10px;">
+            <div style="color:var(--muted2)">No accounts yet.</div>
+          </div>
+        </div>
+      </aside>
+      </div>
+    </div>
+
+    <!-- SINGLE copy of your long “advanced form” info (collapsible) -->
+    <section class="card" id="guide" style="margin-top:16px;">
+      <div class="cardHeader">
+        <h2>Advanced Form Guide</h2>
+        <div class="badge">ideas + build template</div>
+      </div>
+      <div class="cardBody">
+        <details class="guide">
+          <summary>Open advanced form checklist</summary>
+          <div class="guideBody">
+            <h3>What makes a form “advanced”</h3>
+            <ul>
+              <li>Conditional questions (show/hide fields)</li>
+              <li>Validation (required, min/max, link checks, age checks)</li>
+              <li>Anti-spam (captcha + rate limit)</li>
+              <li>File uploads (screenshots / proof)</li>
+              <li>Save/continue later (drafts)</li>
+              <li>Admin review flow (pending/approved/denied)</li>
+              <li>Logging (who, when)</li>
+              <li>Privacy + policy pages</li>
+            </ul>
+
+            <h3>Core pieces</h3>
+            <ul>
+              <li><b>Frontend:</b> form page + success/error states</li>
+              <li><b>Backend:</b> needed so your Discord webhook isn’t exposed</li>
+              <li><b>Storage:</b> optional (Discord only / DB / Sheets)</li>
+              <li><b>Security:</b> Turnstile/hCaptcha + rate limit + secrets server-side</li>
+            </ul>
+
+            <h3>How to tell me to build it later (template)</h3>
+            <div class="callout" style="white-space:pre-wrap;">
+GOAL:
+HOSTING:
+SEND TO (webhook as secret/env var):
+FORM FIELDS:
+CONDITIONAL LOGIC:
+ANTI-SPAM:
+STORE SUBMISSIONS:
+FILE UPLOADS:
+DESIGN STYLE:
+PAGES NEEDED:
+EXTRA:
+            </div>
+
+            <div class="callout">
+              <b>Best setup:</b> Cloudflare Pages + Worker + Turnstile (free) — optional D1 database later.
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Saved!</div>
+
+  <!-- Auth Modal -->
+  <div class="modalOverlay" id="authModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Login or Register">
+      <div class="modalTop">
+        <h3 id="authTitle">Account</h3>
+        <button class="xBtn" id="authClose" aria-label="Close">
+          <svg viewBox="0 0 24 24"><path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.42L12 13.41l-6.89 6.3-1.42-1.41L10.59 12 3.69 5.71 5.11 4.29 12 10.59l6.89-6.3z"/></svg>
+        </button>
+      </div>
+
+      <div class="modalBody">
+        <div class="notice">
+          <strong>DON'T use any real passwords you normally use.</strong><br/>
+          This demo login is stored locally in your browser (no server yet).
+          <br/><br/>
+          <span style="opacity:.9">
+            Uses the same localStorage keys across Home + Forms + TOS, so staying logged in carries over between pages.
+          </span>
+        </div>
+
+        <div class="tabs">
+          <button class="tabBtn" id="tabLogin">Login</button>
+          <button class="tabBtn" id="tabRegister">Register</button>
+        </div>
+
+        <div id="authMsg"></div>
+
+        <!-- Login -->
+        <form class="form" id="formLogin" autocomplete="off">
+          <div class="field">
+            <label for="l_user">Username</label>
+            <input id="l_user" type="text" placeholder="your username" required />
+          </div>
+          <div class="field">
+            <label for="l_pass">Password</label>
+            <input id="l_pass" type="password" placeholder="dont reuse your real passwords" required />
+          </div>
+          <div class="formActions">
+            <button type="button" class="btnGhost" id="loginClear">Clear</button>
+            <button type="submit" class="btnPrimary">Login</button>
+          </div>
+        </form>
+
+        <!-- Register -->
+        <form class="form" id="formRegister" autocomplete="off" style="display:none;">
+          <div class="field">
+            <label for="r_user">Username</label>
+            <input id="r_user" type="text" placeholder="pick a username" required />
+          </div>
+
+          <div class="field">
+            <label for="r_display">Display Name</label>
+            <input id="r_display" type="text" placeholder="name shown on the site" required />
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label for="r_pass">Password</label>
+              <input id="r_pass" type="password" placeholder="dont reuse your real passwords" required />
+            </div>
+            <div class="field">
+              <label for="r_conf">Confirm</label>
+              <input id="r_conf" type="password" placeholder="confirm password" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="r_dhandle">Discord @ (optional)</label>
+            <input id="r_dhandle" type="text" placeholder="@username" />
+          </div>
+
+          <div class="field">
+            <label for="r_did">Discord ID (optional)</label>
+            <input id="r_did" type="text" inputmode="numeric" placeholder="example 1161162505628942346" />
+          </div>
+
+          <div class="formActions">
+            <button type="button" class="btnGhost" id="regClear">Clear</button>
+            <button type="submit" class="btnPrimary">Create account</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================
+    // Smooth jumps
+    // =========================
+    document.querySelectorAll("[data-jump]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const sel = btn.getAttribute("data-jump");
+        const el = document.querySelector(sel);
+        if(!el) return;
+        el.scrollIntoView({behavior:"smooth", block:"start"});
+      });
+    });
+
+    // =========================
+    // Toast
+    // =========================
+    const toast = document.getElementById("toast");
+    function showToast(text){
+      toast.textContent = text || "Saved!";
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1400);
+    }
+
+    // =========================
+    // Discord
+    // =========================
+    const invite = "https://discord.gg/3H45bxeMe2";
+    document.getElementById("discordJoin").addEventListener("click", () => {
+      window.open(invite, "_blank", "noopener,noreferrer");
+    });
+
+    // =========================
+    // Storm / Lightning Canvas
+    // =========================
+    const storm = document.getElementById("storm");
+    const sctx = storm.getContext("2d");
+    let SW, SH;
+
+    function stormResize(){
+      SW = storm.width = Math.floor(window.innerWidth * devicePixelRatio);
+      SH = storm.height = Math.floor(window.innerHeight * devicePixelRatio);
+    }
+    window.addEventListener("resize", stormResize);
+    stormResize();
+
+    let flash = 0;
+    let bolts = [];
+
+    function newBolt(){
+      const startX = (Math.random() * SW * 0.9) + (SW * 0.05);
+      const startY = -20 * devicePixelRatio;
+
+      const segments = 10 + Math.floor(Math.random() * 10);
+      const pts = [{x:startX, y:startY}];
+
+      let x = startX, y = startY;
+      for(let i=0;i<segments;i++){
+        x += (Math.random()*2-1) * (SW * 0.03);
+        y += (SH / segments) * (0.6 + Math.random()*0.7);
+        pts.push({x, y});
+        if(y > SH * (0.7 + Math.random()*0.3)) break;
+      }
+
+      bolts.push({
+        pts,
+        life: 18 + Math.floor(Math.random()*20),
+        maxLife: 28,
+        width: (1.2 + Math.random()*1.8) * devicePixelRatio,
+      });
+
+      flash = Math.max(flash, 0.28 + Math.random()*0.42);
+    }
+
+    function drawStorm(){
+      sctx.clearRect(0,0,SW,SH);
+
+      // ambient haze
+      sctx.globalAlpha = 0.18;
+      const grad = sctx.createRadialGradient(SW*0.35, SH*0.2, 0, SW*0.35, SH*0.2, SW*0.8);
+      grad.addColorStop(0, "rgba(168,120,255,0.18)");
+      grad.addColorStop(1, "rgba(0,0,0,0)");
+      sctx.fillStyle = grad;
+      sctx.fillRect(0,0,SW,SH);
+
+      // lightning bolts
+      for(const b of bolts){
+        const t = b.life / b.maxLife;
+        const alpha = Math.min(1, t) * 0.95;
+
+        sctx.lineWidth = b.width * 4.5;
+        sctx.strokeStyle = `rgba(168,120,255,${alpha*0.18})`;
+        sctx.beginPath();
+        sctx.moveTo(b.pts[0].x, b.pts[0].y);
+        for(let i=1;i<b.pts.length;i++) sctx.lineTo(b.pts[i].x, b.pts[i].y);
+        sctx.stroke();
+
+        sctx.lineWidth = b.width;
+        sctx.strokeStyle = `rgba(255,255,255,${alpha*0.85})`;
+        sctx.beginPath();
+        sctx.moveTo(b.pts[0].x, b.pts[0].y);
+        for(let i=1;i<b.pts.length;i++) sctx.lineTo(b.pts[i].x, b.pts[i].y);
+        sctx.stroke();
+
+        b.life -= 1;
+      }
+      bolts = bolts.filter(b => b.life > 0);
+
+      if(flash > 0){
+        sctx.globalAlpha = flash;
+        sctx.fillStyle = "rgba(168,120,255,0.9)";
+        sctx.fillRect(0,0,SW,SH);
+        flash *= 0.88;
+        if(flash < 0.01) flash = 0;
+      }
+
+      if(Math.random() < 0.015) newBolt();
+      requestAnimationFrame(drawStorm);
+    }
+    drawStorm();
+
+    // =========================
+    // Auth (same keys as TOS)
+    // =========================
+    const ACC_KEY = "push_accounts_v1";
+    const SES_KEY = "push_session_v1";
+    const FORMS_KEY = "push_forms_v1";
+
+    const OWNER_DISCORD_ID = "1161162505628942346";
+
+    const ROLE_ORDER = [
+      "Owner",
+      "Manager",
+      "Forms Apps",
+      "Push-Team",
+      "Admin",
+      "Mod",
+      "Officials",
+      "Member",
+    ];
+
+    const STAFF_ROLES = new Set([
+      "Owner",
+      "Manager",
+      "Admin",
+      "Mod",
+      "Push-Team",
+      "Forms Apps",
+      "Officials",
+    ]);
+
+    const PRESENCE_TTL_MS = 60 * 1000;
+
+    // Optional: legacy staff/dev username allowlists
+    const STAFF_USERS = ["Dezz", "DezzDk", "Dezz.fed", "Diesel", "Diesel Lane"];
+    const DEV_USERS   = ["Dezz", "DezzDk"];
+
+    function normalizeRole(role){
+      const r = String(role || "").trim();
+      if(!r) return "Member";
+      const found = ROLE_ORDER.find(x => x.toLowerCase() === r.toLowerCase());
+      return found || r;
+    }
+
+    function normalizeDiscordHandle(handle){
+      const h = String(handle || "").trim();
+      if(!h) return "";
+      return h.startsWith("@") ? h : `@${h}`;
+    }
+
+    function loadAccounts(){
+      let raw = {};
+      try { raw = JSON.parse(localStorage.getItem(ACC_KEY) || "{}"); } catch { raw = {}; }
+      const obj = (raw && typeof raw === "object") ? raw : {};
+
+      for(const [u, info0] of Object.entries(obj)){
+        const info = (info0 && typeof info0 === "object") ? info0 : {};
+        info.discordId = info.discordId ? String(info.discordId).trim() : "";
+        info.discordHandle = info.discordHandle ? normalizeDiscordHandle(info.discordHandle) : "";
+        info.displayName = (info.displayName && String(info.displayName).trim()) || u;
+        info.role = normalizeRole(info.role);
+        if(info.discordId && info.discordId === OWNER_DISCORD_ID) info.role = "Owner";
+        info.lastSeenAt = Number(info.lastSeenAt || 0);
+        obj[u] = info;
+      }
+
+      return obj;
+    }
+    function saveAccounts(obj){ localStorage.setItem(ACC_KEY, JSON.stringify(obj || {})); }
+
+    function getAccount(username){
+      if(!username) return null;
+      const accounts = loadAccounts();
+      return accounts[username] ? { username, ...accounts[username] } : null;
+    }
+    function getDisplayName(username){
+      const acc = getAccount(username);
+      return acc?.displayName || username || "";
+    }
+    function getRole(username){
+      const acc = getAccount(username);
+      return acc?.role || "Member";
+    }
+
+    function isStaff(username){
+      const role = getRole(username);
+      if(STAFF_ROLES.has(role)) return true;
+      if(!username) return false;
+      return STAFF_USERS.some(u => u.toLowerCase() === username.toLowerCase()) ||
+             DEV_USERS.some(u => u.toLowerCase() === username.toLowerCase());
+    }
+    function isDev(username){
+      const role = getRole(username);
+      if(role === "Owner" || role === "Manager" || role === "Forms Apps") return true;
+      if(!username) return false;
+      return DEV_USERS.some(u => u.toLowerCase() === username.toLowerCase());
+    }
+
+    function isOnline(info){
+      return !!info && (Date.now() - (Number(info.lastSeenAt || 0)) < PRESENCE_TTL_MS);
+    }
+
+    function touchPresence(){
+      const sess = getSession();
+      if(!sess?.username) return;
+      const accounts = loadAccounts();
+      if(!accounts[sess.username]) return;
+      accounts[sess.username].lastSeenAt = Date.now();
+      saveAccounts(accounts);
+    }
+
+    function setSession(username){
+      localStorage.setItem(SES_KEY, JSON.stringify({ username, ts: Date.now() }));
+      touchPresence();
+      renderAuthArea();
+      renderForms();
+      syncLoginUI();
+      renderMembers();
+    }
+    function clearSession(){
+      const sess = getSession();
+      if(sess?.username){
+        const accounts = loadAccounts();
+        if(accounts[sess.username]){
+          accounts[sess.username].lastSeenAt = 0;
+          saveAccounts(accounts);
+        }
+      }
+      localStorage.removeItem(SES_KEY);
+      renderAuthArea();
+      renderForms();
+      syncLoginUI();
+      renderMembers();
+    }
+    function getSession(){
+      try { return JSON.parse(localStorage.getItem(SES_KEY) || "null"); } catch { return null; }
+    }
+
+    async function sha256Hex(str){
+      const enc = new TextEncoder().encode(str);
+      const buf = await crypto.subtle.digest("SHA-256", enc);
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
+    }
+
+    const authModal = document.getElementById("authModal");
+    const authClose = document.getElementById("authClose");
+    const openLogin = document.getElementById("openLogin");
+    const openRegister = document.getElementById("openRegister");
+    const tabLogin = document.getElementById("tabLogin");
+    const tabRegister = document.getElementById("tabRegister");
+    const formLogin = document.getElementById("formLogin");
+    const formRegister = document.getElementById("formRegister");
+    const authMsg = document.getElementById("authMsg");
+
+    function setAuthMsg(type, text){
+      authMsg.innerHTML = text ? `<div class="${type === "ok" ? "okText" : "errorText"}">${text}</div>` : "";
+    }
+
+    function showModal(which){
+      authModal.classList.add("show");
+      authModal.setAttribute("aria-hidden","false");
+      setAuthMsg("", "");
+      if(which === "register") setTab("register");
+      else setTab("login");
+    }
+    function hideModal(){
+      authModal.classList.remove("show");
+      authModal.setAttribute("aria-hidden","true");
+      setAuthMsg("", "");
+    }
+    function setTab(which){
+      const isLogin = which === "login";
+      tabLogin.classList.toggle("active", isLogin);
+      tabRegister.classList.toggle("active", !isLogin);
+      formLogin.style.display = isLogin ? "" : "none";
+      formRegister.style.display = isLogin ? "none" : "";
+    }
+
+    openLogin.addEventListener("click", () => showModal("login"));
+    openRegister.addEventListener("click", () => showModal("register"));
+    authClose.addEventListener("click", hideModal);
+    authModal.addEventListener("click", (e) => { if(e.target === authModal) hideModal(); });
+
+    tabLogin.addEventListener("click", () => setTab("login"));
+    tabRegister.addEventListener("click", () => setTab("register"));
+
+    document.getElementById("loginClear").addEventListener("click", () => {
+      document.getElementById("l_user").value = "";
+      document.getElementById("l_pass").value = "";
+      setAuthMsg("", "");
+    });
+    document.getElementById("regClear").addEventListener("click", () => {
+      document.getElementById("r_user").value = "";
+      document.getElementById("r_display").value = "";
+      document.getElementById("r_dhandle").value = "";
+      document.getElementById("r_pass").value = "";
+      document.getElementById("r_conf").value = "";
+      document.getElementById("r_did").value = "";
+      setAuthMsg("", "");
+    });
+
+    function isValidDiscordId(s){
+      if(!s) return true;
+      return /^[0-9]{10,24}$/.test(s.trim());
+    }
+
+    formRegister.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      setAuthMsg("", "");
+
+      const user = document.getElementById("r_user").value.trim();
+      const displayName = document.getElementById("r_display").value.trim();
+      const dhandleRaw = document.getElementById("r_dhandle").value.trim();
+      const discordHandle = normalizeDiscordHandle(dhandleRaw);
+      const pass = document.getElementById("r_pass").value;
+      const conf = document.getElementById("r_conf").value;
+      const didRaw = document.getElementById("r_did").value.trim();
+      const did = didRaw ? didRaw : "";
+
+      if(user.length < 3) return setAuthMsg("err", "Username must be at least 3 characters.");
+      if(displayName.length < 2) return setAuthMsg("err", "Display name must be at least 2 characters.");
+      if(pass.length < 6) return setAuthMsg("err", "Password must be at least 6 characters.");
+      if(pass !== conf) return setAuthMsg("err", "Passwords do not match.");
+      if(!isValidDiscordId(did)) return setAuthMsg("err", "Discord ID looks wrong. Example: 1161162505628942346");
+
+      const accounts = loadAccounts();
+      if(accounts[user]) return setAuthMsg("err", "That username is already taken.");
+
+      if(did){
+        for(const [u, info] of Object.entries(accounts)){
+          if(info.discordId && info.discordId === did){
+            return setAuthMsg("err", `That Discord ID is already linked to another username (${u}).`);
+          }
+        }
+      }
+
+      const pwh = await sha256Hex(pass);
+      const role = (did && did === OWNER_DISCORD_ID) ? "Owner" : "Member";
+      accounts[user] = { pwh, displayName, role, discordId: did, discordHandle, lastSeenAt: 0, createdAt: Date.now() };
+      saveAccounts(accounts);
+      renderMembers();
+
+      setAuthMsg("ok", "Account created. You can login now.");
+      setTab("login");
+      document.getElementById("l_user").value = user;
+      document.getElementById("l_pass").value = "";
+      showToast("Registered");
+    });
+
+    formLogin.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      setAuthMsg("", "");
+
+      const user = document.getElementById("l_user").value.trim();
+      const pass = document.getElementById("l_pass").value;
+
+      const accounts = loadAccounts();
+      if(!accounts[user]) return setAuthMsg("err", "No account found with that username.");
+
+      const pwh = await sha256Hex(pass);
+      if(pwh !== accounts[user].pwh) return setAuthMsg("err", "Wrong password.");
+
+      setSession(user);
+      hideModal();
+      showToast("Logged in");
+    });
+
+    function renderAuthArea(){
+      const area = document.getElementById("authArea");
+      const sess = getSession();
+
+      // ALWAYS remove old dynamic nodes before adding (prevents duplicates)
+      const existing = document.getElementById("whoami");
+      if(existing) existing.remove();
+      const logout = document.getElementById("logoutBtn");
+      if(logout) logout.remove();
+
+      const loginHint = document.getElementById("loginHint");
+      if(!sess || !sess.username){
+        document.getElementById("openLogin").style.display = "";
+        document.getElementById("openRegister").style.display = "";
+        loginHint.style.display = "";
+        return;
+      }
+
+      document.getElementById("openLogin").style.display = "none";
+      document.getElementById("openRegister").style.display = "none";
+      loginHint.style.display = "none";
+
+      const who = document.createElement("div");
+      who.id = "whoami";
+      who.className = "pill";
+      who.style.cursor = "default";
+      who.textContent = `Hi, ${getDisplayName(sess.username)}`;
+      area.insertBefore(who, area.firstChild);
+
+      const out = document.createElement("button");
+      out.id = "logoutBtn";
+      out.className = "pill";
+      out.textContent = "Logout";
+      out.addEventListener("click", () => {
+        clearSession();
+        showToast("Logged out");
+      });
+      area.insertBefore(out, document.getElementById("discordJoin"));
+    }
+
+    // =========================
+    // Forms (local demo)
+    // =========================
+    function loadForms(){ return JSON.parse(localStorage.getItem(FORMS_KEY) || "[]"); }
+    function saveForms(arr){ localStorage.setItem(FORMS_KEY, JSON.stringify(arr)); }
+
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function renderMembers(){
+      const list = document.getElementById("memberList");
+      const count = document.getElementById("memberCount");
+      if(!list || !count) return;
+
+      const accounts = loadAccounts();
+      const sess = getSession();
+      const current = sess?.username || "";
+
+      const entries = Object.entries(accounts).map(([username, info]) => ({ username, ...info }));
+      entries.sort((a, b) => {
+        const ao = (a.username === current) || isOnline(a);
+        const bo = (b.username === current) || isOnline(b);
+        if(ao !== bo) return (bo ? 1 : 0) - (ao ? 1 : 0);
+        return String(a.displayName || a.username).localeCompare(String(b.displayName || b.username), undefined, { sensitivity: "base" });
+      });
+
+      count.textContent = String(entries.length);
+
+      if(!entries.length){
+        list.innerHTML = `<div style="color:var(--muted2)">No accounts yet.</div>`;
+        return;
+      }
+
+      list.innerHTML = entries.map(acc => {
+        const online = (acc.username === current) || isOnline(acc);
+        const dot = online ? "rgba(150,255,180,.95)" : "rgba(255,255,255,.30)";
+
+        const role = (acc.role && acc.role !== "Member") ? acc.role : "";
+        const roleHtml = role ? `<span class="badge" style="font-size:11px; padding:4px 8px;">${escapeHtml(role)}</span>` : "";
+
+        const connected = !!acc.discordHandle;
+        const handleText = connected ? acc.discordHandle : `@${acc.username}`;
+        const linkBadge = connected
+          ? `<span class="badge" style="font-size:11px; padding:4px 8px; border-color: rgba(150,255,180,.35); background: rgba(150,255,180,.12); color: rgba(150,255,180,.95);">CONNECTED</span>`
+          : `<span class="badge" style="font-size:11px; padding:4px 8px; border-color: rgba(255,120,120,.35); background: rgba(255,120,120,.12); color: rgba(255,120,120,.95);">NOT CONNECTED</span>`;
+
+        return `
+          <div class="memberRow">
+            <span class="dot" style="background:${dot}"></span>
+            <div style="display:grid; gap:4px;">
+              <div style="display:flex; gap:8px; align-items:baseline; flex-wrap:wrap;">
+                <div style="font-weight:900;">${escapeHtml(acc.displayName || acc.username)}</div>
+                ${roleHtml}
+                ${linkBadge}
+              </div>
+              <div style="font-size:12px; color:${connected ? 'var(--muted2)' : 'rgba(255,120,120,.95)'}; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <span style="display:inline-flex; align-items:center; gap:6px;">
+                  <img class="miniIcon" src="./assets/discord.svg" alt="" aria-hidden="true" />
+                  ${escapeHtml(handleText)}
+                </span>
+                <span style="color:rgba(255,255,255,.28)">•</span>
+                <span style="color:var(--muted2)">${online ? 'online' : 'offline'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderForms(){
+      const sess = getSession();
+      const username = sess?.username || null;
+
+      const forms = loadForms();
+      const my = username ? forms.filter(f => f.user === username) : [];
+
+      document.getElementById("myCount").textContent = String(my.length);
+
+      const myList = document.getElementById("myList");
+      if(!my.length){
+        myList.innerHTML = `<div style="color:var(--muted2)">No submissions yet.</div>`;
+      } else {
+        myList.innerHTML = my.slice().reverse().map(f => `
+          <div style="border:1px solid rgba(168,120,255,.14); background:rgba(0,0,0,.18); border-radius:14px; padding:10px;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+              <div style="font-weight:900; letter-spacing:.04em;">${escapeHtml(f.title || "(No title)")}</div>
+              <div style="font-size:12px; color:var(--muted2)">${new Date(f.ts).toLocaleString()}</div>
+            </div>
+            <div style="margin-top:6px; font-size:12px; color:rgba(255,255,255,.78); letter-spacing:.08em; text-transform:uppercase;">
+              ${escapeHtml(f.type)} • <span style="color:rgba(168,120,255,.95)">${escapeHtml(f.status)}</span>
+            </div>
+            <div style="margin-top:8px; color:rgba(255,255,255,.82); white-space:pre-wrap;">${escapeHtml(f.body || "")}</div>
+          </div>
+        `).join("");
+      }
+
+      const staffPanel = document.getElementById("staffPanel");
+      const staffBadge = document.getElementById("staffBadge");
+      if(username && isStaff(username)){
+        staffPanel.style.display = "";
+        const role = getRole(username);
+        staffBadge.textContent = isDev(username) ? "DEV" : (role !== "Member" ? role.toUpperCase() : "STAFF");
+      } else {
+        staffPanel.style.display = "none";
+      }
+    }
+
+    function syncLoginUI(){
+      const sess = getSession();
+      const loggedIn = !!sess?.username;
+      document.getElementById("loginRequiredBadge").textContent = loggedIn ? "ready" : "login required";
+    }
+
+    // Gate create form
+    document.getElementById("btnCreateForm").addEventListener("click", () => {
+      const sess = getSession();
+      if(!sess?.username){
+        showToast("Login required");
+        showModal("login");
+        return;
+      }
+      document.getElementById("f_title").focus();
+      document.querySelector("#forms").scrollIntoView({behavior:"smooth", block:"start"});
+    });
+
+    document.getElementById("btnClearForm").addEventListener("click", () => {
+      document.getElementById("f_type").value = "Report (Rule Break)";
+      document.getElementById("f_title").value = "";
+      document.getElementById("f_body").value = "";
+      showToast("Cleared");
+    });
+
+    document.getElementById("btnSubmitForm").addEventListener("click", () => {
+      const sess = getSession();
+      if(!sess?.username){
+        showToast("Login required");
+        showModal("login");
+        return;
+      }
+
+      const type = document.getElementById("f_type").value;
+      const title = document.getElementById("f_title").value.trim();
+      const body = document.getElementById("f_body").value.trim();
+
+      if(!title || title.length < 3){
+        showToast("Title too short");
+        document.getElementById("f_title").focus();
+        return;
+      }
+      if(!body || body.length < 10){
+        showToast("Add more details");
+        document.getElementById("f_body").focus();
+        return;
+      }
+
+      const forms = loadForms();
+      forms.push({
+        id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2)),
+        user: sess.username,
+        type,
+        title,
+        body,
+        status: "Submitted",
+        ts: Date.now()
+      });
+      saveForms(forms);
+
+      document.getElementById("f_title").value = "";
+      document.getElementById("f_body").value = "";
+      showToast("Submitted");
+      renderForms();
+      document.querySelector("#myForms").scrollIntoView({behavior:"smooth", block:"start"});
+    });
+
+    document.getElementById("btnViewAll").addEventListener("click", () => {
+      const sess = getSession();
+      const username = sess?.username || null;
+      if(!username || !isStaff(username)) return;
+
+      const allList = document.getElementById("allList");
+      const forms = loadForms();
+
+      const showing = allList.style.display === "" || allList.style.display === "block";
+      if(!showing){
+        allList.style.display = "block";
+        if(!forms.length){
+          allList.innerHTML = `<div style="color:var(--muted2)">No submissions yet.</div>`;
+        } else {
+          allList.innerHTML = forms.slice().reverse().map(f => `
+            <div style="border:1px solid rgba(168,120,255,.14); background:rgba(0,0,0,.18); border-radius:14px; padding:10px; margin-top:10px;">
+              <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+                <div style="font-weight:900;">${escapeHtml(f.user)} — ${escapeHtml(f.title)}</div>
+                <div style="font-size:12px; color:var(--muted2)">${new Date(f.ts).toLocaleString()}</div>
+              </div>
+              <div style="margin-top:6px; font-size:12px; color:rgba(255,255,255,.78); letter-spacing:.08em; text-transform:uppercase;">
+                ${escapeHtml(f.type)} • <span style="color:rgba(168,120,255,.95)">${escapeHtml(f.status)}</span>
+              </div>
+              <div style="margin-top:8px; color:rgba(255,255,255,.82); white-space:pre-wrap;">${escapeHtml(f.body)}</div>
+            </div>
+          `).join("");
+        }
+        showToast("All loaded");
+      } else {
+        allList.style.display = "none";
+        showToast("Hidden");
+      }
+    });
+
+    // Initial render
+    renderAuthArea();
+    renderForms();
+    syncLoginUI();
+    renderMembers();
+    touchPresence();
+
+    window.addEventListener("focus", () => {
+      touchPresence();
+      renderMembers();
+    });
+
+    // Presence heartbeat (local demo)
+    setInterval(() => {
+      touchPresence();
+      renderMembers();
+    }, 20000);
+
+    // Cross-tab sync
+    window.addEventListener("storage", (e) => {
+      if(e.key === ACC_KEY || e.key === SES_KEY){
+        renderAuthArea();
+        renderForms();
+        syncLoginUI();
+        renderMembers();
+      }
+    });
+  </script>
+</body>
+</html>
