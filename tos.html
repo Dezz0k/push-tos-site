@@ -3,8 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>P.U.S.H — Home</title>
-
+  <title>P.U.S.H — TOS</title>
 
   <style>
     :root{
@@ -268,13 +267,6 @@
       font-size: 14px;
     }
 
-    .ctaRow{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top: 6px;
-    }
-
     .grid{
       display:grid;
       grid-template-columns: 1.15fr .85fr;
@@ -329,41 +321,24 @@
       gap:12px;
     }
 
-    .field{
-      display:grid;
-      gap:6px;
-    }
-    .field label{
+    .sectionTitle{
+      margin: 14px 0 8px;
       font-size: 12px;
-      color: rgba(255,255,255,.70);
-      letter-spacing:.08em;
+      letter-spacing:.12em;
       text-transform: uppercase;
-    }
-    .field input, .field textarea{
-      width:100%;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(168,120,255,.18);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.92);
-      outline:none;
-    }
-    .field textarea{ min-height: 120px; resize: vertical; }
-    .field input:focus, .field textarea:focus{
-      border-color: rgba(168,120,255,.34);
-      background: rgba(168,120,255,.08);
+      color: rgba(255,255,255,.70);
     }
 
-    .row2{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
+    .rules{
+      margin:0;
+      padding-left: 18px;
+      color: var(--text);
+      line-height: 1.65;
     }
-    @media (max-width: 720px){
-      .row2{ grid-template-columns: 1fr; }
-    }
+    .rules li{ margin: 6px 0; }
 
     .callout{
+      margin-top: 12px;
       padding: 12px 12px;
       border-radius: 14px;
       border: 1px solid rgba(168,120,255,.18);
@@ -372,27 +347,39 @@
       color: rgba(255,255,255,.82);
     }
 
-    .post{
-      border: 1px solid rgba(168,120,255,.14);
-      background: rgba(0,0,0,.18);
-      border-radius: 14px;
-      padding: 10px;
-    }
-    .postTop{
-      display:flex;
+    .ladder{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
       gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
+      margin-top: 10px;
     }
-    .postTitle{
+    @media (max-width: 520px){
+      .ladder{ grid-template-columns: 1fr; }
+    }
+    .step{
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(168,120,255,.16);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .step .k{
+      font-size: 12px;
+      color: rgba(255,255,255,.60);
+      text-transform: uppercase;
+      letter-spacing:.14em;
+    }
+    .step .v{
+      margin-top: 6px;
+      font-size: 16px;
       font-weight: 900;
-      letter-spacing:.04em;
+      letter-spacing: .02em;
     }
-    .postBody{
+
+    .toolbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
       margin-top: 8px;
-      color: rgba(255,255,255,.84);
-      white-space:pre-wrap;
     }
 
     .memberRow{
@@ -403,14 +390,22 @@
       border: 1px solid rgba(168,120,255,.14);
       background: rgba(0,0,0,.18);
       border-radius: 14px;
+      cursor:pointer;
+      transition: border-color .12s ease, background .12s ease, transform .12s ease;
     }
+    .memberRow:hover{
+      transform: translateY(-1px);
+      background: rgba(168,120,255,.08);
+      border-color: rgba(168,120,255,.24);
+    }
+    .memberRow:active{ transform: translateY(0px); }
     .dot{
       width: 10px;
       height: 10px;
       border-radius: 999px;
-      box-shadow: 0 0 0 1px rgba(255,255,255,.18);
-      flex: 0 0 10px;
       margin-top: 4px;
+      box-shadow: 0 0 0 3px rgba(168,120,255,.10);
+      flex: 0 0 auto;
     }
     .miniIcon{
       width: 14px;
@@ -529,6 +524,37 @@
       display:grid;
       gap:10px;
     }
+    .field{
+      display:grid;
+      gap:6px;
+    }
+    .field label{
+      font-size: 12px;
+      color: rgba(255,255,255,.70);
+      letter-spacing:.08em;
+      text-transform: uppercase;
+    }
+    .field input{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(168,120,255,.18);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.92);
+      outline:none;
+    }
+    .field input:focus{
+      border-color: rgba(168,120,255,.34);
+      background: rgba(168,120,255,.08);
+    }
+    .row2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 720px){
+      .row2{ grid-template-columns: 1fr; }
+    }
     .formActions{
       display:flex;
       gap:10px;
@@ -584,14 +610,14 @@
         />
         <div>
           <div class="title">P.U.S.H</div>
-          <div class="sub">Home</div>
+          <div class="sub">TOS</div>
         </div>
       </a>
 
       <nav class="nav" aria-label="Navigation">
-        <a class="pill primary" href="./index.html" aria-current="page">Home</a>
+        <a class="pill" href="./index.html">Home</a>
         <a class="pill" href="./forms.html">Forms</a>
-        <a class="pill" href="./tos.html#tos">TOS Rules</a>
+        <a class="pill primary" href="./tos.html#tos" aria-current="page">TOS Rules</a>
       </nav>
 
       <div class="right" id="authArea">
@@ -615,65 +641,110 @@
             alt="P.U.S.H logo"
           />
           <div>
-            <div class="tagline">storm mode • home • announcements</div>
-            <h1>P.U.S.H</h1>
+            <div class="tagline">community rules • staff standards • logs</div>
+            <h1>PUSH</h1>
           </div>
         </div>
 
         <p>
-          Welcome to the P.U.S.H home page. News and announcements show here.
-          Your login saves across pages (Home + Forms + TOS) on this same website.
+          Community rules + staff standards. Clear punishments, proper evidence, and clean logging so everything stays fair.
         </p>
-
-        <div class="ctaRow">
-          <a class="pill primary" href="./forms.html">Open Forms</a>
-          <a class="pill" href="./tos.html#tos">Read TOS Rules</a>
-        </div>
-
-        <div class="callout" id="loginHint" style="display:none;">
-          <strong>Heads up:</strong> you’re not logged in. Click <strong>Login</strong> or <strong>Register</strong>.
-        </div>
       </div>
     </section>
 
     <div class="grid">
-      <section class="card" id="announcements">
+      <section class="card" id="tos">
         <div class="cardHeader">
-          <h2>News & Announcements</h2>
-          <div class="badge" id="annCount">0</div>
+          <h2>Community Rules</h2>
+          <div class="badge">Applies to Discord + in-game</div>
         </div>
         <div class="cardBody">
-          <div id="annList" class="callout" style="display:grid; gap:10px;">
-            <div style="color:var(--muted2)">No announcements yet.</div>
+          <div class="sectionTitle">What this covers</div>
+          <p style="margin:0;line-height:1.6;color:var(--muted2)">
+            This applies to all P.U.S.H spaces (Discord, events, game sessions, voice, and community-run chats).
+          </p>
+
+          <div class="sectionTitle">Slurs / hate speech</div>
+          <ul class="rules">
+            <li>Slurs or hateful language uses the ladder below (no “joke” exceptions).</li>
+            <li>Filter bypassing counts (spacing/symbols).</li>
+            <li>Targeting identity = not allowed.</li>
+          </ul>
+
+          <div class="ladder" aria-label="Slur enforcement ladder">
+            <div class="step"><div class="k">1st</div><div class="v">Warning</div></div>
+            <div class="step"><div class="k">2nd</div><div class="v">Mute / Timeout</div></div>
+            <div class="step"><div class="k">3rd</div><div class="v">Ban</div></div>
           </div>
 
-          <div id="announceLocked" class="callout" style="display:none;">
-            <strong>Posting locked:</strong> only <strong>Manager</strong>, <strong>Forms Apps</strong>, or <strong>Owner</strong> can post announcements.
+          <div class="callout">
+            <strong>Appealable:</strong> Yes (for ladder actions).<br/>
+            <span style="color:var(--muted2)">If it becomes threats/doxxing/DDOS threats, it moves to zero-tolerance.</span>
           </div>
 
-          <div id="announceComposer" style="display:none;">
-            <div class="field">
-              <label for="ann_title">Title</label>
-              <input id="ann_title" type="text" placeholder="announcement title" />
-            </div>
-            <div class="field">
-              <label for="ann_body">Message</label>
-              <textarea id="ann_body" placeholder="announcement message"></textarea>
-            </div>
-            <div class="formActions">
-              <button type="button" class="btnGhost" id="annClear">Clear</button>
-              <button type="button" class="btnPrimary" id="annPost">Post</button>
-            </div>
-            <div class="callout" style="color:var(--muted2)">
-              Discord webhook posting needs a server/proxy so your webhook URL stays private.
-              Set your Cloudflare Worker/API URL in <b>Owner Panel → Announce API Base</b>.
-            </div>
-            <div id="discordPushMsg"></div>
+          <div class="sectionTitle">Zero-tolerance: threats / doxxing / DDOS threats</div>
+          <ul class="rules">
+            <li>Real-life threats or safety threats</li>
+            <li>Doxxing or threatening to leak private info</li>
+            <li>DDOS threats (“boot you offline”, “hit your net”, etc.)</li>
+            <li>Coordinating harassment</li>
+          </ul>
+
+          <div class="callout">
+            <strong>Result:</strong> Permanent ban<br/>
+            <strong>Appealable:</strong> No<br/>
+            <strong>Staff must attach proof:</strong> screenshots/message links + timestamps + usernames/IDs
           </div>
+
+          <div class="sectionTitle">Harassment / bullying</div>
+          <ul class="rules">
+            <li>No targeted abuse, stalking behavior, or dogpiling.</li>
+            <li>“In DMs” doesn’t protect it if it started through the community.</li>
+          </ul>
+
+          <div class="sectionTitle">NSFW / sexual content</div>
+          <ul class="rules">
+            <li>No NSFW content at all (porn, explicit media, sexual roleplay) anywhere in P.U.S.H.</li>
+            <li>Any sexual content involving minors = instant ban.</li>
+          </ul>
         </div>
       </section>
 
       <div class="sideCol">
+        <aside class="card" id="staff">
+          <div class="cardHeader">
+            <h2>Staff Standards</h2>
+            <div class="badge">calm handling</div>
+          </div>
+          <div class="cardBody">
+            <div class="sectionTitle">How staff should act</div>
+            <ul class="rules">
+              <li>Stay professional (no arguing like a member).</li>
+              <li>Enforce rules with evidence, not emotion.</li>
+              <li>Be consistent. Same rule = same action.</li>
+              <li>No leaking internal reports or staff chat.</li>
+            </ul>
+
+            <div class="sectionTitle">When slurs happen</div>
+            <ul class="rules">
+              <li>Stop it fast: “That’s not allowed here. Drop it now.”</li>
+              <li>Apply ladder: warn → mute → ban</li>
+              <li>Log the action + attach evidence</li>
+            </ul>
+
+            <div class="sectionTitle">Shortcuts</div>
+            <div class="toolbar" role="group" aria-label="Staff shortcuts">
+              <button class="pill" data-jump="#logs">Logs</button>
+              <button class="pill" data-jump="#appeals">Appeals</button>
+              <button class="pill" data-jump="#more">More</button>
+            </div>
+
+            <div class="callout" style="margin-top:12px">
+              <strong>Reminder:</strong> If there’s no proof, don’t action. Ask for evidence first.
+            </div>
+          </div>
+        </aside>
+
         <aside class="card" id="members">
           <div class="cardHeader">
             <h2>Members</h2>
@@ -683,54 +754,99 @@
             <div id="memberList" class="callout" style="display:grid; gap:10px;">
               <div style="color:var(--muted2)">No accounts yet.</div>
             </div>
-          </div>
-        </aside>
-
-        <aside class="card" id="tiktok">
-          <div class="cardHeader">
-            <h2>TikTok</h2>
-            <div class="badge">latest links</div>
-          </div>
-          <div class="cardBody">
-            <div id="tiktokList" class="callout" style="display:grid; gap:10px;">
-              <div style="color:var(--muted2)">No TikTok links added yet.</div>
-            </div>
             <div class="callout" style="color:var(--muted2)">
-              Edit <b>TIKTOK_FEED</b> in <b>index.html</b> to add more links.
-            </div>
-          </div>
-        </aside>
-
-        <aside class="card" id="ownerPanel" style="display:none;">
-          <div class="cardHeader">
-            <h2>Owner Panel</h2>
-            <div class="badge">owner</div>
-          </div>
-          <div class="cardBody">
-            <div class="callout">
-              Owner can set roles and (optionally) configure the Discord announce proxy.
-              <br/>
-              <span style="color:var(--muted2)">Owner Discord ID:</span> <code>1161162505628942346</code>
-            </div>
-
-            <div class="field">
-              <label for="apiBase">Announce API Base (Cloudflare Worker/API)</label>
-              <input id="apiBase" type="text" placeholder="https://your-worker.example.com" />
-            </div>
-            <div class="formActions">
-              <button type="button" class="btnPrimary" id="saveApiBase">Save API Base</button>
-            </div>
-
-            <div class="callout" style="color:var(--muted2)">
-              Roles are stored locally (demo). Only your browser sees these changes.
-            </div>
-
-            <div id="adminAccounts" class="callout" style="display:grid; gap:10px;">
-              <div style="color:var(--muted2)">No accounts to manage.</div>
+              <b>Demo note:</b> accounts/members are stored in your browser. Other people won’t see these members until we add a real database.
             </div>
           </div>
         </aside>
       </div>
+
+      <section class="card" id="logs" style="grid-column: 1 / -1;">
+        <div class="cardHeader">
+          <h2>Logs & Evidence</h2>
+          <div class="badge">required for staff actions</div>
+        </div>
+        <div class="cardBody">
+          <div class="sectionTitle">What every log must include</div>
+          <ul class="rules">
+            <li>Staff member name + role</li>
+            <li>User name + user ID (if possible)</li>
+            <li>Rule broken (which section)</li>
+            <li>Action taken (warn / mute / ban / perma)</li>
+            <li><strong>Evidence:</strong> screenshots or message links + timestamps</li>
+            <li>Date/time + short context</li>
+          </ul>
+
+          <div class="callout">
+            <strong>No log = action can be reversed.</strong>
+            <span style="color:var(--muted2)">Logging protects the community and protects staff too.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="appeals" style="grid-column: 1 / -1;">
+        <div class="cardHeader">
+          <h2>Appeals</h2>
+          <div class="badge">fair + consistent</div>
+        </div>
+        <div class="cardBody">
+          <div class="sectionTitle">Appealable</div>
+          <ul class="rules">
+            <li>Warning / mute / ban ladder actions</li>
+            <li>Most non-zero-tolerance punishments</li>
+          </ul>
+
+          <div class="sectionTitle">Not appealable</div>
+          <ul class="rules">
+            <li>Perma bans for real-life threats, doxxing, or DDOS threats</li>
+            <li>Sexual content involving minors (zero-tolerance)</li>
+          </ul>
+
+          <div class="sectionTitle">Appeal should include</div>
+          <ul class="rules">
+            <li>What happened (brief)</li>
+            <li>Why they think it was wrong / context</li>
+            <li>What they’ll do differently</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card" id="more" style="grid-column: 1 / -1;">
+        <div class="cardHeader">
+          <h2>More</h2>
+          <div class="badge">extra rules</div>
+        </div>
+        <div class="cardBody">
+          <div class="sectionTitle">Spam / raid behavior</div>
+          <ul class="rules">
+            <li>No spamming the same things over and over.</li>
+            <li>No soundboard spam / mic spam.</li>
+            <li>No repeated pings / mass mentions.</li>
+            <li>Raid attempts or encouraging raids = instant ban.</li>
+            <li>No advertising other servers/socials without permission.</li>
+          </ul>
+
+          <div class="sectionTitle">Impersonation</div>
+          <ul class="rules">
+            <li>No pretending to be staff, a creator, or another member.</li>
+            <li>Copying names/avatars to trick people counts as impersonation.</li>
+            <li>Fake screenshots, fake “staff DMs”, or fake modmail = ban.</li>
+          </ul>
+
+          <div class="sectionTitle">Scams / fake giveaways</div>
+          <ul class="rules">
+            <li>No scam links, phishing, token grabbers, or account selling.</li>
+            <li>Giveaways must be approved by staff and posted in the correct channel.</li>
+          </ul>
+
+          <div class="sectionTitle">Event disruption</div>
+          <ul class="rules">
+            <li>No crashing events, trolling hosts, or intentionally ruining games.</li>
+            <li>No loud audio / disruptive soundboards during events.</li>
+            <li>Follow host instructions during events. If you disagree, appeal after.</li>
+          </ul>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -821,7 +937,105 @@
     </div>
   </div>
 
+  <!-- Settings Modal -->
+  <div class="modalOverlay" id="settingsModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Settings">
+      <div class="modalTop">
+        <h3>Settings</h3>
+        <button class="xBtn" id="settingsClose" aria-label="Close settings">
+          <svg viewBox="0 0 24 24"><path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.42L12 13.41l-6.89 6.3-1.42-1.41L10.59 12 3.69 5.71 5.11 4.29 12 10.59l6.89-6.3z"/></svg>
+        </button>
+      </div>
+      <div class="modalBody">
+        <div class="notice">
+          Update your account settings.<br/>
+          <span style="color:var(--muted2)">Demo note:</span> changes are stored in your browser (localStorage), not a real server.
+        </div>
+
+        <div id="settingsMsg"></div>
+
+        <div class="callout" style="display:grid; gap:6px;">
+          <div><span style="color:var(--muted2)">User:</span> <b id="settings_username">—</b></div>
+          <div><span style="color:var(--muted2)">Role:</span> <b id="settings_role">Member</b></div>
+        </div>
+
+        <div class="field">
+          <label for="s_display">Display Name</label>
+          <input id="s_display" type="text" placeholder="name shown on the site" />
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label for="s_dhandle">Discord @ (optional)</label>
+            <input id="s_dhandle" type="text" placeholder="@username" />
+          </div>
+          <div class="field">
+            <label for="s_did">Discord ID (optional)</label>
+            <input id="s_did" type="text" inputmode="numeric" placeholder="example 1161162505628942346" />
+          </div>
+        </div>
+
+        <div class="formActions">
+          <button type="button" class="btnGhost" id="s_resetProfile">Reset</button>
+          <button type="button" class="btnPrimary" id="s_saveProfile">Save Profile</button>
+        </div>
+
+        <div style="margin-top:8px; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.70)">Change password</div>
+
+        <div class="row2">
+          <div class="field">
+            <label for="s_curpass">Current password</label>
+            <input id="s_curpass" type="password" placeholder="current password" />
+          </div>
+          <div class="field">
+            <label for="s_newpass">New password</label>
+            <input id="s_newpass" type="password" placeholder="new password" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="s_newconf">Confirm new password</label>
+          <input id="s_newconf" type="password" placeholder="confirm new password" />
+        </div>
+
+        <div class="formActions">
+          <button type="button" class="btnGhost" id="s_clearPass">Clear</button>
+          <button type="button" class="btnPrimary" id="s_savePass">Update Password</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div class="modalOverlay" id="profileModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Profile">
+      <div class="modalTop">
+        <h3 id="profileTitle">Profile</h3>
+        <button class="xBtn" id="profileClose" aria-label="Close profile">
+          <svg viewBox="0 0 24 24"><path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.42L12 13.41l-6.89 6.3-1.42-1.41L10.59 12 3.69 5.71 5.11 4.29 12 10.59l6.89-6.3z"/></svg>
+        </button>
+      </div>
+      <div class="modalBody">
+        <div id="profileMsg"></div>
+        <div id="profileContent" class="callout" style="display:grid; gap:10px;">
+          <div style="color:var(--muted2)">Select a member to view their profile.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // =========================
+    // Smooth jumps
+    // =========================
+    document.querySelectorAll("[data-jump]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const sel = btn.getAttribute("data-jump");
+        const el = document.querySelector(sel);
+        if(!el) return;
+        el.scrollIntoView({behavior:"smooth", block:"start"});
+      });
+    });
+
     // =========================
     // Toast
     // =========================
@@ -846,12 +1060,39 @@
     const storm = document.getElementById("storm");
     const sctx = storm.getContext("2d");
     let SW, SH;
+    let lastDpr = devicePixelRatio || 1;
 
     function stormResize(){
-      SW = storm.width = Math.floor(window.innerWidth * devicePixelRatio);
-      SH = storm.height = Math.floor(window.innerHeight * devicePixelRatio);
+      const dpr = devicePixelRatio || 1;
+      lastDpr = dpr;
+      SW = storm.width = Math.floor(window.innerWidth * dpr);
+      SH = storm.height = Math.floor(window.innerHeight * dpr);
     }
-    window.addEventListener("resize", stormResize);
+
+    let stormRaf = 0;
+    function stormResizeSoon(){
+      if(stormRaf) return;
+      stormRaf = requestAnimationFrame(() => {
+        stormRaf = 0;
+        stormResize();
+      });
+    }
+
+    window.addEventListener("resize", stormResizeSoon);
+    window.addEventListener("orientationchange", stormResizeSoon);
+    window.addEventListener("pageshow", stormResizeSoon);
+    if(window.visualViewport){
+      window.visualViewport.addEventListener("resize", stormResizeSoon);
+    }
+
+    // Zoom can change devicePixelRatio without a resize event
+    setInterval(() => {
+      const dpr = devicePixelRatio || 1;
+      if(Math.abs(dpr - lastDpr) > 0.001){
+        stormResizeSoon();
+      }
+    }, 500);
+
     stormResize();
 
     let flash = 0;
@@ -930,11 +1171,10 @@
     drawStorm();
 
     // =========================
-    // Auth + Accounts (local demo)
+    // Auth (client-side demo)
     // =========================
     const ACC_KEY = "push_accounts_v1";
     const SES_KEY = "push_session_v1";
-    const ANN_KEY = "push_announcements_v1";
 
     const OWNER_DISCORD_ID = "1161162505628942346";
 
@@ -949,16 +1189,26 @@
       "Member",
     ];
 
-    const POST_ROLES = new Set(["Owner", "Manager", "Forms Apps"]);
     const PRESENCE_TTL_MS = 60 * 1000;
 
-    const API_BASE_KEY = "push_api_base_v1";
+    // Cross-tab UI refresh (helps “auto update” when multiple pages are open)
+    const BUS_NAME = "push_bus_v1";
+    const bus = ("BroadcastChannel" in window) ? new BroadcastChannel(BUS_NAME) : null;
 
-    function getApiBase(){
-      const saved = (localStorage.getItem(API_BASE_KEY) || "").trim();
-      if(saved) return saved;
-      const origin = (typeof location !== "undefined" && location.origin && location.origin !== "null") ? location.origin : "";
-      return origin;
+    function busEmit(type, data){
+      try{ bus?.postMessage({ type, data, ts: Date.now() }); }catch{}
+    }
+
+    function busHandle(msg){
+      const t = msg?.type;
+      if(t === "accounts"){
+        renderAuthArea();
+        renderMembers();
+      }
+    }
+
+    if(bus){
+      bus.addEventListener("message", (e) => busHandle(e.data));
     }
 
     function normalizeRole(role){
@@ -1007,10 +1257,6 @@
       const acc = getAccount(username);
       return acc?.displayName || username || "";
     }
-    function getRole(username){
-      const acc = getAccount(username);
-      return acc?.role || "Member";
-    }
 
     function isOnline(info){
       return !!info && (Date.now() - (Number(info.lastSeenAt || 0)) < PRESENCE_TTL_MS);
@@ -1030,9 +1276,6 @@
       touchPresence();
       renderAuthArea();
       renderMembers();
-      renderAnnouncements();
-      renderComposer();
-      renderOwnerPanel();
     }
     function clearSession(){
       const sess = getSession();
@@ -1043,13 +1286,9 @@
           saveAccounts(accounts);
         }
       }
-
       localStorage.removeItem(SES_KEY);
       renderAuthArea();
       renderMembers();
-      renderAnnouncements();
-      renderComposer();
-      renderOwnerPanel();
     }
 
     async function sha256Hex(str){
@@ -1067,13 +1306,6 @@
         .replaceAll("'","&#039;");
     }
 
-    function canPostAnnouncements(username){
-      return POST_ROLES.has(getRole(username));
-    }
-
-    // =========================
-    // Auth Modal
-    // =========================
     const authModal = document.getElementById("authModal");
     const authClose = document.getElementById("authClose");
     const openLogin = document.getElementById("openLogin");
@@ -1084,8 +1316,257 @@
     const formRegister = document.getElementById("formRegister");
     const authMsg = document.getElementById("authMsg");
 
+    // Settings modal
+    const settingsModal = document.getElementById("settingsModal");
+    const settingsClose = document.getElementById("settingsClose");
+    const settingsMsg = document.getElementById("settingsMsg");
+
+    // Profile modal
+    const profileModal = document.getElementById("profileModal");
+    const profileClose = document.getElementById("profileClose");
+    const profileTitle = document.getElementById("profileTitle");
+    const profileMsg = document.getElementById("profileMsg");
+    const profileContent = document.getElementById("profileContent");
+    let activeProfileUser = "";
+
     function setAuthMsg(type, text){
       authMsg.innerHTML = text ? `<div class="${type === "ok" ? "okText" : "errorText"}">${text}</div>` : "";
+    }
+
+    function setSettingsMsg(type, text){
+      if(!settingsMsg) return;
+      settingsMsg.innerHTML = text ? `<div class="${type === "ok" ? "okText" : "errorText"}">${text}</div>` : "";
+    }
+
+    function setProfileMsg(type, text){
+      if(!profileMsg) return;
+      profileMsg.innerHTML = text ? `<div class="${type === "ok" ? "okText" : "errorText"}">${text}</div>` : "";
+    }
+
+    function showSettings(){
+      const sess = getSession();
+      if(!sess?.username){
+        showToast("Login required");
+        showModal("login");
+        return;
+      }
+
+      const acc = getAccount(sess.username);
+      if(!acc){
+        showToast("No account");
+        return;
+      }
+
+      document.getElementById("settings_username").textContent = acc.username;
+      document.getElementById("settings_role").textContent = getRole(acc.username);
+
+      document.getElementById("s_display").value = acc.displayName || acc.username;
+      document.getElementById("s_dhandle").value = acc.discordHandle || "";
+      document.getElementById("s_did").value = acc.discordId || "";
+
+      document.getElementById("s_curpass").value = "";
+      document.getElementById("s_newpass").value = "";
+      document.getElementById("s_newconf").value = "";
+
+      setSettingsMsg("", "");
+      settingsModal.classList.add("show");
+      settingsModal.setAttribute("aria-hidden","false");
+    }
+
+    function hideSettings(){
+      settingsModal.classList.remove("show");
+      settingsModal.setAttribute("aria-hidden","true");
+      setSettingsMsg("", "");
+    }
+
+    function openProfile(username){
+      activeProfileUser = String(username || "");
+      renderProfile();
+      setProfileMsg("", "");
+      profileModal.classList.add("show");
+      profileModal.setAttribute("aria-hidden","false");
+    }
+
+    function hideProfile(){
+      profileModal.classList.remove("show");
+      profileModal.setAttribute("aria-hidden","true");
+      activeProfileUser = "";
+      setProfileMsg("", "");
+    }
+
+    function renderProfile(){
+      if(!profileContent) return;
+
+      const u = activeProfileUser;
+      const accounts = loadAccounts();
+      const info = accounts[u];
+
+      if(!u || !info){
+        profileTitle.textContent = "Profile";
+        profileContent.innerHTML = `<div style="color:var(--muted2)">Profile not found.</div>`;
+        return;
+      }
+
+      const sess = getSession();
+      const me = sess?.username || "";
+      const isSelf = me && me === u;
+      const isOwner = getRole(me) === "Owner";
+      const online = isSelf || isOnline({ lastSeenAt: info.lastSeenAt });
+
+      const role = normalizeRole(info.role);
+      const roleBadge = role !== "Member"
+        ? `<span class="badge" style="font-size:12px; padding:6px 10px;">${escapeHtml(role)}</span>`
+        : `<span class="badge" style="font-size:12px; padding:6px 10px;">Member</span>`;
+
+      const connected = !!info.discordHandle;
+      const handleText = connected ? info.discordHandle : `@${u}`;
+      const createdAt = info.createdAt ? new Date(info.createdAt).toLocaleString() : "—";
+      const lastSeenAt = info.lastSeenAt ? new Date(info.lastSeenAt).toLocaleString() : "—";
+
+      profileTitle.textContent = isSelf ? "Your Profile" : `Profile`;
+
+      const ownerTools = isOwner ? `
+        <div style="margin-top:10px; border-top:1px solid rgba(168,120,255,.16); padding-top:10px;">
+          <div style="font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.70)">Owner tools</div>
+
+          <div class="field" style="margin-top:10px;">
+            <label for="p_display">Display Name</label>
+            <input id="p_display" type="text" value="${escapeHtml(info.displayName || u)}" />
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label for="p_role">Role</label>
+              <select id="p_role" style="width:100%; padding:12px 12px; border-radius:14px; border:1px solid rgba(168,120,255,.18); background:rgba(255,255,255,.06); color:rgba(255,255,255,.92);">
+                ${ROLE_ORDER.map(r => `<option ${normalizeRole(role) === r ? "selected" : ""}>${escapeHtml(r)}</option>`).join("")}
+              </select>
+            </div>
+            <div class="field">
+              <label for="p_dhandle">Discord @</label>
+              <input id="p_dhandle" type="text" value="${escapeHtml(info.discordHandle || "")}" placeholder="@username" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="p_did">Discord ID</label>
+            <input id="p_did" type="text" inputmode="numeric" value="${escapeHtml(info.discordId || "")}" placeholder="example 1161162505628942346" />
+          </div>
+
+          <div class="formActions">
+            <button type="button" class="btnGhost" id="p_remove">Remove</button>
+            <button type="button" class="btnPrimary" id="p_save">Save</button>
+          </div>
+        </div>
+      ` : "";
+
+      profileContent.innerHTML = `
+        <div style="display:grid; gap:10px;">
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-start; justify-content:space-between;">
+            <div>
+              <div style="font-weight:1000; font-size:18px;">${escapeHtml(info.displayName || u)}</div>
+              <div style="color:var(--muted2); font-size:13px;">@${escapeHtml(u)} • ${online ? "online" : "offline"}</div>
+            </div>
+            ${roleBadge}
+          </div>
+
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <img class="miniIcon" src="./assets/discord.svg" alt="" aria-hidden="true" />
+            <span style="color:${connected ? 'var(--text)' : 'rgba(255,120,120,.95)'};">${escapeHtml(handleText)}</span>
+            <span style="color:rgba(255,255,255,.28)">•</span>
+            <span style="color:var(--muted2)">ID:</span>
+            <code>${escapeHtml(info.discordId || "")}</code>
+          </div>
+
+          <div style="color:var(--muted2); font-size:12px; line-height:1.5;">
+            <div>Created: ${escapeHtml(createdAt)}</div>
+            <div>Last seen: ${escapeHtml(lastSeenAt)}</div>
+          </div>
+
+          ${isSelf ? `
+            <div class="formActions">
+              <button type="button" class="btnPrimary" id="p_openSettings">Open Settings</button>
+            </div>
+          ` : ""}
+
+          ${ownerTools}
+        </div>
+      `;
+
+      const openSettingsBtn = document.getElementById("p_openSettings");
+      if(openSettingsBtn){
+        openSettingsBtn.addEventListener("click", () => {
+          hideProfile();
+          showSettings();
+        });
+      }
+
+      const saveBtn = document.getElementById("p_save");
+      if(saveBtn){
+        saveBtn.addEventListener("click", () => {
+          const accounts2 = loadAccounts();
+          if(!accounts2[u]) return;
+
+          const newDisplay = String(document.getElementById("p_display").value || "").trim();
+          const newRole = String(document.getElementById("p_role").value || "Member");
+          const newHandle = normalizeDiscordHandle(String(document.getElementById("p_dhandle").value || "").trim());
+          const newDid = String(document.getElementById("p_did").value || "").trim();
+
+          if(newDisplay.length < 2){
+            setProfileMsg("err", "Display name must be at least 2 characters.");
+            return;
+          }
+          if(!isValidDiscordId(newDid)){
+            setProfileMsg("err", "Discord ID looks wrong. Example: 1161162505628942346");
+            return;
+          }
+
+          if(newDid){
+            for(const [uname, info2] of Object.entries(accounts2)){
+              if(uname === u) continue;
+              if(info2.discordId && String(info2.discordId).trim() === newDid){
+                setProfileMsg("err", `That Discord ID is already linked to ${uname}.`);
+                return;
+              }
+            }
+          }
+
+          accounts2[u].displayName = newDisplay;
+          accounts2[u].discordHandle = newHandle;
+          accounts2[u].discordId = newDid;
+          accounts2[u].role = normalizeRole(newRole);
+          if(newDid && newDid === OWNER_DISCORD_ID) accounts2[u].role = "Owner";
+
+          saveAccounts(accounts2);
+          renderAuthArea();
+          renderMembers();
+          busEmit("accounts");
+
+          showToast("Saved");
+          setProfileMsg("ok", "Saved.");
+          renderProfile();
+        });
+      }
+
+      const removeBtn = document.getElementById("p_remove");
+      if(removeBtn){
+        removeBtn.addEventListener("click", () => {
+          const accounts2 = loadAccounts();
+          if(!accounts2[u]) return;
+          delete accounts2[u];
+          saveAccounts(accounts2);
+
+          const sess2 = getSession();
+          if(sess2?.username === u){
+            clearSession();
+          } else {
+            renderMembers();
+          }
+
+          busEmit("accounts");
+          showToast("Removed");
+          hideProfile();
+        });
+      }
     }
 
     function showModal(which){
@@ -1100,6 +1581,7 @@
       authModal.setAttribute("aria-hidden","true");
       setAuthMsg("", "");
     }
+
     function setTab(which){
       const isLogin = which === "login";
       tabLogin.classList.toggle("active", isLogin);
@@ -1112,6 +1594,12 @@
     openRegister.addEventListener("click", () => showModal("register"));
     authClose.addEventListener("click", hideModal);
     authModal.addEventListener("click", (e) => { if(e.target === authModal) hideModal(); });
+
+    settingsClose.addEventListener("click", hideSettings);
+    settingsModal.addEventListener("click", (e) => { if(e.target === settingsModal) hideSettings(); });
+
+    profileClose.addEventListener("click", hideProfile);
+    profileModal.addEventListener("click", (e) => { if(e.target === profileModal) hideProfile(); });
 
     tabLogin.addEventListener("click", () => setTab("login"));
     tabRegister.addEventListener("click", () => setTab("register"));
@@ -1130,6 +1618,141 @@
       document.getElementById("r_conf").value = "";
       document.getElementById("r_did").value = "";
       setAuthMsg("", "");
+    });
+
+    // =========================
+    // Settings actions
+    // =========================
+    document.getElementById("s_resetProfile").addEventListener("click", () => {
+      const sess = getSession();
+      if(!sess?.username) return;
+      const acc = getAccount(sess.username);
+      if(!acc) return;
+
+      document.getElementById("settings_username").textContent = acc.username;
+      document.getElementById("settings_role").textContent = getRole(acc.username);
+      document.getElementById("s_display").value = acc.displayName || acc.username;
+      document.getElementById("s_dhandle").value = acc.discordHandle || "";
+      document.getElementById("s_did").value = acc.discordId || "";
+
+      setSettingsMsg("", "");
+      showToast("Reset");
+    });
+
+    document.getElementById("s_saveProfile").addEventListener("click", () => {
+      const sess = getSession();
+      if(!sess?.username){
+        showToast("Login required");
+        showModal("login");
+        return;
+      }
+
+      const username = sess.username;
+      const accounts = loadAccounts();
+      if(!accounts[username]){
+        setSettingsMsg("err", "Account not found.");
+        return;
+      }
+
+      const displayName = String(document.getElementById("s_display").value || "").trim();
+      const dhandleRaw = String(document.getElementById("s_dhandle").value || "").trim();
+      const discordHandle = normalizeDiscordHandle(dhandleRaw);
+      const did = String(document.getElementById("s_did").value || "").trim();
+
+      if(displayName.length < 2){
+        setSettingsMsg("err", "Display name must be at least 2 characters.");
+        return;
+      }
+      if(!isValidDiscordId(did)){
+        setSettingsMsg("err", "Discord ID looks wrong. Example: 1161162505628942346");
+        return;
+      }
+
+      if(did){
+        for(const [u, info] of Object.entries(accounts)){
+          if(u === username) continue;
+          if(info.discordId && String(info.discordId).trim() === did){
+            setSettingsMsg("err", `That Discord ID is already linked to ${u}.`);
+            return;
+          }
+        }
+      }
+
+      accounts[username].displayName = displayName;
+      accounts[username].discordHandle = discordHandle;
+      accounts[username].discordId = did;
+      accounts[username].role = normalizeRole(accounts[username].role);
+      if(did && did === OWNER_DISCORD_ID) accounts[username].role = "Owner";
+
+      saveAccounts(accounts);
+      touchPresence();
+
+      document.getElementById("settings_role").textContent = getRole(username);
+
+      renderAuthArea();
+      renderMembers();
+
+      busEmit("accounts");
+      setSettingsMsg("ok", "Profile updated.");
+      showToast("Saved");
+    });
+
+    document.getElementById("s_clearPass").addEventListener("click", () => {
+      document.getElementById("s_curpass").value = "";
+      document.getElementById("s_newpass").value = "";
+      document.getElementById("s_newconf").value = "";
+      setSettingsMsg("", "");
+      showToast("Cleared");
+    });
+
+    document.getElementById("s_savePass").addEventListener("click", async () => {
+      const sess = getSession();
+      if(!sess?.username){
+        showToast("Login required");
+        showModal("login");
+        return;
+      }
+
+      const username = sess.username;
+      const accounts = loadAccounts();
+      if(!accounts[username]){
+        setSettingsMsg("err", "Account not found.");
+        return;
+      }
+
+      const cur = String(document.getElementById("s_curpass").value || "");
+      const np = String(document.getElementById("s_newpass").value || "");
+      const conf = String(document.getElementById("s_newconf").value || "");
+
+      if(cur.length < 1){
+        setSettingsMsg("err", "Enter your current password.");
+        return;
+      }
+      if(np.length < 6){
+        setSettingsMsg("err", "New password must be at least 6 characters.");
+        return;
+      }
+      if(np !== conf){
+        setSettingsMsg("err", "New passwords do not match.");
+        return;
+      }
+
+      const curHash = await sha256Hex(cur);
+      if(curHash !== accounts[username].pwh){
+        setSettingsMsg("err", "Current password is wrong.");
+        return;
+      }
+
+      accounts[username].pwh = await sha256Hex(np);
+      saveAccounts(accounts);
+      busEmit("accounts");
+
+      document.getElementById("s_curpass").value = "";
+      document.getElementById("s_newpass").value = "";
+      document.getElementById("s_newconf").value = "";
+
+      setSettingsMsg("ok", "Password updated.");
+      showToast("Password updated");
     });
 
     function isValidDiscordId(s){
@@ -1171,6 +1794,7 @@
       const role = (did && did === OWNER_DISCORD_ID) ? "Owner" : "Member";
       accounts[user] = { pwh, displayName, role, discordId: did, discordHandle, lastSeenAt: 0, createdAt: Date.now() };
       saveAccounts(accounts);
+      busEmit("accounts");
 
       setAuthMsg("ok", "Account created. You can login now.");
       setTab("login");
@@ -1179,7 +1803,6 @@
       showToast("Registered");
 
       renderMembers();
-      renderOwnerPanel();
     });
 
     formLogin.addEventListener("submit", async (e) => {
@@ -1206,20 +1829,19 @@
 
       const existing = document.getElementById("whoami");
       if(existing) existing.remove();
+      const settingsBtn = document.getElementById("settingsBtn");
+      if(settingsBtn) settingsBtn.remove();
       const logout = document.getElementById("logoutBtn");
       if(logout) logout.remove();
 
-      const loginHint = document.getElementById("loginHint");
       if(!sess || !sess.username){
         document.getElementById("openLogin").style.display = "";
         document.getElementById("openRegister").style.display = "";
-        loginHint.style.display = "";
         return;
       }
 
       document.getElementById("openLogin").style.display = "none";
       document.getElementById("openRegister").style.display = "none";
-      loginHint.style.display = "none";
 
       const who = document.createElement("div");
       who.id = "whoami";
@@ -1227,6 +1849,15 @@
       who.style.cursor = "default";
       who.textContent = `Hi, ${getDisplayName(sess.username)}`;
       area.insertBefore(who, area.firstChild);
+
+      const settings = document.createElement("button");
+      settings.id = "settingsBtn";
+      settings.className = "pill";
+      settings.textContent = "Settings";
+      settings.addEventListener("click", () => {
+        showSettings();
+      });
+      area.insertBefore(settings, document.getElementById("discordJoin"));
 
       const out = document.createElement("button");
       out.id = "logoutBtn";
@@ -1239,9 +1870,6 @@
       area.insertBefore(out, document.getElementById("discordJoin"));
     }
 
-    // =========================
-    // Members list
-    // =========================
     function renderMembers(){
       const list = document.getElementById("memberList");
       const count = document.getElementById("memberCount");
@@ -1280,7 +1908,7 @@
           : `<span class="badge" style="font-size:11px; padding:4px 8px; border-color: rgba(255,120,120,.35); background: rgba(255,120,120,.12); color: rgba(255,120,120,.95);">NOT CONNECTED</span>`;
 
         return `
-          <div class="memberRow">
+          <div class="memberRow" data-member="${escapeHtml(acc.username)}" role="button" tabindex="0" aria-label="Open profile">
             <span class="dot" style="background:${dot}"></span>
             <div style="display:grid; gap:4px;">
               <div style="display:flex; gap:8px; align-items:baseline; flex-wrap:wrap;">
@@ -1302,313 +1930,27 @@
       }).join("");
     }
 
-    // =========================
-    // Announcements
-    // =========================
-    function loadAnnouncements(){
-      try { return JSON.parse(localStorage.getItem(ANN_KEY) || "[]"); } catch { return []; }
-    }
-    function saveAnnouncements(arr){
-      localStorage.setItem(ANN_KEY, JSON.stringify(arr || []));
-    }
-
-    function renderAnnouncements(){
-      const list = document.getElementById("annList");
-      const count = document.getElementById("annCount");
-      if(!list || !count) return;
-
-      const anns = loadAnnouncements();
-      count.textContent = String(anns.length);
-
-      if(!anns.length){
-        list.innerHTML = `<div style="color:var(--muted2)">No announcements yet.</div>`;
-        return;
-      }
-
-      list.innerHTML = anns.slice().reverse().map(a => {
-        return `
-          <div class="post">
-            <div class="postTop">
-              <div class="postTitle">${escapeHtml(a.title || "(No title)")}</div>
-              <div style="font-size:12px; color:var(--muted2)">${new Date(a.ts).toLocaleString()}</div>
-            </div>
-            <div style="margin-top:6px; font-size:12px; color:rgba(255,255,255,.78); letter-spacing:.08em; text-transform:uppercase;">
-              posted by <span style="color:rgba(168,120,255,.95)">${escapeHtml(getDisplayName(a.author))}</span>
-            </div>
-            <div class="postBody">${escapeHtml(a.body || "")}</div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    function renderComposer(){
-      const sess = getSession();
-      const username = sess?.username || "";
-
-      const locked = document.getElementById("announceLocked");
-      const comp = document.getElementById("announceComposer");
-
-      if(!sess?.username){
-        locked.style.display = "none";
-        comp.style.display = "none";
-        return;
-      }
-
-      if(canPostAnnouncements(username)){
-        locked.style.display = "none";
-        comp.style.display = "";
-      } else {
-        locked.style.display = "";
-        comp.style.display = "none";
-      }
-    }
-
-    async function postAnnouncementToDiscord(a){
-      const msg = document.getElementById("discordPushMsg");
-      if(msg) msg.innerHTML = "";
-
-      const apiBase = getApiBase();
-      if(!apiBase){
-        if(msg) msg.innerHTML = `<div class="errorText">Discord push skipped: Announce API Base not set.</div>`;
-        return;
-      }
-
-      try{
-        const res = await fetch(`${apiBase.replace(/\/$/,"")}/api/announce`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: a.title,
-            body: a.body,
-            author: getDisplayName(a.author),
-            ts: a.ts
-          })
-        });
-
-        if(!res.ok){
-          throw new Error(`HTTP ${res.status}`);
-        }
-
-        if(msg) msg.innerHTML = `<div class="okText">Discord: posted</div>`;
-      }catch(e){
-        if(msg) msg.innerHTML = `<div class="errorText">Discord push failed (is the local server running?): ${escapeHtml(e?.message || String(e))}</div>`;
-      }
-    }
-
-    document.getElementById("annClear").addEventListener("click", () => {
-      document.getElementById("ann_title").value = "";
-      document.getElementById("ann_body").value = "";
-      const msg = document.getElementById("discordPushMsg");
-      if(msg) msg.innerHTML = "";
-      showToast("Cleared");
-    });
-
-    document.getElementById("annPost").addEventListener("click", async () => {
-      const sess = getSession();
-      const username = sess?.username || "";
-      if(!sess?.username){
-        showToast("Login required");
-        showModal("login");
-        return;
-      }
-      if(!canPostAnnouncements(username)){
-        showToast("No permission");
-        return;
-      }
-
-      const title = document.getElementById("ann_title").value.trim();
-      const body = document.getElementById("ann_body").value.trim();
-
-      if(title.length < 3){
-        showToast("Title too short");
-        return;
-      }
-      if(body.length < 10){
-        showToast("Message too short");
-        return;
-      }
-
-      const anns = loadAnnouncements();
-      const a = {
-        id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2)),
-        title,
-        body,
-        author: username,
-        ts: Date.now()
-      };
-
-      anns.push(a);
-      saveAnnouncements(anns);
-
-      document.getElementById("ann_title").value = "";
-      document.getElementById("ann_body").value = "";
-
-      renderAnnouncements();
-      showToast("Posted");
-
-      // Push to Discord (via local proxy)
-      await postAnnouncementToDiscord(a);
-    });
-
-    // =========================
-    // TikTok links
-    // =========================
-    const TIKTOK_FEED = [
-      // Add your TikTok links here
-      // { name: "Creator name", url: "https://www.tiktok.com/@user/video/123" },
-    ];
-
-    function renderTikTok(){
-      const box = document.getElementById("tiktokList");
-      if(!box) return;
-
-      if(!TIKTOK_FEED.length){
-        box.innerHTML = `<div style="color:var(--muted2)">No TikTok links added yet.</div>`;
-        return;
-      }
-
-      box.innerHTML = TIKTOK_FEED.map(item => {
-        const name = item?.name ? String(item.name) : "TikTok";
-        const url = item?.url ? String(item.url) : "";
-        if(!url) return "";
-        return `
-          <div class="post">
-            <div class="postTitle">${escapeHtml(name)}</div>
-            <div style="margin-top:6px; font-size:12px; color:var(--muted2)">${escapeHtml(url)}</div>
-            <div style="margin-top:10px;">
-              <a class="pill" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open</a>
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    // =========================
-    // Owner panel
-    // =========================
-    function renderOwnerPanel(){
-      const panel = document.getElementById("ownerPanel");
-      const adminAccounts = document.getElementById("adminAccounts");
-      const apiBaseInput = document.getElementById("apiBase");
-
-      if(!panel || !adminAccounts || !apiBaseInput) return;
-
-      const sess = getSession();
-      const username = sess?.username || "";
-      const role = getRole(username);
-
-      apiBaseInput.value = getApiBase();
-
-      if(role !== "Owner"){
-        panel.style.display = "none";
-        return;
-      }
-
-      panel.style.display = "";
-
-      const accounts = loadAccounts();
-      const rows = Object.entries(accounts).map(([u, info]) => ({ username: u, ...info }));
-      if(!rows.length){
-        adminAccounts.innerHTML = `<div style="color:var(--muted2)">No accounts to manage.</div>`;
-        return;
-      }
-
-      adminAccounts.innerHTML = rows.map(acc => {
-        const options = ROLE_ORDER.map(r => {
-          const sel = (normalizeRole(acc.role) === r) ? "selected" : "";
-          return `<option ${sel}>${escapeHtml(r)}</option>`;
-        }).join("");
-
-        return `
-          <div class="post">
-            <div class="postTop">
-              <div class="postTitle">${escapeHtml(acc.displayName || acc.username)}</div>
-              <div style="font-size:12px; color:var(--muted2)">@${escapeHtml(acc.username)}</div>
-            </div>
-
-            <div class="row2" style="margin-top:10px;">
-              <div class="field">
-                <label>Role</label>
-                <select class="roleSelect" data-user="${escapeHtml(acc.username)}" style="width:100%; padding:12px 12px; border-radius:14px; border:1px solid rgba(168,120,255,.18); background:rgba(255,255,255,.06); color:rgba(255,255,255,.92);">
-                  ${options}
-                </select>
-              </div>
-              <div class="field">
-                <label>Discord ID</label>
-                <input value="${escapeHtml(acc.discordId || "")}" disabled />
-              </div>
-            </div>
-
-            <div class="formActions">
-              <button type="button" class="btnGhost" data-remove-user="${escapeHtml(acc.username)}">Remove</button>
-            </div>
-          </div>
-        `;
-      }).join("");
-
-      adminAccounts.querySelectorAll(".roleSelect").forEach(sel => {
-        sel.addEventListener("change", () => {
-          const u = sel.getAttribute("data-user");
-          const newRole = sel.value;
-          const accounts2 = loadAccounts();
-          if(!accounts2[u]) return;
-
-          // Always force owner role if discord ID matches
-          accounts2[u].role = normalizeRole(newRole);
-          if(accounts2[u].discordId && accounts2[u].discordId === OWNER_DISCORD_ID){
-            accounts2[u].role = "Owner";
-          }
-
-          saveAccounts(accounts2);
-          renderMembers();
-          renderComposer();
-          showToast("Role saved");
-        });
-      });
-
-      adminAccounts.querySelectorAll("[data-remove-user]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const u = btn.getAttribute("data-remove-user");
-          if(!u) return;
-
-          const accounts2 = loadAccounts();
-          if(!accounts2[u]) return;
-          delete accounts2[u];
-          saveAccounts(accounts2);
-
-          // If you removed yourself, log out
-          const sess2 = getSession();
-          if(sess2?.username === u){
-            clearSession();
-          }
-
-          renderMembers();
-          renderOwnerPanel();
-          showToast("Removed");
-        });
-      });
-    }
-
-    document.getElementById("saveApiBase").addEventListener("click", () => {
-      const sess = getSession();
-      const username = sess?.username || "";
-      if(getRole(username) !== "Owner") return;
-
-      const val = String(document.getElementById("apiBase").value || "").trim();
-      localStorage.setItem(API_BASE_KEY, val);
-      showToast("API base saved");
-    });
-
-    // =========================
     // Initial render
-    // =========================
     renderAuthArea();
     renderMembers();
-    renderAnnouncements();
-    renderComposer();
-    renderTikTok();
-    renderOwnerPanel();
     touchPresence();
+
+    // Profile open (event delegation)
+    const memberListBox = document.getElementById("memberList");
+    if(memberListBox){
+      memberListBox.addEventListener("click", (e) => {
+        const row = e.target.closest(".memberRow[data-member]");
+        if(!row) return;
+        openProfile(row.getAttribute("data-member"));
+      });
+      memberListBox.addEventListener("keydown", (e) => {
+        if(e.key !== "Enter" && e.key !== " ") return;
+        const row = e.target.closest(".memberRow[data-member]");
+        if(!row) return;
+        e.preventDefault();
+        openProfile(row.getAttribute("data-member"));
+      });
+    }
 
     window.addEventListener("focus", () => {
       touchPresence();
@@ -1621,12 +1963,9 @@
     }, 20000);
 
     window.addEventListener("storage", (e) => {
-      if(e.key === ACC_KEY || e.key === SES_KEY || e.key === ANN_KEY){
+      if(e.key === ACC_KEY || e.key === SES_KEY){
         renderAuthArea();
         renderMembers();
-        renderAnnouncements();
-        renderComposer();
-        renderOwnerPanel();
       }
     });
   </script>
