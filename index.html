@@ -3,12 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>P.U.S.H — Forms</title>
+  <title>P.U.S.H — Home</title>
 
-  <!-- Cursive font for the PUSH heading -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -191,7 +187,7 @@
       transform: translateY(-1px);
       background: rgba(168,120,255,.12);
     }
-    .discordBtn svg{ width: 20px; height: 20px; fill: rgba(255,255,255,.92); }
+    .discordBtn img{ width: 20px; height: 20px; display:block; }
 
     /* Layout */
     .wrap{
@@ -243,14 +239,15 @@
       box-shadow: 0 20px 55px rgba(0,0,0,.45);
     }
 
-    /* Cursive PUSH heading */
+    /* Heading */
     .hero h1{
       margin:0;
-      font-family: "Great Vibes", cursive;
-      font-size: 64px;
-      font-weight: 400;
-      letter-spacing: .06em;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size: clamp(44px, 8vw, 64px);
+      font-weight: 1000;
+      letter-spacing: .22em;
       line-height: 1;
+      text-transform: uppercase;
       color: rgba(255,255,255,.95);
       text-shadow:
         0 0 18px rgba(168,120,255,.35),
@@ -280,14 +277,18 @@
 
     .grid{
       display:grid;
-      grid-template-columns: 1.1fr .9fr;
+      grid-template-columns: 1.15fr .85fr;
       gap: 16px;
       margin-top: 16px;
       align-items:start;
     }
+    .sideCol{
+      display:grid;
+      gap: 16px;
+      align-content:start;
+    }
     @media (max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
-      .hero h1{ font-size: 56px; }
     }
 
     .card{
@@ -338,7 +339,7 @@
       letter-spacing:.08em;
       text-transform: uppercase;
     }
-    .field input, .field select, .field textarea{
+    .field input, .field textarea{
       width:100%;
       padding: 12px 12px;
       border-radius: 14px;
@@ -348,7 +349,7 @@
       outline:none;
     }
     .field textarea{ min-height: 120px; resize: vertical; }
-    .field input:focus, .field select:focus, .field textarea:focus{
+    .field input:focus, .field textarea:focus{
       border-color: rgba(168,120,255,.34);
       background: rgba(168,120,255,.08);
     }
@@ -371,36 +372,52 @@
       color: rgba(255,255,255,.82);
     }
 
-    details.guide{
-      border: 1px solid rgba(168,120,255,.16);
-      background: rgba(0,0,0,.16);
+    .post{
+      border: 1px solid rgba(168,120,255,.14);
+      background: rgba(0,0,0,.18);
       border-radius: 14px;
-      overflow:hidden;
+      padding: 10px;
     }
-    details.guide summary{
-      cursor:pointer;
-      padding: 12px 12px;
+    .postTop{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .postTitle{
       font-weight: 900;
-      letter-spacing:.08em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.90);
-      list-style:none;
+      letter-spacing:.04em;
     }
-    details.guide summary::-webkit-details-marker{ display:none; }
-    details.guide .guideBody{
-      padding: 12px 12px 14px;
-      border-top: 1px solid rgba(168,120,255,.14);
+    .postBody{
+      margin-top: 8px;
       color: rgba(255,255,255,.84);
+      white-space:pre-wrap;
     }
-    .guideBody h3{
-      margin: 12px 0 6px;
-      font-size: 13px;
-      letter-spacing:.10em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.86);
+
+    .memberRow{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding: 10px;
+      border: 1px solid rgba(168,120,255,.14);
+      background: rgba(0,0,0,.18);
+      border-radius: 14px;
     }
-    .guideBody ul{ margin: 6px 0 0; padding-left: 18px; }
-    .guideBody li{ margin: 6px 0; }
+    .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.18);
+      flex: 0 0 10px;
+      margin-top: 4px;
+    }
+    .miniIcon{
+      width: 14px;
+      height: 14px;
+      opacity: .92;
+      display: block;
+    }
 
     .toast{
       position: fixed;
@@ -558,25 +575,23 @@
   <canvas id="storm"></canvas>
   <div class="grain"></div>
 
-  <!-- SINGLE topbar (no duplicates) -->
   <header class="topbar">
     <div class="topbar-inner">
-      <a class="brand" href="./forms.html" aria-label="Forms">
+      <a class="brand" href="./index.html" aria-label="Home">
         <img
-          src="https://cdn.discordapp.com/attachments/1154831673058402317/1447188492261130323/content.png?ex=69409a10&is=693f4890&hm=d530ea855b3eaeb7b36405d3dc23af56ba957b77499811015e6ec8fc9dd6ae2a&"
+          src="./assets/content.png"
           alt="P.U.S.H logo"
         />
         <div>
           <div class="title">P.U.S.H</div>
-          <div class="sub">Forms</div>
+          <div class="sub">Home</div>
         </div>
       </a>
 
-      <!-- Keep it simple: Forms + TOS only -->
       <nav class="nav" aria-label="Navigation">
-        <button class="pill" data-jump="#forms">Forms</button>
-        <button class="pill" data-jump="#guide">Advanced</button>
-        <a class="pill" href="./tos.html">Open TOS</a>
+        <a class="pill primary" href="./index.html" aria-current="page">Home</a>
+        <a class="pill" href="./forms.html">Forms</a>
+        <a class="pill" href="./tos.html#tos">TOS Rules</a>
       </nav>
 
       <div class="right" id="authArea">
@@ -584,9 +599,7 @@
         <button class="pill" id="openRegister">Register</button>
 
         <button class="discordBtn" id="discordJoin" title="Join Discord" aria-label="Join Discord">
-          <svg viewBox="0 0 127.14 96.36" aria-hidden="true">
-            <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2A75.57,75.57,0,0,0,95.73,78c.87.72,1.76,1.4,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.18-16.14C129.24,52.84,122.07,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.22,46,96.11,53,91.07,65.69,84.69,65.69Z"/>
-          </svg>
+          <img src="./assets/discord.svg" alt="" aria-hidden="true" />
         </button>
       </div>
     </div>
@@ -598,154 +611,127 @@
         <div class="heroTop">
           <img
             class="heroLogo"
-            src="https://cdn.discordapp.com/attachments/1154831673058402317/1447188492261130323/content.png?ex=69409a10&is=693f4890&hm=d530ea855b3eaeb7b36405d3dc23af56ba957b77499811015e6ec8fc9dd6ae2a&"
+            src="./assets/content.png"
             alt="P.U.S.H logo"
           />
           <div>
-            <div class="tagline">storm mode • forms hub • staff workflow</div>
-            <h1>PUSH</h1>
+            <div class="tagline">storm mode • home • announcements</div>
+            <h1>P.U.S.H</h1>
           </div>
         </div>
 
         <p>
-          This is the P.U.S.H forms hub. You must be logged in to submit a form.
-          Your login saves across pages (Forms + TOS) on this same website.
+          Welcome to the P.U.S.H home page. News and announcements show here.
+          Your login saves across pages (Home + Forms + TOS) on this same website.
         </p>
 
         <div class="ctaRow">
-          <button class="pill primary" id="btnCreateForm">Create Form</button>
-          <a class="pill" href="./tos.html">Read TOS</a>
-          <button class="pill" data-jump="#myForms">My Submissions</button>
+          <a class="pill primary" href="./forms.html">Open Forms</a>
+          <a class="pill" href="./tos.html#tos">Read TOS Rules</a>
         </div>
 
         <div class="callout" id="loginHint" style="display:none;">
-          <strong>Heads up:</strong> you’re not logged in. Click <strong>Login</strong> or <strong>Register</strong> to submit forms.
+          <strong>Heads up:</strong> you’re not logged in. Click <strong>Login</strong> or <strong>Register</strong>.
         </div>
       </div>
     </section>
 
-    <div class="grid" id="forms">
-      <!-- Create form -->
-      <section class="card">
+    <div class="grid">
+      <section class="card" id="announcements">
         <div class="cardHeader">
-          <h2>Create Form</h2>
-          <div class="badge" id="loginRequiredBadge">login required</div>
+          <h2>News & Announcements</h2>
+          <div class="badge" id="annCount">0</div>
         </div>
         <div class="cardBody">
-          <div class="row2">
+          <div id="annList" class="callout" style="display:grid; gap:10px;">
+            <div style="color:var(--muted2)">No announcements yet.</div>
+          </div>
+
+          <div id="announceLocked" class="callout" style="display:none;">
+            <strong>Posting locked:</strong> only <strong>Manager</strong>, <strong>Forms Apps</strong>, or <strong>Owner</strong> can post announcements.
+          </div>
+
+          <div id="announceComposer" style="display:none;">
             <div class="field">
-              <label for="f_type">Form Type</label>
-              <select id="f_type">
-                <option>Report (Rule Break)</option>
-                <option>Appeal</option>
-                <option>Staff / Dev Request</option>
-                <option>Event Issue</option>
-                <option>Other</option>
-              </select>
+              <label for="ann_title">Title</label>
+              <input id="ann_title" type="text" placeholder="announcement title" />
             </div>
             <div class="field">
-              <label for="f_title">Title</label>
-              <input id="f_title" type="text" placeholder="short title" />
+              <label for="ann_body">Message</label>
+              <textarea id="ann_body" placeholder="announcement message"></textarea>
             </div>
-          </div>
-
-          <div class="field">
-            <label for="f_body">Details</label>
-            <textarea id="f_body" placeholder="what happened? include usernames, dates, proof links, etc."></textarea>
-          </div>
-
-          <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
-            <button class="pill" id="btnClearForm">Clear</button>
-            <button class="pill primary" id="btnSubmitForm">Submit</button>
-          </div>
-
-          <div class="callout" style="margin-top:6px;">
-            <strong>Tip:</strong> If this is a report, include message links/screenshots + timestamps. If it’s an appeal, include what you’ll do differently.
+            <div class="formActions">
+              <button type="button" class="btnGhost" id="annClear">Clear</button>
+              <button type="button" class="btnPrimary" id="annPost">Post</button>
+            </div>
+            <div class="callout" style="color:var(--muted2)">
+              Discord webhook posting needs a server/proxy so your webhook URL stays private.
+              Set your Cloudflare Worker/API URL in <b>Owner Panel → Announce API Base</b>.
+            </div>
+            <div id="discordPushMsg"></div>
           </div>
         </div>
       </section>
 
-      <!-- Right panel: My submissions + Staff/Dev -->
-      <aside class="card" id="myForms">
-        <div class="cardHeader">
-          <h2>My Submissions</h2>
-          <div class="badge" id="myCount">0</div>
-        </div>
-        <div class="cardBody">
-          <div id="myList" class="callout" style="display:grid; gap:10px;">
-            <div style="color:var(--muted2)">No submissions yet.</div>
+      <div class="sideCol">
+        <aside class="card" id="members">
+          <div class="cardHeader">
+            <h2>Members</h2>
+            <div class="badge" id="memberCount">0</div>
           </div>
-
-          <div id="staffPanel" style="display:none; margin-top:10px;">
-            <div class="cardHeader" style="padding:0; border:0; margin-top:2px;">
-              <h2 style="font-size:13px;">Staff / Dev Panel</h2>
-              <div class="badge" id="staffBadge">STAFF</div>
+          <div class="cardBody">
+            <div id="memberList" class="callout" style="display:grid; gap:10px;">
+              <div style="color:var(--muted2)">No accounts yet.</div>
             </div>
-
-            <div class="callout" style="margin-top:10px;">
-              <strong>Visible to staff/dev usernames only.</strong><br/>
-              This is a simple demo. Later we can hook this into a real database + Discord webhook.
-            </div>
-
-            <button class="pill" id="btnViewAll" style="width:max-content;">View All Submissions</button>
-            <div id="allList" class="callout" style="display:none; margin-top:10px;"></div>
           </div>
-        </div>
-      </aside>
-    </div>
+        </aside>
 
-    <!-- SINGLE copy of your long “advanced form” info (collapsible) -->
-    <section class="card" id="guide" style="margin-top:16px;">
-      <div class="cardHeader">
-        <h2>Advanced Form Guide</h2>
-        <div class="badge">ideas + build template</div>
-      </div>
-      <div class="cardBody">
-        <details class="guide">
-          <summary>Open advanced form checklist</summary>
-          <div class="guideBody">
-            <h3>What makes a form “advanced”</h3>
-            <ul>
-              <li>Conditional questions (show/hide fields)</li>
-              <li>Validation (required, min/max, link checks, age checks)</li>
-              <li>Anti-spam (captcha + rate limit)</li>
-              <li>File uploads (screenshots / proof)</li>
-              <li>Save/continue later (drafts)</li>
-              <li>Admin review flow (pending/approved/denied)</li>
-              <li>Logging (who, when)</li>
-              <li>Privacy + policy pages</li>
-            </ul>
-
-            <h3>Core pieces</h3>
-            <ul>
-              <li><b>Frontend:</b> form page + success/error states</li>
-              <li><b>Backend:</b> needed so your Discord webhook isn’t exposed</li>
-              <li><b>Storage:</b> optional (Discord only / DB / Sheets)</li>
-              <li><b>Security:</b> Turnstile/hCaptcha + rate limit + secrets server-side</li>
-            </ul>
-
-            <h3>How to tell me to build it later (template)</h3>
-            <div class="callout" style="white-space:pre-wrap;">
-GOAL:
-HOSTING:
-SEND TO (webhook as secret/env var):
-FORM FIELDS:
-CONDITIONAL LOGIC:
-ANTI-SPAM:
-STORE SUBMISSIONS:
-FILE UPLOADS:
-DESIGN STYLE:
-PAGES NEEDED:
-EXTRA:
+        <aside class="card" id="tiktok">
+          <div class="cardHeader">
+            <h2>TikTok</h2>
+            <div class="badge">latest links</div>
+          </div>
+          <div class="cardBody">
+            <div id="tiktokList" class="callout" style="display:grid; gap:10px;">
+              <div style="color:var(--muted2)">No TikTok links added yet.</div>
             </div>
+            <div class="callout" style="color:var(--muted2)">
+              Edit <b>TIKTOK_FEED</b> in <b>index.html</b> to add more links.
+            </div>
+          </div>
+        </aside>
 
+        <aside class="card" id="ownerPanel" style="display:none;">
+          <div class="cardHeader">
+            <h2>Owner Panel</h2>
+            <div class="badge">owner</div>
+          </div>
+          <div class="cardBody">
             <div class="callout">
-              <b>Best setup:</b> Cloudflare Pages + Worker + Turnstile (free) — optional D1 database later.
+              Owner can set roles and (optionally) configure the Discord announce proxy.
+              <br/>
+              <span style="color:var(--muted2)">Owner Discord ID:</span> <code>1161162505628942346</code>
+            </div>
+
+            <div class="field">
+              <label for="apiBase">Announce API Base (Cloudflare Worker/API)</label>
+              <input id="apiBase" type="text" placeholder="https://your-worker.example.com" />
+            </div>
+            <div class="formActions">
+              <button type="button" class="btnPrimary" id="saveApiBase">Save API Base</button>
+            </div>
+
+            <div class="callout" style="color:var(--muted2)">
+              Roles are stored locally (demo). Only your browser sees these changes.
+            </div>
+
+            <div id="adminAccounts" class="callout" style="display:grid; gap:10px;">
+              <div style="color:var(--muted2)">No accounts to manage.</div>
             </div>
           </div>
-        </details>
+        </aside>
       </div>
-    </section>
+    </div>
   </main>
 
   <div class="toast" id="toast">Saved!</div>
@@ -762,11 +748,11 @@ EXTRA:
 
       <div class="modalBody">
         <div class="notice">
-          <strong>DONT USE ANY ACT PASSWORDS YOU NORMALY USE.</strong><br/>
+          <strong>DON'T use any real passwords you normally use.</strong><br/>
           This demo login is stored locally in your browser (no server yet).
           <br/><br/>
           <span style="opacity:.9">
-            Uses the same localStorage keys as your TOS page, so staying logged in carries over between pages.
+            Uses the same localStorage keys across Home + Forms + TOS, so staying logged in carries over between pages.
           </span>
         </div>
 
@@ -800,6 +786,11 @@ EXTRA:
             <input id="r_user" type="text" placeholder="pick a username" required />
           </div>
 
+          <div class="field">
+            <label for="r_display">Display Name</label>
+            <input id="r_display" type="text" placeholder="name shown on the site" required />
+          </div>
+
           <div class="row2">
             <div class="field">
               <label for="r_pass">Password</label>
@@ -809,6 +800,11 @@ EXTRA:
               <label for="r_conf">Confirm</label>
               <input id="r_conf" type="password" placeholder="confirm password" required />
             </div>
+          </div>
+
+          <div class="field">
+            <label for="r_dhandle">Discord @ (optional)</label>
+            <input id="r_dhandle" type="text" placeholder="@username" />
           </div>
 
           <div class="field">
@@ -826,18 +822,6 @@ EXTRA:
   </div>
 
   <script>
-    // =========================
-    // Smooth jumps
-    // =========================
-    document.querySelectorAll("[data-jump]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const sel = btn.getAttribute("data-jump");
-        const el = document.querySelector(sel);
-        if(!el) return;
-        el.scrollIntoView({behavior:"smooth", block:"start"});
-      });
-    });
-
     // =========================
     // Toast
     // =========================
@@ -946,33 +930,126 @@ EXTRA:
     drawStorm();
 
     // =========================
-    // Auth (same keys as TOS)
+    // Auth + Accounts (local demo)
     // =========================
     const ACC_KEY = "push_accounts_v1";
     const SES_KEY = "push_session_v1";
-    const FORMS_KEY = "push_forms_v1";
+    const ANN_KEY = "push_announcements_v1";
 
-    // Optional: set your staff/dev usernames here
-    const STAFF_USERS = ["Dezz", "DezzDk", "Dezz.fed", "Diesel", "Diesel Lane"];
-    const DEV_USERS   = ["Dezz", "DezzDk"];
+    const OWNER_DISCORD_ID = "1161162505628942346";
 
-    function loadAccounts(){ return JSON.parse(localStorage.getItem(ACC_KEY) || "{}"); }
-    function saveAccounts(obj){ localStorage.setItem(ACC_KEY, JSON.stringify(obj)); }
+    const ROLE_ORDER = [
+      "Owner",
+      "Manager",
+      "Forms Apps",
+      "Push-Team",
+      "Admin",
+      "Mod",
+      "Officials",
+      "Member",
+    ];
+
+    const POST_ROLES = new Set(["Owner", "Manager", "Forms Apps"]);
+    const PRESENCE_TTL_MS = 60 * 1000;
+
+    const API_BASE_KEY = "push_api_base_v1";
+
+    function getApiBase(){
+      const saved = (localStorage.getItem(API_BASE_KEY) || "").trim();
+      if(saved) return saved;
+      const origin = (typeof location !== "undefined" && location.origin && location.origin !== "null") ? location.origin : "";
+      return origin;
+    }
+
+    function normalizeRole(role){
+      const r = String(role || "").trim();
+      if(!r) return "Member";
+      const found = ROLE_ORDER.find(x => x.toLowerCase() === r.toLowerCase());
+      return found || r;
+    }
+
+    function normalizeDiscordHandle(handle){
+      const h = String(handle || "").trim();
+      if(!h) return "";
+      return h.startsWith("@") ? h : `@${h}`;
+    }
+
+    function loadAccounts(){
+      let raw = {};
+      try { raw = JSON.parse(localStorage.getItem(ACC_KEY) || "{}"); } catch { raw = {}; }
+      const obj = (raw && typeof raw === "object") ? raw : {};
+
+      for(const [u, info0] of Object.entries(obj)){
+        const info = (info0 && typeof info0 === "object") ? info0 : {};
+        info.discordId = info.discordId ? String(info.discordId).trim() : "";
+        info.discordHandle = info.discordHandle ? normalizeDiscordHandle(info.discordHandle) : "";
+        info.displayName = (info.displayName && String(info.displayName).trim()) || u;
+        info.role = normalizeRole(info.role);
+        if(info.discordId && info.discordId === OWNER_DISCORD_ID) info.role = "Owner";
+        info.lastSeenAt = Number(info.lastSeenAt || 0);
+        obj[u] = info;
+      }
+
+      return obj;
+    }
+    function saveAccounts(obj){ localStorage.setItem(ACC_KEY, JSON.stringify(obj || {})); }
+
+    function getSession(){
+      try { return JSON.parse(localStorage.getItem(SES_KEY) || "null"); } catch { return null; }
+    }
+
+    function getAccount(username){
+      if(!username) return null;
+      const accounts = loadAccounts();
+      return accounts[username] ? { username, ...accounts[username] } : null;
+    }
+    function getDisplayName(username){
+      const acc = getAccount(username);
+      return acc?.displayName || username || "";
+    }
+    function getRole(username){
+      const acc = getAccount(username);
+      return acc?.role || "Member";
+    }
+
+    function isOnline(info){
+      return !!info && (Date.now() - (Number(info.lastSeenAt || 0)) < PRESENCE_TTL_MS);
+    }
+
+    function touchPresence(){
+      const sess = getSession();
+      if(!sess?.username) return;
+      const accounts = loadAccounts();
+      if(!accounts[sess.username]) return;
+      accounts[sess.username].lastSeenAt = Date.now();
+      saveAccounts(accounts);
+    }
 
     function setSession(username){
       localStorage.setItem(SES_KEY, JSON.stringify({ username, ts: Date.now() }));
+      touchPresence();
       renderAuthArea();
-      renderForms();
-      syncLoginUI();
+      renderMembers();
+      renderAnnouncements();
+      renderComposer();
+      renderOwnerPanel();
     }
     function clearSession(){
+      const sess = getSession();
+      if(sess?.username){
+        const accounts = loadAccounts();
+        if(accounts[sess.username]){
+          accounts[sess.username].lastSeenAt = 0;
+          saveAccounts(accounts);
+        }
+      }
+
       localStorage.removeItem(SES_KEY);
       renderAuthArea();
-      renderForms();
-      syncLoginUI();
-    }
-    function getSession(){
-      try { return JSON.parse(localStorage.getItem(SES_KEY) || "null"); } catch { return null; }
+      renderMembers();
+      renderAnnouncements();
+      renderComposer();
+      renderOwnerPanel();
     }
 
     async function sha256Hex(str){
@@ -981,6 +1058,22 @@ EXTRA:
       return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
     }
 
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function canPostAnnouncements(username){
+      return POST_ROLES.has(getRole(username));
+    }
+
+    // =========================
+    // Auth Modal
+    // =========================
     const authModal = document.getElementById("authModal");
     const authClose = document.getElementById("authClose");
     const openLogin = document.getElementById("openLogin");
@@ -1028,8 +1121,11 @@ EXTRA:
       document.getElementById("l_pass").value = "";
       setAuthMsg("", "");
     });
+
     document.getElementById("regClear").addEventListener("click", () => {
       document.getElementById("r_user").value = "";
+      document.getElementById("r_display").value = "";
+      document.getElementById("r_dhandle").value = "";
       document.getElementById("r_pass").value = "";
       document.getElementById("r_conf").value = "";
       document.getElementById("r_did").value = "";
@@ -1046,12 +1142,16 @@ EXTRA:
       setAuthMsg("", "");
 
       const user = document.getElementById("r_user").value.trim();
+      const displayName = document.getElementById("r_display").value.trim();
+      const dhandleRaw = document.getElementById("r_dhandle").value.trim();
+      const discordHandle = normalizeDiscordHandle(dhandleRaw);
       const pass = document.getElementById("r_pass").value;
       const conf = document.getElementById("r_conf").value;
       const didRaw = document.getElementById("r_did").value.trim();
       const did = didRaw ? didRaw : "";
 
       if(user.length < 3) return setAuthMsg("err", "Username must be at least 3 characters.");
+      if(displayName.length < 2) return setAuthMsg("err", "Display name must be at least 2 characters.");
       if(pass.length < 6) return setAuthMsg("err", "Password must be at least 6 characters.");
       if(pass !== conf) return setAuthMsg("err", "Passwords do not match.");
       if(!isValidDiscordId(did)) return setAuthMsg("err", "Discord ID looks wrong. Example: 1161162505628942346");
@@ -1068,7 +1168,8 @@ EXTRA:
       }
 
       const pwh = await sha256Hex(pass);
-      accounts[user] = { pwh, discordId: did, createdAt: Date.now() };
+      const role = (did && did === OWNER_DISCORD_ID) ? "Owner" : "Member";
+      accounts[user] = { pwh, displayName, role, discordId: did, discordHandle, lastSeenAt: 0, createdAt: Date.now() };
       saveAccounts(accounts);
 
       setAuthMsg("ok", "Account created. You can login now.");
@@ -1076,6 +1177,9 @@ EXTRA:
       document.getElementById("l_user").value = user;
       document.getElementById("l_pass").value = "";
       showToast("Registered");
+
+      renderMembers();
+      renderOwnerPanel();
     });
 
     formLogin.addEventListener("submit", async (e) => {
@@ -1100,7 +1204,6 @@ EXTRA:
       const area = document.getElementById("authArea");
       const sess = getSession();
 
-      // ALWAYS remove old dynamic nodes before adding (prevents duplicates)
       const existing = document.getElementById("whoami");
       if(existing) existing.remove();
       const logout = document.getElementById("logoutBtn");
@@ -1122,7 +1225,7 @@ EXTRA:
       who.id = "whoami";
       who.className = "pill";
       who.style.cursor = "default";
-      who.textContent = `Hi, ${sess.username}`;
+      who.textContent = `Hi, ${getDisplayName(sess.username)}`;
       area.insertBefore(who, area.firstChild);
 
       const out = document.createElement("button");
@@ -1137,172 +1240,395 @@ EXTRA:
     }
 
     // =========================
-    // Forms (local demo)
+    // Members list
     // =========================
-    function loadForms(){ return JSON.parse(localStorage.getItem(FORMS_KEY) || "[]"); }
-    function saveForms(arr){ localStorage.setItem(FORMS_KEY, JSON.stringify(arr)); }
+    function renderMembers(){
+      const list = document.getElementById("memberList");
+      const count = document.getElementById("memberCount");
+      if(!list || !count) return;
 
-    function isStaff(username){
-      if(!username) return false;
-      return STAFF_USERS.some(u => u.toLowerCase() === username.toLowerCase()) ||
-             DEV_USERS.some(u => u.toLowerCase() === username.toLowerCase());
-    }
-    function isDev(username){
-      if(!username) return false;
-      return DEV_USERS.some(u => u.toLowerCase() === username.toLowerCase());
-    }
-
-    function escapeHtml(s){
-      return String(s ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    function renderForms(){
+      const accounts = loadAccounts();
       const sess = getSession();
-      const username = sess?.username || null;
+      const current = sess?.username || "";
 
-      const forms = loadForms();
-      const my = username ? forms.filter(f => f.user === username) : [];
+      const entries = Object.entries(accounts).map(([username, info]) => ({ username, ...info }));
+      entries.sort((a, b) => {
+        const ao = (a.username === current) || isOnline(a);
+        const bo = (b.username === current) || isOnline(b);
+        if(ao !== bo) return (bo ? 1 : 0) - (ao ? 1 : 0);
+        return String(a.displayName || a.username).localeCompare(String(b.displayName || b.username), undefined, { sensitivity: "base" });
+      });
 
-      document.getElementById("myCount").textContent = String(my.length);
+      count.textContent = String(entries.length);
 
-      const myList = document.getElementById("myList");
-      if(!my.length){
-        myList.innerHTML = `<div style="color:var(--muted2)">No submissions yet.</div>`;
-      } else {
-        myList.innerHTML = my.slice().reverse().map(f => `
-          <div style="border:1px solid rgba(168,120,255,.14); background:rgba(0,0,0,.18); border-radius:14px; padding:10px;">
-            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
-              <div style="font-weight:900; letter-spacing:.04em;">${escapeHtml(f.title || "(No title)")}</div>
-              <div style="font-size:12px; color:var(--muted2)">${new Date(f.ts).toLocaleString()}</div>
-            </div>
-            <div style="margin-top:6px; font-size:12px; color:rgba(255,255,255,.78); letter-spacing:.08em; text-transform:uppercase;">
-              ${escapeHtml(f.type)} • <span style="color:rgba(168,120,255,.95)">${escapeHtml(f.status)}</span>
-            </div>
-            <div style="margin-top:8px; color:rgba(255,255,255,.82); white-space:pre-wrap;">${escapeHtml(f.body || "")}</div>
-          </div>
-        `).join("");
-      }
-
-      const staffPanel = document.getElementById("staffPanel");
-      const staffBadge = document.getElementById("staffBadge");
-      if(username && isStaff(username)){
-        staffPanel.style.display = "";
-        staffBadge.textContent = isDev(username) ? "DEV" : "STAFF";
-      } else {
-        staffPanel.style.display = "none";
-      }
-    }
-
-    function syncLoginUI(){
-      const sess = getSession();
-      const loggedIn = !!sess?.username;
-      document.getElementById("loginRequiredBadge").textContent = loggedIn ? "ready" : "login required";
-    }
-
-    // Gate create form
-    document.getElementById("btnCreateForm").addEventListener("click", () => {
-      const sess = getSession();
-      if(!sess?.username){
-        showToast("Login required");
-        showModal("login");
+      if(!entries.length){
+        list.innerHTML = `<div style="color:var(--muted2)">No accounts yet.</div>`;
         return;
       }
-      document.getElementById("f_title").focus();
-      document.querySelector("#forms").scrollIntoView({behavior:"smooth", block:"start"});
-    });
 
-    document.getElementById("btnClearForm").addEventListener("click", () => {
-      document.getElementById("f_type").value = "Report (Rule Break)";
-      document.getElementById("f_title").value = "";
-      document.getElementById("f_body").value = "";
+      list.innerHTML = entries.map(acc => {
+        const online = (acc.username === current) || isOnline(acc);
+        const dot = online ? "rgba(150,255,180,.95)" : "rgba(255,255,255,.30)";
+
+        const role = (acc.role && acc.role !== "Member") ? acc.role : "";
+        const roleHtml = role ? `<span class="badge" style="font-size:11px; padding:4px 8px;">${escapeHtml(role)}</span>` : "";
+
+        const connected = !!acc.discordHandle;
+        const handleText = connected ? acc.discordHandle : `@${acc.username}`;
+        const linkBadge = connected
+          ? `<span class="badge" style="font-size:11px; padding:4px 8px; border-color: rgba(150,255,180,.35); background: rgba(150,255,180,.12); color: rgba(150,255,180,.95);">CONNECTED</span>`
+          : `<span class="badge" style="font-size:11px; padding:4px 8px; border-color: rgba(255,120,120,.35); background: rgba(255,120,120,.12); color: rgba(255,120,120,.95);">NOT CONNECTED</span>`;
+
+        return `
+          <div class="memberRow">
+            <span class="dot" style="background:${dot}"></span>
+            <div style="display:grid; gap:4px;">
+              <div style="display:flex; gap:8px; align-items:baseline; flex-wrap:wrap;">
+                <div style="font-weight:900;">${escapeHtml(acc.displayName || acc.username)}</div>
+                ${roleHtml}
+                ${linkBadge}
+              </div>
+              <div style="font-size:12px; color:${connected ? 'var(--muted2)' : 'rgba(255,120,120,.95)'}; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <span style="display:inline-flex; align-items:center; gap:6px;">
+                  <img class="miniIcon" src="./assets/discord.svg" alt="" aria-hidden="true" />
+                  ${escapeHtml(handleText)}
+                </span>
+                <span style="color:rgba(255,255,255,.28)">•</span>
+                <span style="color:var(--muted2)">${online ? 'online' : 'offline'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // =========================
+    // Announcements
+    // =========================
+    function loadAnnouncements(){
+      try { return JSON.parse(localStorage.getItem(ANN_KEY) || "[]"); } catch { return []; }
+    }
+    function saveAnnouncements(arr){
+      localStorage.setItem(ANN_KEY, JSON.stringify(arr || []));
+    }
+
+    function renderAnnouncements(){
+      const list = document.getElementById("annList");
+      const count = document.getElementById("annCount");
+      if(!list || !count) return;
+
+      const anns = loadAnnouncements();
+      count.textContent = String(anns.length);
+
+      if(!anns.length){
+        list.innerHTML = `<div style="color:var(--muted2)">No announcements yet.</div>`;
+        return;
+      }
+
+      list.innerHTML = anns.slice().reverse().map(a => {
+        return `
+          <div class="post">
+            <div class="postTop">
+              <div class="postTitle">${escapeHtml(a.title || "(No title)")}</div>
+              <div style="font-size:12px; color:var(--muted2)">${new Date(a.ts).toLocaleString()}</div>
+            </div>
+            <div style="margin-top:6px; font-size:12px; color:rgba(255,255,255,.78); letter-spacing:.08em; text-transform:uppercase;">
+              posted by <span style="color:rgba(168,120,255,.95)">${escapeHtml(getDisplayName(a.author))}</span>
+            </div>
+            <div class="postBody">${escapeHtml(a.body || "")}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderComposer(){
+      const sess = getSession();
+      const username = sess?.username || "";
+
+      const locked = document.getElementById("announceLocked");
+      const comp = document.getElementById("announceComposer");
+
+      if(!sess?.username){
+        locked.style.display = "none";
+        comp.style.display = "none";
+        return;
+      }
+
+      if(canPostAnnouncements(username)){
+        locked.style.display = "none";
+        comp.style.display = "";
+      } else {
+        locked.style.display = "";
+        comp.style.display = "none";
+      }
+    }
+
+    async function postAnnouncementToDiscord(a){
+      const msg = document.getElementById("discordPushMsg");
+      if(msg) msg.innerHTML = "";
+
+      const apiBase = getApiBase();
+      if(!apiBase){
+        if(msg) msg.innerHTML = `<div class="errorText">Discord push skipped: Announce API Base not set.</div>`;
+        return;
+      }
+
+      try{
+        const res = await fetch(`${apiBase.replace(/\/$/,"")}/api/announce`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: a.title,
+            body: a.body,
+            author: getDisplayName(a.author),
+            ts: a.ts
+          })
+        });
+
+        if(!res.ok){
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        if(msg) msg.innerHTML = `<div class="okText">Discord: posted</div>`;
+      }catch(e){
+        if(msg) msg.innerHTML = `<div class="errorText">Discord push failed (is the local server running?): ${escapeHtml(e?.message || String(e))}</div>`;
+      }
+    }
+
+    document.getElementById("annClear").addEventListener("click", () => {
+      document.getElementById("ann_title").value = "";
+      document.getElementById("ann_body").value = "";
+      const msg = document.getElementById("discordPushMsg");
+      if(msg) msg.innerHTML = "";
       showToast("Cleared");
     });
 
-    document.getElementById("btnSubmitForm").addEventListener("click", () => {
+    document.getElementById("annPost").addEventListener("click", async () => {
       const sess = getSession();
+      const username = sess?.username || "";
       if(!sess?.username){
         showToast("Login required");
         showModal("login");
         return;
       }
+      if(!canPostAnnouncements(username)){
+        showToast("No permission");
+        return;
+      }
 
-      const type = document.getElementById("f_type").value;
-      const title = document.getElementById("f_title").value.trim();
-      const body = document.getElementById("f_body").value.trim();
+      const title = document.getElementById("ann_title").value.trim();
+      const body = document.getElementById("ann_body").value.trim();
 
-      if(!title || title.length < 3){
+      if(title.length < 3){
         showToast("Title too short");
-        document.getElementById("f_title").focus();
         return;
       }
-      if(!body || body.length < 10){
-        showToast("Add more details");
-        document.getElementById("f_body").focus();
+      if(body.length < 10){
+        showToast("Message too short");
         return;
       }
 
-      const forms = loadForms();
-      forms.push({
+      const anns = loadAnnouncements();
+      const a = {
         id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2)),
-        user: sess.username,
-        type,
         title,
         body,
-        status: "Submitted",
+        author: username,
         ts: Date.now()
-      });
-      saveForms(forms);
+      };
 
-      document.getElementById("f_title").value = "";
-      document.getElementById("f_body").value = "";
-      showToast("Submitted");
-      renderForms();
-      document.querySelector("#myForms").scrollIntoView({behavior:"smooth", block:"start"});
+      anns.push(a);
+      saveAnnouncements(anns);
+
+      document.getElementById("ann_title").value = "";
+      document.getElementById("ann_body").value = "";
+
+      renderAnnouncements();
+      showToast("Posted");
+
+      // Push to Discord (via local proxy)
+      await postAnnouncementToDiscord(a);
     });
 
-    document.getElementById("btnViewAll").addEventListener("click", () => {
-      const sess = getSession();
-      const username = sess?.username || null;
-      if(!username || !isStaff(username)) return;
+    // =========================
+    // TikTok links
+    // =========================
+    const TIKTOK_FEED = [
+      // Add your TikTok links here
+      // { name: "Creator name", url: "https://www.tiktok.com/@user/video/123" },
+    ];
 
-      const allList = document.getElementById("allList");
-      const forms = loadForms();
+    function renderTikTok(){
+      const box = document.getElementById("tiktokList");
+      if(!box) return;
 
-      const showing = allList.style.display === "" || allList.style.display === "block";
-      if(!showing){
-        allList.style.display = "block";
-        if(!forms.length){
-          allList.innerHTML = `<div style="color:var(--muted2)">No submissions yet.</div>`;
-        } else {
-          allList.innerHTML = forms.slice().reverse().map(f => `
-            <div style="border:1px solid rgba(168,120,255,.14); background:rgba(0,0,0,.18); border-radius:14px; padding:10px; margin-top:10px;">
-              <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
-                <div style="font-weight:900;">${escapeHtml(f.user)} — ${escapeHtml(f.title)}</div>
-                <div style="font-size:12px; color:var(--muted2)">${new Date(f.ts).toLocaleString()}</div>
-              </div>
-              <div style="margin-top:6px; font-size:12px; color:rgba(255,255,255,.78); letter-spacing:.08em; text-transform:uppercase;">
-                ${escapeHtml(f.type)} • <span style="color:rgba(168,120,255,.95)">${escapeHtml(f.status)}</span>
-              </div>
-              <div style="margin-top:8px; color:rgba(255,255,255,.82); white-space:pre-wrap;">${escapeHtml(f.body)}</div>
+      if(!TIKTOK_FEED.length){
+        box.innerHTML = `<div style="color:var(--muted2)">No TikTok links added yet.</div>`;
+        return;
+      }
+
+      box.innerHTML = TIKTOK_FEED.map(item => {
+        const name = item?.name ? String(item.name) : "TikTok";
+        const url = item?.url ? String(item.url) : "";
+        if(!url) return "";
+        return `
+          <div class="post">
+            <div class="postTitle">${escapeHtml(name)}</div>
+            <div style="margin-top:6px; font-size:12px; color:var(--muted2)">${escapeHtml(url)}</div>
+            <div style="margin-top:10px;">
+              <a class="pill" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open</a>
             </div>
-          `).join("");
-        }
-        showToast("All loaded");
-      } else {
-        allList.style.display = "none";
-        showToast("Hidden");
+          </div>
+        `;
+      }).join("");
+    }
+
+    // =========================
+    // Owner panel
+    // =========================
+    function renderOwnerPanel(){
+      const panel = document.getElementById("ownerPanel");
+      const adminAccounts = document.getElementById("adminAccounts");
+      const apiBaseInput = document.getElementById("apiBase");
+
+      if(!panel || !adminAccounts || !apiBaseInput) return;
+
+      const sess = getSession();
+      const username = sess?.username || "";
+      const role = getRole(username);
+
+      apiBaseInput.value = getApiBase();
+
+      if(role !== "Owner"){
+        panel.style.display = "none";
+        return;
+      }
+
+      panel.style.display = "";
+
+      const accounts = loadAccounts();
+      const rows = Object.entries(accounts).map(([u, info]) => ({ username: u, ...info }));
+      if(!rows.length){
+        adminAccounts.innerHTML = `<div style="color:var(--muted2)">No accounts to manage.</div>`;
+        return;
+      }
+
+      adminAccounts.innerHTML = rows.map(acc => {
+        const options = ROLE_ORDER.map(r => {
+          const sel = (normalizeRole(acc.role) === r) ? "selected" : "";
+          return `<option ${sel}>${escapeHtml(r)}</option>`;
+        }).join("");
+
+        return `
+          <div class="post">
+            <div class="postTop">
+              <div class="postTitle">${escapeHtml(acc.displayName || acc.username)}</div>
+              <div style="font-size:12px; color:var(--muted2)">@${escapeHtml(acc.username)}</div>
+            </div>
+
+            <div class="row2" style="margin-top:10px;">
+              <div class="field">
+                <label>Role</label>
+                <select class="roleSelect" data-user="${escapeHtml(acc.username)}" style="width:100%; padding:12px 12px; border-radius:14px; border:1px solid rgba(168,120,255,.18); background:rgba(255,255,255,.06); color:rgba(255,255,255,.92);">
+                  ${options}
+                </select>
+              </div>
+              <div class="field">
+                <label>Discord ID</label>
+                <input value="${escapeHtml(acc.discordId || "")}" disabled />
+              </div>
+            </div>
+
+            <div class="formActions">
+              <button type="button" class="btnGhost" data-remove-user="${escapeHtml(acc.username)}">Remove</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      adminAccounts.querySelectorAll(".roleSelect").forEach(sel => {
+        sel.addEventListener("change", () => {
+          const u = sel.getAttribute("data-user");
+          const newRole = sel.value;
+          const accounts2 = loadAccounts();
+          if(!accounts2[u]) return;
+
+          // Always force owner role if discord ID matches
+          accounts2[u].role = normalizeRole(newRole);
+          if(accounts2[u].discordId && accounts2[u].discordId === OWNER_DISCORD_ID){
+            accounts2[u].role = "Owner";
+          }
+
+          saveAccounts(accounts2);
+          renderMembers();
+          renderComposer();
+          showToast("Role saved");
+        });
+      });
+
+      adminAccounts.querySelectorAll("[data-remove-user]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const u = btn.getAttribute("data-remove-user");
+          if(!u) return;
+
+          const accounts2 = loadAccounts();
+          if(!accounts2[u]) return;
+          delete accounts2[u];
+          saveAccounts(accounts2);
+
+          // If you removed yourself, log out
+          const sess2 = getSession();
+          if(sess2?.username === u){
+            clearSession();
+          }
+
+          renderMembers();
+          renderOwnerPanel();
+          showToast("Removed");
+        });
+      });
+    }
+
+    document.getElementById("saveApiBase").addEventListener("click", () => {
+      const sess = getSession();
+      const username = sess?.username || "";
+      if(getRole(username) !== "Owner") return;
+
+      const val = String(document.getElementById("apiBase").value || "").trim();
+      localStorage.setItem(API_BASE_KEY, val);
+      showToast("API base saved");
+    });
+
+    // =========================
+    // Initial render
+    // =========================
+    renderAuthArea();
+    renderMembers();
+    renderAnnouncements();
+    renderComposer();
+    renderTikTok();
+    renderOwnerPanel();
+    touchPresence();
+
+    window.addEventListener("focus", () => {
+      touchPresence();
+      renderMembers();
+    });
+
+    setInterval(() => {
+      touchPresence();
+      renderMembers();
+    }, 20000);
+
+    window.addEventListener("storage", (e) => {
+      if(e.key === ACC_KEY || e.key === SES_KEY || e.key === ANN_KEY){
+        renderAuthArea();
+        renderMembers();
+        renderAnnouncements();
+        renderComposer();
+        renderOwnerPanel();
       }
     });
-
-    // Initial render
-    renderAuthArea();
-    renderForms();
-    syncLoginUI();
   </script>
 </body>
 </html>
