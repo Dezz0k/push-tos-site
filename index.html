@@ -673,8 +673,8 @@
               <button type="button" class="btnPrimary" id="annPost">Post</button>
             </div>
             <div class="callout" style="color:var(--muted2)">
-              Discord webhook posting needs a server/proxy so your webhook URL stays private.
-              Set your Cloudflare Worker/API URL in <b>Owner Panel → Announce API Base</b>.
+              Discord webhook posting is handled by the Cloudflare Pages Function <code>/api/announce</code>.
+              Make sure your Pages project has the env var <code>DISCORD_WEBHOOK_URL</code> set, then redeploy.
             </div>
             <div id="discordPushMsg"></div>
           </div>
@@ -943,14 +943,51 @@
     // =========================
     const storm = document.getElementById("storm");
     const sctx = storm.getContext("2d");
+    const bg = document.querySelector(".bg");
+    const grain = document.querySelector(".grain");
     let SW, SH;
     let lastDpr = devicePixelRatio || 1;
+
+    function getViewportBox(){
+      const vv = window.visualViewport;
+      if(vv && Number.isFinite(vv.width) && Number.isFinite(vv.height)){
+        return {
+          w: vv.width,
+          h: vv.height,
+          x: vv.offsetLeft || 0,
+          y: vv.offsetTop || 0,
+        };
+      }
+      return { w: window.innerWidth, h: window.innerHeight, x: 0, y: 0 };
+    }
+
+    function positionFixedLayer(el, x, y, w, h){
+      if(!el) return;
+      el.style.left = "0";
+      el.style.top = "0";
+      el.style.right = "auto";
+      el.style.bottom = "auto";
+      el.style.width = `${w}px`;
+      el.style.height = `${h}px`;
+      el.style.transform = `translate(${x}px, ${y}px)`;
+    }
 
     function stormResize(){
       const dpr = devicePixelRatio || 1;
       lastDpr = dpr;
-      SW = storm.width = Math.floor(window.innerWidth * dpr);
-      SH = storm.height = Math.floor(window.innerHeight * dpr);
+
+      const vb = getViewportBox();
+      const w = Math.ceil(vb.w);
+      const h = Math.ceil(vb.h);
+      const x = Math.round(vb.x);
+      const y = Math.round(vb.y);
+
+      positionFixedLayer(bg, x, y, w, h);
+      positionFixedLayer(grain, x, y, w, h);
+      positionFixedLayer(storm, x, y, w, h);
+
+      SW = storm.width = Math.floor(w * dpr);
+      SH = storm.height = Math.floor(h * dpr);
     }
 
     let stormRaf = 0;
@@ -967,6 +1004,7 @@
     window.addEventListener("pageshow", stormResizeSoon);
     if(window.visualViewport){
       window.visualViewport.addEventListener("resize", stormResizeSoon);
+      window.visualViewport.addEventListener("scroll", stormResizeSoon);
     }
 
     // Zoom can change devicePixelRatio without a resize event
@@ -1163,7 +1201,38 @@
       return acc?.role || "Member";
     }
 
+    let sharedOnline = {};
+
+    async function pingSharedPresence(){
+      const sess = getSession();
+      if(!sess?.username) return;
+      try{
+        await fetch("/api/presence-ping", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: sess.username })
+        });
+      }catch{}
+    }
+
+    async function refreshSharedPresence(){
+      const accounts = loadAccounts();
+      const ids = Object.keys(accounts);
+      if(!ids.length) return;
+
+      try{
+        const res = await fetch(`/api/presence?ids=${encodeURIComponent(ids.join(","))}`, { cache: "no-store" });
+        if(!res.ok) return;
+        const data = await res.json().catch(() => null);
+        if(data && typeof data.online === "object"){
+          sharedOnline = data.online || {};
+        }
+      }catch{}
+    }
+
     function isOnline(info){
+      const u = info?.username;
+      if(u && sharedOnline[u]) return true;
       return !!info && (Date.now() - (Number(info.lastSeenAt || 0)) < PRESENCE_TTL_MS);
     }
 
@@ -1220,6 +1289,22 @@
 
     function canPostAnnouncements(username){
       return POST_ROLES.has(getRole(username));
+    }
+
+    function roleIndex(role){
+      const r = normalizeRole(role);
+      const idx = ROLE_ORDER.findIndex(x => x.toLowerCase() === String(r).toLowerCase());
+      return idx === -1 ? (ROLE_ORDER.length - 1) : idx;
+    }
+
+    function hasRoleAtLeast(username, minRole){
+      // ROLE_ORDER is highest -> lowest (smaller index = higher role)
+      return roleIndex(getRole(username)) <= roleIndex(minRole);
+    }
+
+    function canDeleteAnnouncements(username){
+      // Admin+ means Admin and anything above it (Owner/Manager/Forms Apps/Push-Team/Admin)
+      return hasRoleAtLeast(username, "Admin");
     }
 
     // =========================
@@ -1874,12 +1959,37 @@
       localStorage.setItem(ANN_KEY, JSON.stringify(arr || []));
     }
 
-    function renderAnnouncements(){
+    async function fetchAnnouncementsShared(){
+      try{
+        const res = await fetch("/api/announcements", { cache: "no-store" });
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const data = await res.json().catch(() => null);
+        const items = Array.isArray(data?.announcements) ? data.announcements : [];
+
+        return items.map(r => ({
+          id: String(r?.id ?? ""),
+          title: String(r?.title ?? ""),
+          body: String(r?.body ?? ""),
+          author: String(r?.author ?? ""),
+          ts: Number(r?.created_at || 0) || Date.now(),
+        })).filter(a => (a.title || a.body));
+      }catch{
+        // fallback to local-only announcements if API is unavailable
+        return loadAnnouncements();
+      }
+    }
+
+    async function renderAnnouncements(){
       const list = document.getElementById("annList");
       const count = document.getElementById("annCount");
       if(!list || !count) return;
 
-      const anns = loadAnnouncements();
+      const sess = getSession();
+      const me = sess?.username || "";
+      const allowDelete = !!me && canDeleteAnnouncements(me);
+
+      const anns = await fetchAnnouncementsShared();
       count.textContent = String(anns.length);
 
       if(!anns.length){
@@ -1887,20 +1997,74 @@
         return;
       }
 
-      list.innerHTML = anns.slice().reverse().map(a => {
+      list.innerHTML = anns.map(a => {
+        const delBtn = allowDelete
+          ? `<button class="pill" data-ann-del="${escapeHtml(a.id)}" style="padding:7px 10px; border-color: rgba(255,120,120,.35); background: rgba(255,80,80,.10);">Delete</button>`
+          : "";
+
+        const who = a.author ? getDisplayName(a.author) : "Unknown";
+
         return `
           <div class="post">
-            <div class="postTop">
+            <div class="postTop" style="align-items:flex-start;">
               <div class="postTitle">${escapeHtml(a.title || "(No title)")}</div>
-              <div style="font-size:12px; color:var(--muted2)">${new Date(a.ts).toLocaleString()}</div>
+              <div style="display:flex; gap:10px; align-items:center; justify-content:flex-end; flex-wrap:wrap; text-align:right;">
+                <div style="font-size:12px; color:var(--muted2)">${new Date(a.ts).toLocaleString()}</div>
+                ${delBtn}
+              </div>
             </div>
             <div style="margin-top:6px; font-size:12px; color:rgba(255,255,255,.78); letter-spacing:.08em; text-transform:uppercase;">
-              posted by <span style="color:rgba(168,120,255,.95)">${escapeHtml(getDisplayName(a.author))}</span>
+              posted by <span style="color:rgba(168,120,255,.95)">${escapeHtml(who)}</span>
             </div>
             <div class="postBody">${escapeHtml(a.body || "")}</div>
           </div>
         `;
       }).join("");
+    }
+
+    // Bind once: delete announcement (Admin+)
+    const annListEl = document.getElementById("annList");
+    if(annListEl && !annListEl.dataset.bound){
+      annListEl.dataset.bound = "1";
+      annListEl.addEventListener("click", async (e) => {
+        const btn = e.target.closest("[data-ann-del]");
+        if(!btn) return;
+
+        const id = String(btn.getAttribute("data-ann-del") || "");
+        if(!id) return;
+
+        const sess = getSession();
+        const me = sess?.username || "";
+        if(!me){
+          showToast("Login required");
+          showModal("login");
+          return;
+        }
+        if(!canDeleteAnnouncements(me)){
+          showToast("No permission");
+          return;
+        }
+
+        if(!confirm("Delete this announcement?")) return;
+
+        // Prefer shared delete (D1)
+        try{
+          const res = await fetch(`/api/announcements?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+          if(!res.ok) throw new Error(`HTTP ${res.status}`);
+          busEmit("announcements");
+          await renderAnnouncements();
+          showToast("Deleted");
+          return;
+        }catch{}
+
+        // Fallback: local delete
+        const anns = loadAnnouncements();
+        const next = anns.filter(a => String(a?.id || "") !== id);
+        saveAnnouncements(next);
+        busEmit("announcements");
+        renderAnnouncements();
+        showToast("Deleted (local)");
+      });
     }
 
     function renderComposer(){
@@ -1931,12 +2095,14 @@
 
       const apiBase = getApiBase();
       if(!apiBase){
-        if(msg) msg.innerHTML = `<div class="errorText">Discord push skipped: Announce API Base not set.</div>`;
-        return;
+        if(msg) msg.innerHTML = `<div class="errorText">Announcement failed: open this page from your Cloudflare Pages URL (not file://).</div>`;
+        return false;
       }
 
+      const url = `${apiBase.replace(/\/$/,"")}/api/announce`;
+
       try{
-        const res = await fetch(`${apiBase.replace(/\/$/,"")}/api/announce`, {
+        const res = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -1947,13 +2113,27 @@
           })
         });
 
-        if(!res.ok){
-          throw new Error(`HTTP ${res.status}`);
+        const data = await res.json().catch(() => null);
+        if(!res.ok || !data?.ok){
+          const err = data?.error ? String(data.error) : `HTTP ${res.status}`;
+          throw new Error(err);
         }
 
-        if(msg) msg.innerHTML = `<div class="okText">Discord: posted</div>`;
+        const d = data?.discord;
+        if(d?.ok){
+          if(msg) msg.innerHTML = `<div class="okText">Saved + Discord posted</div>`;
+        } else if(d?.skipped){
+          if(msg) msg.innerHTML = `<div class="okText">Saved (Discord not configured)</div>`;
+        } else {
+          const s = d?.status ? `HTTP ${d.status}` : "Unknown";
+          if(msg) msg.innerHTML = `<div class="errorText">Saved, but Discord failed (${escapeHtml(s)})</div>`;
+        }
+
+        return true;
       }catch(e){
-        if(msg) msg.innerHTML = `<div class="errorText">Discord push failed (is the local server running?): ${escapeHtml(e?.message || String(e))}</div>`;
+        const detail = escapeHtml(e?.message || String(e));
+        if(msg) msg.innerHTML = `<div class="errorText">Announcement failed. Check Pages Functions + D1 + env vars. Details: ${detail}</div>`;
+        return false;
       }
     }
 
@@ -1990,27 +2170,34 @@
         return;
       }
 
-      const anns = loadAnnouncements();
       const a = {
-        id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2)),
         title,
         body,
         author: username,
         ts: Date.now()
       };
 
-      anns.push(a);
-      saveAnnouncements(anns);
-      busEmit("announcements");
-
       document.getElementById("ann_title").value = "";
       document.getElementById("ann_body").value = "";
 
-      renderAnnouncements();
       showToast("Posted");
 
-      // Push to Discord (via local proxy)
-      await postAnnouncementToDiscord(a);
+      // Save (D1) + optional Discord push
+      const ok = await postAnnouncementToDiscord(a);
+      if(ok){
+        busEmit("announcements");
+        await renderAnnouncements();
+      } else {
+        // Fallback: local-only
+        const anns = loadAnnouncements();
+        anns.push({
+          id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2)),
+          ...a
+        });
+        saveAnnouncements(anns);
+        busEmit("announcements");
+        renderAnnouncements();
+      }
     });
 
     // =========================
@@ -2196,6 +2383,8 @@
     renderTikTok();
     renderOwnerPanel();
     touchPresence();
+    pingSharedPresence();
+    refreshSharedPresence().finally(() => renderMembers());
 
     // Profile open (event delegation)
     const memberListBox = document.getElementById("memberList");
@@ -2216,12 +2405,16 @@
 
     window.addEventListener("focus", () => {
       touchPresence();
-      renderMembers();
+      pingSharedPresence();
+      refreshSharedPresence().finally(() => renderMembers());
+      renderAnnouncements();
     });
 
     setInterval(() => {
       touchPresence();
-      renderMembers();
+      pingSharedPresence();
+      refreshSharedPresence().finally(() => renderMembers());
+      renderAnnouncements();
     }, 20000);
 
     window.addEventListener("storage", (e) => {
