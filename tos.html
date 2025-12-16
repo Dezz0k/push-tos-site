@@ -3,18 +3,30 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>P.U.S.H — TOS</title>
+  <title>P.U.S.H — Home</title>
+
+
   <style>
     :root{
-      --bg: rgba(10, 14, 20, .55);
-      --card: rgba(18, 24, 34, .55);
-      --card2: rgba(18, 24, 34, .35);
+      /* Black + dark purple theme */
+      --bg0: #05040a;
+      --bg1: #0b0620;
+      --bg2: #12072f;
+
+      --card: rgba(18, 10, 38, .62);
+      --card2: rgba(18, 10, 38, .38);
+
       --stroke: rgba(255,255,255,.10);
+      --stroke2: rgba(168,120,255,.16);
+
       --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.70);
-      --muted2: rgba(255,255,255,.55);
-      --accent: rgba(255,255,255,.90);
-      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --muted: rgba(255,255,255,.72);
+      --muted2: rgba(255,255,255,.56);
+
+      --purple: rgba(168,120,255,.95);
+      --purple2: rgba(130,70,255,.85);
+
+      --shadow: 0 22px 70px rgba(0,0,0,.55);
       --radius: 18px;
     }
 
@@ -25,45 +37,46 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color: var(--text);
       overflow-x:hidden;
-      background:#05070b;
+      background: var(--bg0);
     }
 
-    /* Snowy blurred background */
+    /* Storm background */
     .bg{
       position:fixed;
       inset:0;
+      z-index:-4;
       background:
-        radial-gradient(1200px 700px at 20% 10%, rgba(255,255,255,.18), transparent 55%),
-        radial-gradient(900px 600px at 80% 30%, rgba(160,200,255,.14), transparent 60%),
-        radial-gradient(800px 600px at 60% 85%, rgba(255,255,255,.10), transparent 60%),
-        linear-gradient(180deg, #070a11 0%, #06070b 100%);
-      z-index:-3;
-    }
-    .bg::before{
-      content:"";
-      position:absolute; inset:-20px;
-      background-image: url("https://images.unsplash.com/photo-1489587028985-1a95819a7b39?auto=format&fit=crop&w=2400&q=80");
-      background-size: cover;
-      background-position: center;
-      filter: blur(14px);
-      opacity:.55;
-      transform: scale(1.08);
-      z-index:-2;
+        radial-gradient(1100px 700px at 20% 15%, rgba(160,110,255,.22), transparent 55%),
+        radial-gradient(1000px 700px at 78% 25%, rgba(90,40,255,.18), transparent 60%),
+        radial-gradient(800px 600px at 60% 85%, rgba(255,255,255,.08), transparent 60%),
+        linear-gradient(180deg, var(--bg2) 0%, var(--bg1) 35%, var(--bg0) 100%);
     }
     .bg::after{
       content:"";
       position:absolute; inset:0;
-      background: rgba(0,0,0,.38);
-      z-index:-1;
+      background: rgba(0,0,0,.42);
+      pointer-events:none;
     }
 
-    /* Snow particles */
-    canvas#snow{
+    /* Lightning canvas */
+    canvas#storm{
       position:fixed;
       inset:0;
-      z-index:-1;
+      z-index:-3;
       pointer-events:none;
-      opacity:.8;
+      opacity:.95;
+    }
+
+    /* Subtle mist grain */
+    .grain{
+      position:fixed;
+      inset:0;
+      z-index:-2;
+      pointer-events:none;
+      opacity:.10;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
     }
 
     /* Top bar */
@@ -71,9 +84,9 @@
       position:sticky;
       top:0;
       z-index:50;
-      backdrop-filter: blur(10px);
-      background: rgba(8, 10, 14, .35);
-      border-bottom: 1px solid var(--stroke);
+      backdrop-filter: blur(12px);
+      background: rgba(6, 5, 12, .40);
+      border-bottom: 1px solid rgba(168,120,255,.18);
     }
     .topbar-inner{
       max-width: 1120px;
@@ -90,24 +103,28 @@
       align-items:center;
       gap:12px;
       user-select:none;
-      min-width: 160px;
+      min-width: 180px;
+      text-decoration:none;
+      color:inherit;
     }
     .brand img{
       width: 34px; height: 34px;
       border-radius: 10px;
-      border: 1px solid rgba(255,255,255,.10);
+      border: 1px solid rgba(168,120,255,.22);
       object-fit: cover;
       background: rgba(255,255,255,.06);
+      box-shadow: 0 12px 36px rgba(0,0,0,.35);
     }
     .brand .title{
-      font-size: 16px;
-      letter-spacing: .28em;
+      font-size: 14px;
+      letter-spacing: .32em;
       font-weight: 900;
+      text-transform: uppercase;
     }
     .brand .sub{
       font-size: 12px;
       color: var(--muted2);
-      letter-spacing:.18em;
+      letter-spacing:.16em;
       text-transform: uppercase;
       margin-top: 2px;
     }
@@ -119,8 +136,9 @@
       flex-wrap:wrap;
       justify-content:center;
     }
+
     .pill{
-      border: 1px solid var(--stroke);
+      border: 1px solid rgba(168,120,255,.18);
       background: rgba(255,255,255,.06);
       color: var(--text);
       padding: 9px 12px;
@@ -129,16 +147,21 @@
       cursor:pointer;
       transition: transform .12s ease, background .12s ease, border-color .12s ease;
       white-space:nowrap;
-
-      /* helps <a class="pill"> match buttons */
       text-decoration:none;
       display:inline-flex;
       align-items:center;
+      gap:8px;
     }
     .pill:hover{
       transform: translateY(-1px);
-      background: rgba(255,255,255,.10);
-      border-color: rgba(255,255,255,.16);
+      background: rgba(168,120,255,.10);
+      border-color: rgba(168,120,255,.28);
+    }
+    .pill.primary{
+      background: rgba(168,120,255,.18);
+      border-color: rgba(168,120,255,.35);
+      font-weight: 900;
+      letter-spacing:.04em;
     }
 
     .right{
@@ -154,78 +177,130 @@
       width: 40px;
       height: 40px;
       border-radius: 12px;
-      border: 1px solid var(--stroke);
+      border: 1px solid rgba(168,120,255,.22);
       background: rgba(255,255,255,.07);
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      box-shadow: 0 14px 40px rgba(0,0,0,.35);
       cursor:pointer;
       transition: transform .12s ease, background .12s ease;
     }
     .discordBtn:hover{
       transform: translateY(-1px);
-      background: rgba(255,255,255,.12);
+      background: rgba(168,120,255,.12);
     }
-    .discordBtn svg{ width: 20px; height: 20px; fill: var(--accent); }
+    .discordBtn img{ width: 20px; height: 20px; display:block; }
 
     /* Layout */
     .wrap{
       max-width: 1120px;
       margin: 0 auto;
-      padding: 26px 18px 60px;
+      padding: 26px 18px 70px;
     }
 
     .hero{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap:16px;
       margin-top: 18px;
-      margin-bottom: 18px;
+      padding: 20px 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(168,120,255,.18);
+      background: rgba(10, 8, 22, .55);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
     }
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-80px;
+      background:
+        radial-gradient(900px 520px at 18% 20%, rgba(168,120,255,.16), transparent 62%),
+        radial-gradient(900px 520px at 80% 40%, rgba(90,40,255,.14), transparent 62%);
+      opacity: 1;
+      pointer-events:none;
+    }
+    .hero-inner{
+      position:relative;
+      z-index:1;
+      display:grid;
+      gap:12px;
+    }
+    .heroTop{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+    .heroLogo{
+      width: 62px;
+      height: 62px;
+      border-radius: 18px;
+      border: 1px solid rgba(168,120,255,.22);
+      background: rgba(255,255,255,.05);
+      object-fit: cover;
+      box-shadow: 0 20px 55px rgba(0,0,0,.45);
+    }
+
+    /* Heading */
     .hero h1{
       margin:0;
-      font-size: 44px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size: clamp(44px, 8vw, 64px);
+      font-weight: 1000;
       letter-spacing: .22em;
-      font-weight: 900;
+      line-height: 1;
       text-transform: uppercase;
+      color: rgba(255,255,255,.95);
+      text-shadow:
+        0 0 18px rgba(168,120,255,.35),
+        0 0 40px rgba(90,40,255,.18);
     }
-    .hero .tos{
-      margin-top: 8px;
-      font-size: 13px;
-      color: var(--muted);
-      letter-spacing: .16em;
+
+    .tagline{
+      color: rgba(255,255,255,.78);
+      letter-spacing:.14em;
       text-transform: uppercase;
+      font-size: 12px;
     }
-    .hero .hint{
-      color: var(--muted2);
-      font-size: 13px;
-      max-width: 520px;
-      line-height: 1.5;
-      text-align:right;
+    .hero p{
+      margin:0;
+      max-width: 820px;
+      line-height: 1.65;
+      color: rgba(255,255,255,.84);
+      font-size: 14px;
+    }
+
+    .ctaRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top: 6px;
     }
 
     .grid{
       display:grid;
       grid-template-columns: 1.15fr .85fr;
       gap: 16px;
+      margin-top: 16px;
       align-items:start;
     }
-    @media (max-width: 960px){
+    .sideCol{
+      display:grid;
+      gap: 16px;
+      align-content:start;
+    }
+    @media (max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
-      .hero{ flex-direction:column; align-items:flex-start; }
-      .hero .hint{ text-align:left; }
-      .nav{ justify-content:flex-start; }
     }
 
     .card{
       background: var(--card);
-      border: 1px solid var(--stroke);
+      border: 1px solid rgba(168,120,255,.16);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow:hidden;
     }
     .cardHeader{
       padding: 16px 16px 10px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
+      border-bottom: 1px solid rgba(168,120,255,.14);
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -233,84 +308,115 @@
     }
     .cardHeader h2{
       margin:0;
-      font-size: 16px;
-      letter-spacing: .08em;
+      font-size: 14px;
+      letter-spacing: .12em;
       text-transform: uppercase;
     }
     .badge{
       font-size: 12px;
       padding: 6px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
+      border: 1px solid rgba(168,120,255,.18);
       background: rgba(255,255,255,.06);
       color: var(--muted);
       white-space:nowrap;
     }
     .cardBody{
       padding: 14px 16px 16px;
-    }
-
-    .sectionTitle{
-      margin: 14px 0 8px;
-      font-size: 13px;
-      letter-spacing:.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .rules{
-      margin:0;
-      padding-left: 18px;
-      color: var(--text);
-      line-height: 1.65;
-    }
-    .rules li{ margin: 6px 0; }
-    .muted{ color: var(--muted2); }
-
-    .ladder{
+      color: rgba(255,255,255,.84);
+      line-height:1.6;
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:10px;
-      margin-top: 10px;
+      gap:12px;
     }
-    @media (max-width: 520px){
-      .ladder{ grid-template-columns: 1fr; }
+
+    .field{
+      display:grid;
+      gap:6px;
     }
-    .step{
-      background: var(--card2);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 14px;
-      padding: 12px;
-    }
-    .step .k{
+    .field label{
       font-size: 12px;
-      color: var(--muted2);
+      color: rgba(255,255,255,.70);
+      letter-spacing:.08em;
       text-transform: uppercase;
-      letter-spacing:.14em;
     }
-    .step .v{
-      margin-top: 6px;
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: .02em;
+    .field input, .field textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(168,120,255,.18);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.92);
+      outline:none;
+    }
+    .field textarea{ min-height: 120px; resize: vertical; }
+    .field input:focus, .field textarea:focus{
+      border-color: rgba(168,120,255,.34);
+      background: rgba(168,120,255,.08);
+    }
+
+    .row2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 720px){
+      .row2{ grid-template-columns: 1fr; }
     }
 
     .callout{
-      margin-top: 12px;
       padding: 12px 12px;
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.12);
+      border: 1px solid rgba(168,120,255,.18);
       background: rgba(255,255,255,.06);
       line-height:1.55;
+      color: rgba(255,255,255,.82);
     }
 
-    .toolbar{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top: 8px;
+    .post{
+      border: 1px solid rgba(168,120,255,.14);
+      background: rgba(0,0,0,.18);
+      border-radius: 14px;
+      padding: 10px;
     }
-    .toolbar .pill{
-      background: rgba(255,255,255,.08);
+    .postTop{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .postTitle{
+      font-weight: 900;
+      letter-spacing:.04em;
+    }
+    .postBody{
+      margin-top: 8px;
+      color: rgba(255,255,255,.84);
+      white-space:pre-wrap;
+    }
+
+    .memberRow{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding: 10px;
+      border: 1px solid rgba(168,120,255,.14);
+      background: rgba(0,0,0,.18);
+      border-radius: 14px;
+    }
+    .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.18);
+      flex: 0 0 10px;
+      margin-top: 4px;
+    }
+    .miniIcon{
+      width: 14px;
+      height: 14px;
+      opacity: .92;
+      display: block;
     }
 
     .toast{
@@ -318,14 +424,14 @@
       bottom: 18px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(10, 12, 16, .70);
-      border: 1px solid rgba(255,255,255,.12);
-      backdrop-filter: blur(10px);
+      background: rgba(10, 8, 22, .72);
+      border: 1px solid rgba(168,120,255,.18);
+      backdrop-filter: blur(12px);
       padding: 10px 12px;
       border-radius: 999px;
       color: var(--text);
       font-size: 13px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      box-shadow: 0 22px 70px rgba(0,0,0,.55);
       opacity:0;
       pointer-events:none;
       transition: opacity .18s ease, transform .18s ease;
@@ -342,7 +448,7 @@
     .modalOverlay{
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.60);
+      background: rgba(0,0,0,.62);
       backdrop-filter: blur(10px);
       z-index: 2000;
       display:none;
@@ -356,14 +462,14 @@
       width: 520px;
       max-width: 100%;
       border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(10,12,16,.62);
-      box-shadow: 0 30px 90px rgba(0,0,0,.55);
+      border: 1px solid rgba(168,120,255,.22);
+      background: rgba(10, 8, 22, .70);
+      box-shadow: 0 35px 100px rgba(0,0,0,.65);
       overflow:hidden;
     }
     .modalTop{
       padding: 14px 14px 12px;
-      border-bottom: 1px solid rgba(255,255,255,.10);
+      border-bottom: 1px solid rgba(168,120,255,.16);
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -378,13 +484,13 @@
     .xBtn{
       width: 36px; height: 36px;
       border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.12);
+      border: 1px solid rgba(168,120,255,.18);
       background: rgba(255,255,255,.06);
       cursor:pointer;
       display:grid;
       place-items:center;
     }
-    .xBtn:hover{ background: rgba(255,255,255,.10); }
+    .xBtn:hover{ background: rgba(168,120,255,.10); }
     .xBtn svg{ width: 18px; height: 18px; fill: rgba(255,255,255,.92); }
 
     .modalBody{
@@ -393,12 +499,12 @@
       gap: 12px;
     }
     .notice{
-      border: 1px solid rgba(255,255,255,.12);
+      border: 1px solid rgba(168,120,255,.18);
       background: rgba(255,255,255,.06);
       border-radius: 16px;
       padding: 12px;
       line-height:1.55;
-      color: rgba(255,255,255,.80);
+      color: rgba(255,255,255,.84);
       font-size: 13px;
     }
     .tabs{
@@ -407,7 +513,7 @@
       flex-wrap:wrap;
     }
     .tabBtn{
-      border: 1px solid rgba(255,255,255,.14);
+      border: 1px solid rgba(168,120,255,.18);
       background: rgba(255,255,255,.06);
       color: rgba(255,255,255,.92);
       padding: 10px 12px;
@@ -416,43 +522,12 @@
       cursor:pointer;
     }
     .tabBtn.active{
-      background: rgba(255,255,255,.14);
-      border-color: rgba(255,255,255,.22);
+      background: rgba(168,120,255,.14);
+      border-color: rgba(168,120,255,.32);
     }
     .form{
       display:grid;
       gap:10px;
-    }
-    .field{
-      display:grid;
-      gap:6px;
-    }
-    .field label{
-      font-size: 12px;
-      color: rgba(255,255,255,.70);
-      letter-spacing:.06em;
-      text-transform: uppercase;
-    }
-    .field input{
-      width: 100%;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.92);
-      outline: none;
-    }
-    .field input:focus{
-      border-color: rgba(255,255,255,.24);
-      background: rgba(255,255,255,.08);
-    }
-    .row2{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    @media (max-width: 520px){
-      .row2{ grid-template-columns: 1fr; }
     }
     .formActions{
       display:flex;
@@ -462,25 +537,25 @@
       margin-top: 4px;
     }
     .btnPrimary{
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(168,120,255,.28);
+      background: rgba(168,120,255,.18);
       color: rgba(255,255,255,.95);
       padding: 10px 14px;
       border-radius: 14px;
       cursor:pointer;
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing:.06em;
     }
-    .btnPrimary:hover{ background: rgba(255,255,255,.18); }
+    .btnPrimary:hover{ background: rgba(168,120,255,.22); }
     .btnGhost{
-      border: 1px solid rgba(255,255,255,.14);
+      border: 1px solid rgba(168,120,255,.18);
       background: rgba(255,255,255,.06);
       color: rgba(255,255,255,.92);
       padding: 10px 14px;
       border-radius: 14px;
       cursor:pointer;
     }
-    .btnGhost:hover{ background: rgba(255,255,255,.10); }
+    .btnGhost:hover{ background: rgba(168,120,255,.10); }
 
     .errorText{
       color: rgba(255,120,120,.95);
@@ -497,37 +572,34 @@
 
 <body>
   <div class="bg"></div>
-  <canvas id="snow"></canvas>
+  <canvas id="storm"></canvas>
+  <div class="grain"></div>
 
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="brand">
-        <img src="https://cdn.discordapp.com/attachments/1154831673058402317/1447188492261130323/content.png?ex=693e9fd0&is=693d4e50&hm=ba17c78a85c673a90a6dc69a7ef5de0f165eaa566d57c32d8931ad4ce79be8f6&" alt="P.U.S.H logo" />
+      <a class="brand" href="./index.html" aria-label="Home">
+        <img
+          src="./assets/content.png"
+          alt="P.U.S.H logo"
+        />
         <div>
           <div class="title">P.U.S.H</div>
-          <div class="sub">TOS</div>
+          <div class="sub">Home</div>
         </div>
-      </div>
+      </a>
 
-      <!-- Full info bar buttons -->
       <nav class="nav" aria-label="Navigation">
-        <a class="pill" href="/">Home</a>
-        <button class="pill" data-jump="#tos">TOS Rules</button>
-        <button class="pill" data-jump="#staff">Staff Standards</button>
-        <button class="pill" data-jump="#logs">Logs & Evidence</button>
-        <button class="pill" data-jump="#appeals">Appeals</button>
-        <button class="pill" data-jump="#more">More</button>
+        <a class="pill primary" href="./index.html" aria-current="page">Home</a>
+        <a class="pill" href="./forms.html">Forms</a>
+        <a class="pill" href="./tos.html#tos">TOS Rules</a>
       </nav>
 
       <div class="right" id="authArea">
         <button class="pill" id="openLogin">Login</button>
         <button class="pill" id="openRegister">Register</button>
 
-        <!-- Discord icon button -->
         <button class="discordBtn" id="discordJoin" title="Join Discord" aria-label="Join Discord">
-          <svg viewBox="0 0 127.14 96.36" aria-hidden="true">
-            <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2A75.57,75.57,0,0,0,95.73,78c.87.72,1.76,1.4,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.18-16.14C129.24,52.84,122.07,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.22,46,96.11,53,91.07,65.69,84.69,65.69Z"/>
-          </svg>
+          <img src="./assets/discord.svg" alt="" aria-hidden="true" />
         </button>
       </div>
     </div>
@@ -535,215 +607,134 @@
 
   <main class="wrap">
     <section class="hero">
-      <div>
-        <h1>P.U.S.H</h1>
-        <div class="tos">TOS</div>
-      </div>
-      <div class="hint">
-        Community rules + staff standards. Clear punishments, proper evidence, and clean logging so everything stays fair.
+      <div class="hero-inner">
+        <div class="heroTop">
+          <img
+            class="heroLogo"
+            src="./assets/content.png"
+            alt="P.U.S.H logo"
+          />
+          <div>
+            <div class="tagline">storm mode • home • announcements</div>
+            <h1>P.U.S.H</h1>
+          </div>
+        </div>
+
+        <p>
+          Welcome to the P.U.S.H home page. News and announcements show here.
+          Your login saves across pages (Home + Forms + TOS) on this same website.
+        </p>
+
+        <div class="ctaRow">
+          <a class="pill primary" href="./forms.html">Open Forms</a>
+          <a class="pill" href="./tos.html#tos">Read TOS Rules</a>
+        </div>
+
+        <div class="callout" id="loginHint" style="display:none;">
+          <strong>Heads up:</strong> you’re not logged in. Click <strong>Login</strong> or <strong>Register</strong>.
+        </div>
       </div>
     </section>
 
     <div class="grid">
-      <!-- Main TOS -->
-      <section class="card" id="tos">
+      <section class="card" id="announcements">
         <div class="cardHeader">
-          <h2>Community Rules</h2>
-          <div class="badge">Applies to Discord + in-game</div>
+          <h2>News & Announcements</h2>
+          <div class="badge" id="annCount">0</div>
         </div>
         <div class="cardBody">
-          <div class="sectionTitle">What this covers</div>
-          <p class="muted" style="margin:0;line-height:1.6">
-            This applies to all P.U.S.H spaces (Discord, events, game sessions, voice, and community-run chats).
-          </p>
-
-          <div class="sectionTitle">Slurs / Hate Speech</div>
-          <ul class="rules">
-            <li>Slurs or hateful language uses the ladder below (no “joke” exceptions).</li>
-            <li>Filter bypassing counts (spacing/symbols).</li>
-            <li>Targeting identity = not allowed.</li>
-          </ul>
-
-          <div class="ladder" aria-label="Slur enforcement ladder">
-            <div class="step"><div class="k">1st</div><div class="v">Warning</div></div>
-            <div class="step"><div class="k">2nd</div><div class="v">Mute / Timeout</div></div>
-            <div class="step"><div class="k">3rd</div><div class="v">Ban</div></div>
+          <div id="annList" class="callout" style="display:grid; gap:10px;">
+            <div style="color:var(--muted2)">No announcements yet.</div>
           </div>
 
-          <div class="callout">
-            <strong>Appealable:</strong> Yes (for ladder actions).<br/>
-            <span class="muted">If it becomes personal threats / doxx / DDOS threats, it moves to zero-tolerance.</span>
+          <div id="announceLocked" class="callout" style="display:none;">
+            <strong>Posting locked:</strong> only <strong>Manager</strong>, <strong>Forms Apps</strong>, or <strong>Owner</strong> can post announcements.
           </div>
 
-          <div class="sectionTitle">Zero-tolerance: threats / doxxing / DDOS threats</div>
-          <ul class="rules">
-            <li>Real-life threats or safety threats</li>
-            <li>Doxxing or threatening to leak private info</li>
-            <li>DDOS threats (“boot you offline”, “hit your net”, etc.)</li>
-            <li>Coordinating harassment</li>
-          </ul>
-
-          <div class="callout">
-            <strong>Result:</strong> Permanent ban<br/>
-            <strong>Appealable:</strong> No<br/>
-            <strong>Staff must attach proof:</strong> screenshots/message links + timestamps + usernames/IDs
-          </div>
-
-          <div class="sectionTitle">Harassment / bullying</div>
-          <ul class="rules">
-            <li>No targeted abuse, stalking behavior, or dogpiling.</li>
-            <li>“In DMs” doesn’t protect it if it started through the community.</li>
-          </ul>
-
-          <div class="sectionTitle">NSFW / sexual content</div>
-          <ul class="rules">
-            <li>No explicit sexual content, porn, or sexual roleplay in public channels.</li>
-            <li>No sexual content involving minors (instant perma + report where required).</li>
-            <li>If you allow any mature talk in specific spaces, it must be clearly marked and restricted to 18+.</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- Side: Staff tools + quick buttons -->
-      <aside class="card" id="staff">
-        <div class="cardHeader">
-          <h2>Staff Standards</h2>
-          <div class="badge">PR / calm handling</div>
-        </div>
-        <div class="cardBody">
-          <div class="sectionTitle">How staff should act</div>
-          <ul class="rules">
-            <li>Stay professional (no arguing like a member).</li>
-            <li>Enforce rules with evidence, not emotion.</li>
-            <li>Be consistent. Same rule = same action.</li>
-            <li>No leaking internal reports or staff chat.</li>
-          </ul>
-
-          <div class="sectionTitle">When slurs happen</div>
-          <ul class="rules">
-            <li>Stop it fast: “That’s not allowed here. Drop it now.”</li>
-            <li>Apply ladder: warn → mute → ban</li>
-            <li>Log the action + attach evidence</li>
-          </ul>
-
-          <div class="sectionTitle">Info bar buttons</div>
-          <div class="toolbar" role="group" aria-label="Staff shortcuts">
-            <button class="pill" data-jump="#logs">Log Action</button>
-            <button class="pill" data-jump="#appeals">View Appeals</button>
-            <button class="pill" data-jump="#more">Member Info</button>
-            <button class="pill" id="copyInvite">Copy Discord Invite</button>
-          </div>
-
-          <div class="callout" style="margin-top:12px">
-            <strong>Reminder:</strong> If there’s no proof, don’t action. Ask for evidence first.
-          </div>
-        </div>
-      </aside>
-
-      <!-- Logs & Evidence -->
-      <section class="card" id="logs" style="grid-column: 1 / -1;">
-        <div class="cardHeader">
-          <h2>Logs & Evidence</h2>
-          <div class="badge">Required for staff actions</div>
-        </div>
-        <div class="cardBody">
-          <div class="sectionTitle">What every log must include</div>
-          <ul class="rules">
-            <li>Staff member name + role</li>
-            <li>User name + user ID (if possible)</li>
-            <li>Rule broken (which section)</li>
-            <li>Action taken (warn / mute / ban / perma)</li>
-            <li><strong>Evidence:</strong> screenshots or message links + timestamps</li>
-            <li>Date/time + short context</li>
-          </ul>
-
-          <div class="callout">
-            <strong>No log = action can be reversed.</strong>
-            <span class="muted">Logging protects the community and protects staff too.</span>
+          <div id="announceComposer" style="display:none;">
+            <div class="field">
+              <label for="ann_title">Title</label>
+              <input id="ann_title" type="text" placeholder="announcement title" />
+            </div>
+            <div class="field">
+              <label for="ann_body">Message</label>
+              <textarea id="ann_body" placeholder="announcement message"></textarea>
+            </div>
+            <div class="formActions">
+              <button type="button" class="btnGhost" id="annClear">Clear</button>
+              <button type="button" class="btnPrimary" id="annPost">Post</button>
+            </div>
+            <div class="callout" style="color:var(--muted2)">
+              Discord webhook posting needs a server/proxy so your webhook URL stays private.
+              Set your Cloudflare Worker/API URL in <b>Owner Panel → Announce API Base</b>.
+            </div>
+            <div id="discordPushMsg"></div>
           </div>
         </div>
       </section>
 
-      <!-- Appeals -->
-      <section class="card" id="appeals" style="grid-column: 1 / -1;">
-        <div class="cardHeader">
-          <h2>Appeals</h2>
-          <div class="badge">Fair + consistent</div>
-        </div>
-        <div class="cardBody">
-          <div class="sectionTitle">Appealable</div>
-          <ul class="rules">
-            <li>Warning / mute / ban ladder actions</li>
-            <li>Most non-zero-tolerance punishments</li>
-          </ul>
-
-          <div class="sectionTitle">Not appealable</div>
-          <ul class="rules">
-            <li>Perma bans for real-life threats, doxxing, or DDOS threats</li>
-            <li>Sexual content involving minors (zero-tolerance)</li>
-          </ul>
-
-          <div class="sectionTitle">Appeal should include</div>
-          <ul class="rules">
-            <li>What happened (brief)</li>
-            <li>Why they think it was wrong / context</li>
-            <li>What they’ll do differently</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- More -->
-      <section class="card" id="more" style="grid-column: 1 / -1;">
-        <div class="cardHeader">
-          <h2>More</h2>
-          <div class="badge">Recommended additions</div>
-        </div>
-        <div class="cardBody">
-          <div class="sectionTitle">Age / NSFW</div>
-          <ul class="rules">
-            <li>If your community includes mature content, keep it in clearly marked 18+ channels only.</li>
-            <li>No porn, explicit media, or sexual roleplay in public spaces.</li>
-            <li>Anyone under 18 must not access 18+ channels. No exceptions.</li>
-          </ul>
-
-          <div class="sectionTitle">Spam / raid behavior</div>
-          <ul class="rules">
-            <li>No spam (caps spam, emoji spam, mic spam, soundboards, repeated pings).</li>
-            <li>Raid attempts or encouraging raids = instant ban.</li>
-            <li>Advertising other servers, socials, or “join my group” without permission is treated as spam.</li>
-          </ul>
-
-          <div class="sectionTitle">Impersonation</div>
-          <ul class="rules">
-            <li>No pretending to be staff, a creator, or another member.</li>
-            <li>Copying names/avatars to trick people counts as impersonation.</li>
-            <li>Fake screenshots, fake “staff DMs”, or fake modmail = ban.</li>
-          </ul>
-
-          <div class="sectionTitle">Scams / fake giveaways</div>
-          <ul class="rules">
-            <li>No scam links, “free nitro”, phishing, token grabbers, or account selling.</li>
-            <li>Giveaways must be approved by staff and posted in the correct channel.</li>
-            <li>Chargebacks/refund abuse on paid services (if used) can lead to removal and blacklist.</li>
-          </ul>
-
-          <div class="sectionTitle">Event disruption</div>
-          <ul class="rules">
-            <li>No crashing events, trolling hosts, or intentionally ruining games.</li>
-            <li>No mic spamming, loud audio, or disrupting briefings.</li>
-            <li>Follow host instructions during events. If you disagree, appeal after.</li>
-          </ul>
-
-          <div class="callout">
-            <strong>Tip:</strong> If you want the strictest and cleanest setup, add a short “Three strikes” system for minor stuff
-            (spam, minor disrespect), and keep threats/doxxing/scams as instant bans.
+      <div class="sideCol">
+        <aside class="card" id="members">
+          <div class="cardHeader">
+            <h2>Members</h2>
+            <div class="badge" id="memberCount">0</div>
           </div>
-        </div>
-      </section>
+          <div class="cardBody">
+            <div id="memberList" class="callout" style="display:grid; gap:10px;">
+              <div style="color:var(--muted2)">No accounts yet.</div>
+            </div>
+          </div>
+        </aside>
+
+        <aside class="card" id="tiktok">
+          <div class="cardHeader">
+            <h2>TikTok</h2>
+            <div class="badge">latest links</div>
+          </div>
+          <div class="cardBody">
+            <div id="tiktokList" class="callout" style="display:grid; gap:10px;">
+              <div style="color:var(--muted2)">No TikTok links added yet.</div>
+            </div>
+            <div class="callout" style="color:var(--muted2)">
+              Edit <b>TIKTOK_FEED</b> in <b>index.html</b> to add more links.
+            </div>
+          </div>
+        </aside>
+
+        <aside class="card" id="ownerPanel" style="display:none;">
+          <div class="cardHeader">
+            <h2>Owner Panel</h2>
+            <div class="badge">owner</div>
+          </div>
+          <div class="cardBody">
+            <div class="callout">
+              Owner can set roles and (optionally) configure the Discord announce proxy.
+              <br/>
+              <span style="color:var(--muted2)">Owner Discord ID:</span> <code>1161162505628942346</code>
+            </div>
+
+            <div class="field">
+              <label for="apiBase">Announce API Base (Cloudflare Worker/API)</label>
+              <input id="apiBase" type="text" placeholder="https://your-worker.example.com" />
+            </div>
+            <div class="formActions">
+              <button type="button" class="btnPrimary" id="saveApiBase">Save API Base</button>
+            </div>
+
+            <div class="callout" style="color:var(--muted2)">
+              Roles are stored locally (demo). Only your browser sees these changes.
+            </div>
+
+            <div id="adminAccounts" class="callout" style="display:grid; gap:10px;">
+              <div style="color:var(--muted2)">No accounts to manage.</div>
+            </div>
+          </div>
+        </aside>
+      </div>
     </div>
   </main>
 
-  <div class="toast" id="toast">Copied!</div>
+  <div class="toast" id="toast">Saved!</div>
 
   <!-- Auth Modal -->
   <div class="modalOverlay" id="authModal" aria-hidden="true">
@@ -757,12 +748,11 @@
 
       <div class="modalBody">
         <div class="notice">
-          <strong>DONT USE ANY ACT PASSWORDS YOU NORMALY USE.</strong><br/>
-          This is only for applications + logs, and if you’ve been banned you can appeal through this way.
+          <strong>DON'T use any real passwords you normally use.</strong><br/>
+          This demo login is stored locally in your browser (no server yet).
           <br/><br/>
-          <span style="opacity:.85">
-            Note: this demo login is stored locally in your browser right now (no server yet).
-            For real “Discord login” across everyone, we’ll switch to Discord OAuth later.
+          <span style="opacity:.9">
+            Uses the same localStorage keys across Home + Forms + TOS, so staying logged in carries over between pages.
           </span>
         </div>
 
@@ -796,6 +786,11 @@
             <input id="r_user" type="text" placeholder="pick a username" required />
           </div>
 
+          <div class="field">
+            <label for="r_display">Display Name</label>
+            <input id="r_display" type="text" placeholder="name shown on the site" required />
+          </div>
+
           <div class="row2">
             <div class="field">
               <label for="r_pass">Password</label>
@@ -805,6 +800,11 @@
               <label for="r_conf">Confirm</label>
               <input id="r_conf" type="password" placeholder="confirm password" required />
             </div>
+          </div>
+
+          <div class="field">
+            <label for="r_dhandle">Discord @ (optional)</label>
+            <input id="r_dhandle" type="text" placeholder="@username" />
           </div>
 
           <div class="field">
@@ -823,98 +823,233 @@
 
   <script>
     // =========================
-    // Basics
+    // Toast
     // =========================
-    document.querySelectorAll("[data-jump]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const sel = btn.getAttribute("data-jump");
-        const el = document.querySelector(sel);
-        if(!el) return;
-        el.scrollIntoView({behavior:"smooth", block:"start"});
-      });
-    });
+    const toast = document.getElementById("toast");
+    function showToast(text){
+      toast.textContent = text || "Saved!";
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1400);
+    }
 
+    // =========================
+    // Discord
+    // =========================
     const invite = "https://discord.gg/3H45bxeMe2";
     document.getElementById("discordJoin").addEventListener("click", () => {
       window.open(invite, "_blank", "noopener,noreferrer");
     });
 
-    const toast = document.getElementById("toast");
-    function showToast(text){
-      toast.textContent = text || "Copied!";
-      toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 1400);
+    // =========================
+    // Storm / Lightning Canvas
+    // =========================
+    const storm = document.getElementById("storm");
+    const sctx = storm.getContext("2d");
+    let SW, SH;
+
+    function stormResize(){
+      SW = storm.width = Math.floor(window.innerWidth * devicePixelRatio);
+      SH = storm.height = Math.floor(window.innerHeight * devicePixelRatio);
     }
-    document.getElementById("copyInvite").addEventListener("click", async () => {
-      try{
-        await navigator.clipboard.writeText(invite);
-        showToast("Discord invite copied");
-      }catch(e){
-        showToast("Copy failed");
+    window.addEventListener("resize", stormResize);
+    stormResize();
+
+    let flash = 0;
+    let bolts = [];
+
+    function newBolt(){
+      const startX = (Math.random() * SW * 0.9) + (SW * 0.05);
+      const startY = -20 * devicePixelRatio;
+
+      const segments = 10 + Math.floor(Math.random() * 10);
+      const pts = [{x:startX, y:startY}];
+
+      let x = startX, y = startY;
+      for(let i=0;i<segments;i++){
+        x += (Math.random()*2-1) * (SW * 0.03);
+        y += (SH / segments) * (0.6 + Math.random()*0.7);
+        pts.push({x, y});
+        if(y > SH * (0.7 + Math.random()*0.3)) break;
       }
-    });
 
-    // =========================
-    // Snow animation
-    // =========================
-    const canvas = document.getElementById("snow");
-    const ctx = canvas.getContext("2d");
-    let w, h, flakes;
+      bolts.push({
+        pts,
+        life: 18 + Math.floor(Math.random()*20),
+        maxLife: 28,
+        width: (1.2 + Math.random()*1.8) * devicePixelRatio,
+      });
 
-    function resize(){
-      w = canvas.width = window.innerWidth * devicePixelRatio;
-      h = canvas.height = window.innerHeight * devicePixelRatio;
-      flakes = Array.from({length: Math.max(80, Math.floor(window.innerWidth/12))}, () => ({
-        x: Math.random()*w,
-        y: Math.random()*h,
-        r: (Math.random()*2.2 + 0.8) * devicePixelRatio,
-        s: (Math.random()*0.9 + 0.35) * devicePixelRatio,
-        d: (Math.random()*0.7 + 0.2) * devicePixelRatio
-      }));
+      flash = Math.max(flash, 0.28 + Math.random()*0.42);
     }
-    window.addEventListener("resize", resize);
-    resize();
 
-    function tick(){
-      ctx.clearRect(0,0,w,h);
-      ctx.globalAlpha = 0.9;
-      ctx.fillStyle = "white";
-      for(const f of flakes){
-        ctx.beginPath();
-        ctx.arc(f.x, f.y, f.r, 0, Math.PI*2);
-        ctx.fill();
-        f.y += f.s;
-        f.x += Math.sin(f.y * 0.002) * f.d;
-        if(f.y > h + 10) { f.y = -10; f.x = Math.random()*w; }
-        if(f.x > w + 10) f.x = -10;
-        if(f.x < -10) f.x = w + 10;
+    function drawStorm(){
+      sctx.clearRect(0,0,SW,SH);
+
+      // ambient haze
+      sctx.globalAlpha = 0.18;
+      const grad = sctx.createRadialGradient(SW*0.35, SH*0.2, 0, SW*0.35, SH*0.2, SW*0.8);
+      grad.addColorStop(0, "rgba(168,120,255,0.18)");
+      grad.addColorStop(1, "rgba(0,0,0,0)");
+      sctx.fillStyle = grad;
+      sctx.fillRect(0,0,SW,SH);
+
+      // lightning bolts
+      for(const b of bolts){
+        const t = b.life / b.maxLife;
+        const alpha = Math.min(1, t) * 0.95;
+
+        sctx.lineWidth = b.width * 4.5;
+        sctx.strokeStyle = `rgba(168,120,255,${alpha*0.18})`;
+        sctx.beginPath();
+        sctx.moveTo(b.pts[0].x, b.pts[0].y);
+        for(let i=1;i<b.pts.length;i++) sctx.lineTo(b.pts[i].x, b.pts[i].y);
+        sctx.stroke();
+
+        sctx.lineWidth = b.width;
+        sctx.strokeStyle = `rgba(255,255,255,${alpha*0.85})`;
+        sctx.beginPath();
+        sctx.moveTo(b.pts[0].x, b.pts[0].y);
+        for(let i=1;i<b.pts.length;i++) sctx.lineTo(b.pts[i].x, b.pts[i].y);
+        sctx.stroke();
+
+        b.life -= 1;
       }
-      requestAnimationFrame(tick);
+      bolts = bolts.filter(b => b.life > 0);
+
+      if(flash > 0){
+        sctx.globalAlpha = flash;
+        sctx.fillStyle = "rgba(168,120,255,0.9)";
+        sctx.fillRect(0,0,SW,SH);
+        flash *= 0.88;
+        if(flash < 0.01) flash = 0;
+      }
+
+      if(Math.random() < 0.015) newBolt();
+      requestAnimationFrame(drawStorm);
     }
-    tick();
+    drawStorm();
 
     // =========================
-    // Auth (client-side demo)
+    // Auth + Accounts (local demo)
     // =========================
     const ACC_KEY = "push_accounts_v1";
     const SES_KEY = "push_session_v1";
+    const ANN_KEY = "push_announcements_v1";
+
+    const OWNER_DISCORD_ID = "1161162505628942346";
+
+    const ROLE_ORDER = [
+      "Owner",
+      "Manager",
+      "Forms Apps",
+      "Push-Team",
+      "Admin",
+      "Mod",
+      "Officials",
+      "Member",
+    ];
+
+    const POST_ROLES = new Set(["Owner", "Manager", "Forms Apps"]);
+    const PRESENCE_TTL_MS = 60 * 1000;
+
+    const API_BASE_KEY = "push_api_base_v1";
+
+    function getApiBase(){
+      const saved = (localStorage.getItem(API_BASE_KEY) || "").trim();
+      if(saved) return saved;
+      const origin = (typeof location !== "undefined" && location.origin && location.origin !== "null") ? location.origin : "";
+      return origin;
+    }
+
+    function normalizeRole(role){
+      const r = String(role || "").trim();
+      if(!r) return "Member";
+      const found = ROLE_ORDER.find(x => x.toLowerCase() === r.toLowerCase());
+      return found || r;
+    }
+
+    function normalizeDiscordHandle(handle){
+      const h = String(handle || "").trim();
+      if(!h) return "";
+      return h.startsWith("@") ? h : `@${h}`;
+    }
 
     function loadAccounts(){
-      return JSON.parse(localStorage.getItem(ACC_KEY) || "{}");
+      let raw = {};
+      try { raw = JSON.parse(localStorage.getItem(ACC_KEY) || "{}"); } catch { raw = {}; }
+      const obj = (raw && typeof raw === "object") ? raw : {};
+
+      for(const [u, info0] of Object.entries(obj)){
+        const info = (info0 && typeof info0 === "object") ? info0 : {};
+        info.discordId = info.discordId ? String(info.discordId).trim() : "";
+        info.discordHandle = info.discordHandle ? normalizeDiscordHandle(info.discordHandle) : "";
+        info.displayName = (info.displayName && String(info.displayName).trim()) || u;
+        info.role = normalizeRole(info.role);
+        if(info.discordId && info.discordId === OWNER_DISCORD_ID) info.role = "Owner";
+        info.lastSeenAt = Number(info.lastSeenAt || 0);
+        obj[u] = info;
+      }
+
+      return obj;
     }
-    function saveAccounts(obj){
-      localStorage.setItem(ACC_KEY, JSON.stringify(obj));
-    }
-    function setSession(username){
-      localStorage.setItem(SES_KEY, JSON.stringify({ username, ts: Date.now() }));
-      renderAuthArea();
-    }
-    function clearSession(){
-      localStorage.removeItem(SES_KEY);
-      renderAuthArea();
-    }
+    function saveAccounts(obj){ localStorage.setItem(ACC_KEY, JSON.stringify(obj || {})); }
+
     function getSession(){
       try { return JSON.parse(localStorage.getItem(SES_KEY) || "null"); } catch { return null; }
+    }
+
+    function getAccount(username){
+      if(!username) return null;
+      const accounts = loadAccounts();
+      return accounts[username] ? { username, ...accounts[username] } : null;
+    }
+    function getDisplayName(username){
+      const acc = getAccount(username);
+      return acc?.displayName || username || "";
+    }
+    function getRole(username){
+      const acc = getAccount(username);
+      return acc?.role || "Member";
+    }
+
+    function isOnline(info){
+      return !!info && (Date.now() - (Number(info.lastSeenAt || 0)) < PRESENCE_TTL_MS);
+    }
+
+    function touchPresence(){
+      const sess = getSession();
+      if(!sess?.username) return;
+      const accounts = loadAccounts();
+      if(!accounts[sess.username]) return;
+      accounts[sess.username].lastSeenAt = Date.now();
+      saveAccounts(accounts);
+    }
+
+    function setSession(username){
+      localStorage.setItem(SES_KEY, JSON.stringify({ username, ts: Date.now() }));
+      touchPresence();
+      renderAuthArea();
+      renderMembers();
+      renderAnnouncements();
+      renderComposer();
+      renderOwnerPanel();
+    }
+    function clearSession(){
+      const sess = getSession();
+      if(sess?.username){
+        const accounts = loadAccounts();
+        if(accounts[sess.username]){
+          accounts[sess.username].lastSeenAt = 0;
+          saveAccounts(accounts);
+        }
+      }
+
+      localStorage.removeItem(SES_KEY);
+      renderAuthArea();
+      renderMembers();
+      renderAnnouncements();
+      renderComposer();
+      renderOwnerPanel();
     }
 
     async function sha256Hex(str){
@@ -923,6 +1058,22 @@
       return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
     }
 
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function canPostAnnouncements(username){
+      return POST_ROLES.has(getRole(username));
+    }
+
+    // =========================
+    // Auth Modal
+    // =========================
     const authModal = document.getElementById("authModal");
     const authClose = document.getElementById("authClose");
     const openLogin = document.getElementById("openLogin");
@@ -949,7 +1100,6 @@
       authModal.setAttribute("aria-hidden","true");
       setAuthMsg("", "");
     }
-
     function setTab(which){
       const isLogin = which === "login";
       tabLogin.classList.toggle("active", isLogin);
@@ -971,8 +1121,11 @@
       document.getElementById("l_pass").value = "";
       setAuthMsg("", "");
     });
+
     document.getElementById("regClear").addEventListener("click", () => {
       document.getElementById("r_user").value = "";
+      document.getElementById("r_display").value = "";
+      document.getElementById("r_dhandle").value = "";
       document.getElementById("r_pass").value = "";
       document.getElementById("r_conf").value = "";
       document.getElementById("r_did").value = "";
@@ -989,12 +1142,16 @@
       setAuthMsg("", "");
 
       const user = document.getElementById("r_user").value.trim();
+      const displayName = document.getElementById("r_display").value.trim();
+      const dhandleRaw = document.getElementById("r_dhandle").value.trim();
+      const discordHandle = normalizeDiscordHandle(dhandleRaw);
       const pass = document.getElementById("r_pass").value;
       const conf = document.getElementById("r_conf").value;
       const didRaw = document.getElementById("r_did").value.trim();
       const did = didRaw ? didRaw : "";
 
       if(user.length < 3) return setAuthMsg("err", "Username must be at least 3 characters.");
+      if(displayName.length < 2) return setAuthMsg("err", "Display name must be at least 2 characters.");
       if(pass.length < 6) return setAuthMsg("err", "Password must be at least 6 characters.");
       if(pass !== conf) return setAuthMsg("err", "Passwords do not match.");
       if(!isValidDiscordId(did)) return setAuthMsg("err", "Discord ID looks wrong. Example: 1161162505628942346");
@@ -1011,7 +1168,8 @@
       }
 
       const pwh = await sha256Hex(pass);
-      accounts[user] = { pwh, discordId: did, createdAt: Date.now() };
+      const role = (did && did === OWNER_DISCORD_ID) ? "Owner" : "Member";
+      accounts[user] = { pwh, displayName, role, discordId: did, discordHandle, lastSeenAt: 0, createdAt: Date.now() };
       saveAccounts(accounts);
 
       setAuthMsg("ok", "Account created. You can login now.");
@@ -1019,6 +1177,9 @@
       document.getElementById("l_user").value = user;
       document.getElementById("l_pass").value = "";
       showToast("Registered");
+
+      renderMembers();
+      renderOwnerPanel();
     });
 
     formLogin.addEventListener("submit", async (e) => {
@@ -1043,39 +1204,431 @@
       const area = document.getElementById("authArea");
       const sess = getSession();
 
+      const existing = document.getElementById("whoami");
+      if(existing) existing.remove();
+      const logout = document.getElementById("logoutBtn");
+      if(logout) logout.remove();
+
+      const loginHint = document.getElementById("loginHint");
       if(!sess || !sess.username){
         document.getElementById("openLogin").style.display = "";
         document.getElementById("openRegister").style.display = "";
-        const existing = document.getElementById("whoami");
-        if(existing) existing.remove();
-        const logout = document.getElementById("logoutBtn");
-        if(logout) logout.remove();
+        loginHint.style.display = "";
         return;
       }
 
       document.getElementById("openLogin").style.display = "none";
       document.getElementById("openRegister").style.display = "none";
+      loginHint.style.display = "none";
 
-      if(!document.getElementById("whoami")){
-        const who = document.createElement("div");
-        who.id = "whoami";
-        who.className = "pill";
-        who.style.cursor = "default";
-        who.textContent = `Hi, ${sess.username}`;
-        area.insertBefore(who, area.firstChild);
+      const who = document.createElement("div");
+      who.id = "whoami";
+      who.className = "pill";
+      who.style.cursor = "default";
+      who.textContent = `Hi, ${getDisplayName(sess.username)}`;
+      area.insertBefore(who, area.firstChild);
 
-        const out = document.createElement("button");
-        out.id = "logoutBtn";
-        out.className = "pill";
-        out.textContent = "Logout";
-        out.addEventListener("click", () => {
-          clearSession();
-          showToast("Logged out");
-        });
-        area.insertBefore(out, document.getElementById("discordJoin"));
+      const out = document.createElement("button");
+      out.id = "logoutBtn";
+      out.className = "pill";
+      out.textContent = "Logout";
+      out.addEventListener("click", () => {
+        clearSession();
+        showToast("Logged out");
+      });
+      area.insertBefore(out, document.getElementById("discordJoin"));
+    }
+
+    // =========================
+    // Members list
+    // =========================
+    function renderMembers(){
+      const list = document.getElementById("memberList");
+      const count = document.getElementById("memberCount");
+      if(!list || !count) return;
+
+      const accounts = loadAccounts();
+      const sess = getSession();
+      const current = sess?.username || "";
+
+      const entries = Object.entries(accounts).map(([username, info]) => ({ username, ...info }));
+      entries.sort((a, b) => {
+        const ao = (a.username === current) || isOnline(a);
+        const bo = (b.username === current) || isOnline(b);
+        if(ao !== bo) return (bo ? 1 : 0) - (ao ? 1 : 0);
+        return String(a.displayName || a.username).localeCompare(String(b.displayName || b.username), undefined, { sensitivity: "base" });
+      });
+
+      count.textContent = String(entries.length);
+
+      if(!entries.length){
+        list.innerHTML = `<div style="color:var(--muted2)">No accounts yet.</div>`;
+        return;
+      }
+
+      list.innerHTML = entries.map(acc => {
+        const online = (acc.username === current) || isOnline(acc);
+        const dot = online ? "rgba(150,255,180,.95)" : "rgba(255,255,255,.30)";
+
+        const role = (acc.role && acc.role !== "Member") ? acc.role : "";
+        const roleHtml = role ? `<span class="badge" style="font-size:11px; padding:4px 8px;">${escapeHtml(role)}</span>` : "";
+
+        const connected = !!acc.discordHandle;
+        const handleText = connected ? acc.discordHandle : `@${acc.username}`;
+        const linkBadge = connected
+          ? `<span class="badge" style="font-size:11px; padding:4px 8px; border-color: rgba(150,255,180,.35); background: rgba(150,255,180,.12); color: rgba(150,255,180,.95);">CONNECTED</span>`
+          : `<span class="badge" style="font-size:11px; padding:4px 8px; border-color: rgba(255,120,120,.35); background: rgba(255,120,120,.12); color: rgba(255,120,120,.95);">NOT CONNECTED</span>`;
+
+        return `
+          <div class="memberRow">
+            <span class="dot" style="background:${dot}"></span>
+            <div style="display:grid; gap:4px;">
+              <div style="display:flex; gap:8px; align-items:baseline; flex-wrap:wrap;">
+                <div style="font-weight:900;">${escapeHtml(acc.displayName || acc.username)}</div>
+                ${roleHtml}
+                ${linkBadge}
+              </div>
+              <div style="font-size:12px; color:${connected ? 'var(--muted2)' : 'rgba(255,120,120,.95)'}; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <span style="display:inline-flex; align-items:center; gap:6px;">
+                  <img class="miniIcon" src="./assets/discord.svg" alt="" aria-hidden="true" />
+                  ${escapeHtml(handleText)}
+                </span>
+                <span style="color:rgba(255,255,255,.28)">•</span>
+                <span style="color:var(--muted2)">${online ? 'online' : 'offline'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // =========================
+    // Announcements
+    // =========================
+    function loadAnnouncements(){
+      try { return JSON.parse(localStorage.getItem(ANN_KEY) || "[]"); } catch { return []; }
+    }
+    function saveAnnouncements(arr){
+      localStorage.setItem(ANN_KEY, JSON.stringify(arr || []));
+    }
+
+    function renderAnnouncements(){
+      const list = document.getElementById("annList");
+      const count = document.getElementById("annCount");
+      if(!list || !count) return;
+
+      const anns = loadAnnouncements();
+      count.textContent = String(anns.length);
+
+      if(!anns.length){
+        list.innerHTML = `<div style="color:var(--muted2)">No announcements yet.</div>`;
+        return;
+      }
+
+      list.innerHTML = anns.slice().reverse().map(a => {
+        return `
+          <div class="post">
+            <div class="postTop">
+              <div class="postTitle">${escapeHtml(a.title || "(No title)")}</div>
+              <div style="font-size:12px; color:var(--muted2)">${new Date(a.ts).toLocaleString()}</div>
+            </div>
+            <div style="margin-top:6px; font-size:12px; color:rgba(255,255,255,.78); letter-spacing:.08em; text-transform:uppercase;">
+              posted by <span style="color:rgba(168,120,255,.95)">${escapeHtml(getDisplayName(a.author))}</span>
+            </div>
+            <div class="postBody">${escapeHtml(a.body || "")}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderComposer(){
+      const sess = getSession();
+      const username = sess?.username || "";
+
+      const locked = document.getElementById("announceLocked");
+      const comp = document.getElementById("announceComposer");
+
+      if(!sess?.username){
+        locked.style.display = "none";
+        comp.style.display = "none";
+        return;
+      }
+
+      if(canPostAnnouncements(username)){
+        locked.style.display = "none";
+        comp.style.display = "";
+      } else {
+        locked.style.display = "";
+        comp.style.display = "none";
       }
     }
+
+    async function postAnnouncementToDiscord(a){
+      const msg = document.getElementById("discordPushMsg");
+      if(msg) msg.innerHTML = "";
+
+      const apiBase = getApiBase();
+      if(!apiBase){
+        if(msg) msg.innerHTML = `<div class="errorText">Discord push skipped: Announce API Base not set.</div>`;
+        return;
+      }
+
+      try{
+        const res = await fetch(`${apiBase.replace(/\/$/,"")}/api/announce`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: a.title,
+            body: a.body,
+            author: getDisplayName(a.author),
+            ts: a.ts
+          })
+        });
+
+        if(!res.ok){
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        if(msg) msg.innerHTML = `<div class="okText">Discord: posted</div>`;
+      }catch(e){
+        if(msg) msg.innerHTML = `<div class="errorText">Discord push failed (is the local server running?): ${escapeHtml(e?.message || String(e))}</div>`;
+      }
+    }
+
+    document.getElementById("annClear").addEventListener("click", () => {
+      document.getElementById("ann_title").value = "";
+      document.getElementById("ann_body").value = "";
+      const msg = document.getElementById("discordPushMsg");
+      if(msg) msg.innerHTML = "";
+      showToast("Cleared");
+    });
+
+    document.getElementById("annPost").addEventListener("click", async () => {
+      const sess = getSession();
+      const username = sess?.username || "";
+      if(!sess?.username){
+        showToast("Login required");
+        showModal("login");
+        return;
+      }
+      if(!canPostAnnouncements(username)){
+        showToast("No permission");
+        return;
+      }
+
+      const title = document.getElementById("ann_title").value.trim();
+      const body = document.getElementById("ann_body").value.trim();
+
+      if(title.length < 3){
+        showToast("Title too short");
+        return;
+      }
+      if(body.length < 10){
+        showToast("Message too short");
+        return;
+      }
+
+      const anns = loadAnnouncements();
+      const a = {
+        id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2)),
+        title,
+        body,
+        author: username,
+        ts: Date.now()
+      };
+
+      anns.push(a);
+      saveAnnouncements(anns);
+
+      document.getElementById("ann_title").value = "";
+      document.getElementById("ann_body").value = "";
+
+      renderAnnouncements();
+      showToast("Posted");
+
+      // Push to Discord (via local proxy)
+      await postAnnouncementToDiscord(a);
+    });
+
+    // =========================
+    // TikTok links
+    // =========================
+    const TIKTOK_FEED = [
+      // Add your TikTok links here
+      // { name: "Creator name", url: "https://www.tiktok.com/@user/video/123" },
+    ];
+
+    function renderTikTok(){
+      const box = document.getElementById("tiktokList");
+      if(!box) return;
+
+      if(!TIKTOK_FEED.length){
+        box.innerHTML = `<div style="color:var(--muted2)">No TikTok links added yet.</div>`;
+        return;
+      }
+
+      box.innerHTML = TIKTOK_FEED.map(item => {
+        const name = item?.name ? String(item.name) : "TikTok";
+        const url = item?.url ? String(item.url) : "";
+        if(!url) return "";
+        return `
+          <div class="post">
+            <div class="postTitle">${escapeHtml(name)}</div>
+            <div style="margin-top:6px; font-size:12px; color:var(--muted2)">${escapeHtml(url)}</div>
+            <div style="margin-top:10px;">
+              <a class="pill" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open</a>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // =========================
+    // Owner panel
+    // =========================
+    function renderOwnerPanel(){
+      const panel = document.getElementById("ownerPanel");
+      const adminAccounts = document.getElementById("adminAccounts");
+      const apiBaseInput = document.getElementById("apiBase");
+
+      if(!panel || !adminAccounts || !apiBaseInput) return;
+
+      const sess = getSession();
+      const username = sess?.username || "";
+      const role = getRole(username);
+
+      apiBaseInput.value = getApiBase();
+
+      if(role !== "Owner"){
+        panel.style.display = "none";
+        return;
+      }
+
+      panel.style.display = "";
+
+      const accounts = loadAccounts();
+      const rows = Object.entries(accounts).map(([u, info]) => ({ username: u, ...info }));
+      if(!rows.length){
+        adminAccounts.innerHTML = `<div style="color:var(--muted2)">No accounts to manage.</div>`;
+        return;
+      }
+
+      adminAccounts.innerHTML = rows.map(acc => {
+        const options = ROLE_ORDER.map(r => {
+          const sel = (normalizeRole(acc.role) === r) ? "selected" : "";
+          return `<option ${sel}>${escapeHtml(r)}</option>`;
+        }).join("");
+
+        return `
+          <div class="post">
+            <div class="postTop">
+              <div class="postTitle">${escapeHtml(acc.displayName || acc.username)}</div>
+              <div style="font-size:12px; color:var(--muted2)">@${escapeHtml(acc.username)}</div>
+            </div>
+
+            <div class="row2" style="margin-top:10px;">
+              <div class="field">
+                <label>Role</label>
+                <select class="roleSelect" data-user="${escapeHtml(acc.username)}" style="width:100%; padding:12px 12px; border-radius:14px; border:1px solid rgba(168,120,255,.18); background:rgba(255,255,255,.06); color:rgba(255,255,255,.92);">
+                  ${options}
+                </select>
+              </div>
+              <div class="field">
+                <label>Discord ID</label>
+                <input value="${escapeHtml(acc.discordId || "")}" disabled />
+              </div>
+            </div>
+
+            <div class="formActions">
+              <button type="button" class="btnGhost" data-remove-user="${escapeHtml(acc.username)}">Remove</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      adminAccounts.querySelectorAll(".roleSelect").forEach(sel => {
+        sel.addEventListener("change", () => {
+          const u = sel.getAttribute("data-user");
+          const newRole = sel.value;
+          const accounts2 = loadAccounts();
+          if(!accounts2[u]) return;
+
+          // Always force owner role if discord ID matches
+          accounts2[u].role = normalizeRole(newRole);
+          if(accounts2[u].discordId && accounts2[u].discordId === OWNER_DISCORD_ID){
+            accounts2[u].role = "Owner";
+          }
+
+          saveAccounts(accounts2);
+          renderMembers();
+          renderComposer();
+          showToast("Role saved");
+        });
+      });
+
+      adminAccounts.querySelectorAll("[data-remove-user]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const u = btn.getAttribute("data-remove-user");
+          if(!u) return;
+
+          const accounts2 = loadAccounts();
+          if(!accounts2[u]) return;
+          delete accounts2[u];
+          saveAccounts(accounts2);
+
+          // If you removed yourself, log out
+          const sess2 = getSession();
+          if(sess2?.username === u){
+            clearSession();
+          }
+
+          renderMembers();
+          renderOwnerPanel();
+          showToast("Removed");
+        });
+      });
+    }
+
+    document.getElementById("saveApiBase").addEventListener("click", () => {
+      const sess = getSession();
+      const username = sess?.username || "";
+      if(getRole(username) !== "Owner") return;
+
+      const val = String(document.getElementById("apiBase").value || "").trim();
+      localStorage.setItem(API_BASE_KEY, val);
+      showToast("API base saved");
+    });
+
+    // =========================
+    // Initial render
+    // =========================
     renderAuthArea();
+    renderMembers();
+    renderAnnouncements();
+    renderComposer();
+    renderTikTok();
+    renderOwnerPanel();
+    touchPresence();
+
+    window.addEventListener("focus", () => {
+      touchPresence();
+      renderMembers();
+    });
+
+    setInterval(() => {
+      touchPresence();
+      renderMembers();
+    }, 20000);
+
+    window.addEventListener("storage", (e) => {
+      if(e.key === ACC_KEY || e.key === SES_KEY || e.key === ANN_KEY){
+        renderAuthArea();
+        renderMembers();
+        renderAnnouncements();
+        renderComposer();
+        renderOwnerPanel();
+      }
+    });
   </script>
 </body>
 </html>
