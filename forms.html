@@ -1003,14 +1003,51 @@ EXTRA:
     // =========================
     const storm = document.getElementById("storm");
     const sctx = storm.getContext("2d");
+    const bg = document.querySelector(".bg");
+    const grain = document.querySelector(".grain");
     let SW, SH;
     let lastDpr = devicePixelRatio || 1;
+
+    function getViewportBox(){
+      const vv = window.visualViewport;
+      if(vv && Number.isFinite(vv.width) && Number.isFinite(vv.height)){
+        return {
+          w: vv.width,
+          h: vv.height,
+          x: vv.offsetLeft || 0,
+          y: vv.offsetTop || 0,
+        };
+      }
+      return { w: window.innerWidth, h: window.innerHeight, x: 0, y: 0 };
+    }
+
+    function positionFixedLayer(el, x, y, w, h){
+      if(!el) return;
+      el.style.left = "0";
+      el.style.top = "0";
+      el.style.right = "auto";
+      el.style.bottom = "auto";
+      el.style.width = `${w}px`;
+      el.style.height = `${h}px`;
+      el.style.transform = `translate(${x}px, ${y}px)`;
+    }
 
     function stormResize(){
       const dpr = devicePixelRatio || 1;
       lastDpr = dpr;
-      SW = storm.width = Math.floor(window.innerWidth * dpr);
-      SH = storm.height = Math.floor(window.innerHeight * dpr);
+
+      const vb = getViewportBox();
+      const w = Math.ceil(vb.w);
+      const h = Math.ceil(vb.h);
+      const x = Math.round(vb.x);
+      const y = Math.round(vb.y);
+
+      positionFixedLayer(bg, x, y, w, h);
+      positionFixedLayer(grain, x, y, w, h);
+      positionFixedLayer(storm, x, y, w, h);
+
+      SW = storm.width = Math.floor(w * dpr);
+      SH = storm.height = Math.floor(h * dpr);
     }
 
     let stormRaf = 0;
@@ -1027,6 +1064,7 @@ EXTRA:
     window.addEventListener("pageshow", stormResizeSoon);
     if(window.visualViewport){
       window.visualViewport.addEventListener("resize", stormResizeSoon);
+      window.visualViewport.addEventListener("scroll", stormResizeSoon);
     }
 
     // Zoom can change devicePixelRatio without a resize event
@@ -1233,7 +1271,38 @@ EXTRA:
       return DEV_USERS.some(u => u.toLowerCase() === username.toLowerCase());
     }
 
+    let sharedOnline = {};
+
+    async function pingSharedPresence(){
+      const sess = getSession();
+      if(!sess?.username) return;
+      try{
+        await fetch("/api/presence-ping", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: sess.username })
+        });
+      }catch{}
+    }
+
+    async function refreshSharedPresence(){
+      const accounts = loadAccounts();
+      const ids = Object.keys(accounts);
+      if(!ids.length) return;
+
+      try{
+        const res = await fetch(`/api/presence?ids=${encodeURIComponent(ids.join(","))}`, { cache: "no-store" });
+        if(!res.ok) return;
+        const data = await res.json().catch(() => null);
+        if(data && typeof data.online === "object"){
+          sharedOnline = data.online || {};
+        }
+      }catch{}
+    }
+
     function isOnline(info){
+      const u = info?.username;
+      if(u && sharedOnline[u]) return true;
       return !!info && (Date.now() - (Number(info.lastSeenAt || 0)) < PRESENCE_TTL_MS);
     }
 
@@ -2070,6 +2139,8 @@ EXTRA:
     syncLoginUI();
     renderMembers();
     touchPresence();
+    pingSharedPresence();
+    refreshSharedPresence().finally(() => renderMembers());
 
     // Profile open (event delegation)
     const memberListBox = document.getElementById("memberList");
@@ -2090,13 +2161,15 @@ EXTRA:
 
     window.addEventListener("focus", () => {
       touchPresence();
-      renderMembers();
+      pingSharedPresence();
+      refreshSharedPresence().finally(() => renderMembers());
     });
 
-    // Presence heartbeat (local demo)
+    // Presence heartbeat (local + shared KV)
     setInterval(() => {
       touchPresence();
-      renderMembers();
+      pingSharedPresence();
+      refreshSharedPresence().finally(() => renderMembers());
     }, 20000);
 
     // Cross-tab sync

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>P.U.S.H — Admin</title>
+  <style>
+    :root{
+      --bg0:#05040a; --bg1:#0b0620; --bg2:#12072f;
+      --text:rgba(255,255,255,.92);
+      --muted2:rgba(255,255,255,.56);
+      --stroke2:rgba(168,120,255,.16);
+      --purple:rgba(168,120,255,.95);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; background:linear-gradient(180deg,var(--bg2),var(--bg1),var(--bg0)); color:var(--text)}
+    .wrap{max-width:960px; margin:0 auto; padding:26px 18px 70px}
+    .card{border:1px solid var(--stroke2); background:rgba(255,255,255,.06); border-radius:18px; padding:18px}
+    a{color:var(--purple)}
+    .pill{display:inline-flex; gap:8px; align-items:center; padding:10px 12px; border-radius:999px; border:1px solid var(--stroke2); background:rgba(255,255,255,.06); color:var(--text); text-decoration:none}
+    code{color:rgba(255,255,255,.9)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 style="letter-spacing:.22em; text-transform:uppercase; margin:0 0 14px;">Admin</h1>
+    <div class="card">
+      <div style="color:var(--muted2)">This page checks whether your Discord OAuth session cookie is set.</div>
+      <pre id="out" style="margin-top:14px; white-space:pre-wrap; background:rgba(0,0,0,.25); padding:12px; border-radius:14px; border:1px solid rgba(168,120,255,.14);"></pre>
+      <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="pill" href="/">Home</a>
+        <a class="pill" href="/api/auth/logout">Logout</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (async () => {
+      const out = document.getElementById('out');
+      out.textContent = 'Loading /api/auth/me ...';
+      try{
+        const res = await fetch('/api/auth/me', { cache: 'no-store' });
+        const data = await res.json().catch(() => ({}));
+        out.textContent = JSON.stringify({ status: res.status, ...data }, null, 2);
+      }catch(e){
+        out.textContent = String(e);
+      }
+    })();
+  </script>
+</body>
+</html>
